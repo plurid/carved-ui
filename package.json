@@ -1,7 +1,7 @@
 {
     "name": "carved-react",
     "description": "Carved Design User Interface Components for React",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/plurid/carved-react.git"
