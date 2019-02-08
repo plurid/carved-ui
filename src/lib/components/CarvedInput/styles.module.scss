@@ -46,7 +46,7 @@
 }
 
 .carvedInput::selection {
-    background-color: hsla(0, 0%, 50%, 0.3);
+    background-color: hsla(0, 0%, 80%, 0.3);
 }
 
 .carvedInput:focus {
@@ -54,6 +54,7 @@
 }
 
 .carvedInput::placeholder {
-    color: #aaa;
+    user-select: none;
+    color: hsla(0, 0%, 100%, 0.4);
     text-align: right;
 }

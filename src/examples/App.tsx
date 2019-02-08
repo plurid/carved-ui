@@ -1,5 +1,6 @@
 import React from "react";
 import { CarvedInput } from "../lib";
+import { CarvedSelector } from "../lib";
 
 
 
@@ -65,6 +66,153 @@ const App = () => (
             type="password"
             label="Password"
         />
+
+
+
+        <br />
+        <br />
+        <h1>CarvedSelector</h1>
+
+        <pre>{
+`
+<CarvedSelector
+    selectors={ [
+        {value: 'en', label: 'EN'},
+        {value: 'ro', label: 'RO'},
+        {value: 'fr', label: 'FR'},
+        {value: 'de', label: 'DE'},
+    ] }
+/>
+`
+        }</pre>
+        <br />
+
+        <CarvedSelector
+            selectors={ [
+                {value: 'en', label: 'EN'},
+                {value: 'ro', label: 'RO'},
+                {value: 'fr', label: 'FR'},
+                {value: 'de', label: 'DE'},
+            ] }
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+
+        <pre>{
+`
+<CarvedSelector
+    expand="right"
+    selectors={ [
+        {value: 'en', label: 'EN'},
+        {value: 'ro', label: 'RO'},
+        {value: 'fr', label: 'FR'},
+        {value: 'de', label: 'DE'},
+    ] }
+/>
+`
+        }</pre>
+        <br />
+
+        <CarvedSelector
+            expand="right"
+            selectors={ [
+                {value: 'en', label: 'EN'},
+                {value: 'ro', label: 'RO'},
+                {value: 'fr', label: 'FR'},
+                {value: 'de', label: 'DE'},
+            ] }
+        />
+        <br />
+
+
+        <pre>{
+`
+<CarvedSelector
+    expand="up"
+    expanded="true"
+    selectors={ [
+        {value: 'en', label: 'EN'},
+        {value: 'ro', label: 'RO'},
+        {value: 'fr', label: 'FR'},
+        {value: 'de', label: 'DE'},
+    ] }
+/>
+`
+        }</pre>
+        <br />
+
+        <CarvedSelector
+            expand="right"
+            expanded="true"
+            selectors={ [
+                {value: 'en', label: 'EN'},
+                {value: 'ro', label: 'RO'},
+                {value: 'fr', label: 'FR'},
+                {value: 'de', label: 'DE'},
+            ] }
+        />
+        <br />
+
+
+        <pre>{
+`
+<CarvedSelector
+    initial="2"
+    selectors={ [
+        {value: 'en', label: 'EN'},
+        {value: 'ro', label: 'RO'},
+        {value: 'fr', label: 'FR'},
+        {value: 'de', label: 'DE'},
+    ] }
+/>
+`
+        }</pre>
+        <br />
+
+        <CarvedSelector
+            initial="2"
+            selectors={ [
+                {value: 'en', label: 'EN'},
+                {value: 'ro', label: 'RO'},
+                {value: 'fr', label: 'FR'},
+                {value: 'de', label: 'DE'},
+            ] }
+        />
+        <br />
+
+
+        <pre>{
+`
+<CarvedSelector
+    initial="none"
+    noneText="Please Select a Value"
+    selectors={ [
+        {value: 'en', label: 'EN'},
+        {value: 'ro', label: 'RO'},
+        {value: 'fr', label: 'FR'},
+        {value: 'de', label: 'DE'},
+    ] }
+/>
+`
+        }</pre>
+        <br />
+
+        <CarvedSelector
+            initial="none"
+            noneText="Please Select a Value"
+            selectors={ [
+                {value: 'en', label: 'EN'},
+                {value: 'ro', label: 'RO'},
+                {value: 'fr', label: 'FR'},
+                {value: 'de', label: 'DE'},
+            ] }
+        />
+        <br />
     </div>
 );
 
