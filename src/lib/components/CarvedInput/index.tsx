@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as classNames from 'classnames/bind';
+import classNames from 'classnames/bind';
 
 import styles from './styles.module.scss';
 
