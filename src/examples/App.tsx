@@ -5,6 +5,8 @@ import { CarvedInput } from "../lib";
 
 const App = () => (
     <div style={{ width: 640, margin: "15px auto" }}>
+        <br />
+        <br />
         <h1>CarvedInput</h1>
         <br />
 
@@ -12,30 +14,57 @@ const App = () => (
             {
                 `
                 <CarvedInput
-                    label="Email Address"
-                    placeholder="name@example.com"
+                    label="Name"
+                    placeholder="John Smith"
                 />
                 `
             }
         </code>
         <br />
         <br />
-
         <CarvedInput
             label="Name"
             placeholder="John Smith"
         />
         <br />
+        <br />
+
+        <code>
+            {
+                `
+                <CarvedInput
+                    label="Email"
+                    placeholder="name@email.com"
+                />
+                `
+            }
+        </code>
+        <br />
+        <br />
         <CarvedInput
-            label="Email Address"
-            placeholder="name@example.com"
+            label="Email"
+            placeholder="name@email.com"
         />
+        <br />
+        <br />
+
+
+        <code>
+            {
+                `
+                <CarvedInput
+                    type="password"
+                    label="Password"
+                />
+                `
+            }
+        </code>
+        <br />
         <br />
         <CarvedInput
             type="password"
             label="Password"
         />
-        <br />
     </div>
 );
 
