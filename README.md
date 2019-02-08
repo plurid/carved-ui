@@ -23,7 +23,9 @@ User Interface Components for [React][react]
 
 ### Carved Input
 
-``` html
+``` javascript
+    import { CarvedInput } from 'carved-react';
+
     <CarvedInput label="Name" placeholder="John Smith" />
 ```
 
