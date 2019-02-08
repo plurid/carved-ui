@@ -1,0 +1,24 @@
+.carvedFormGroup {
+    margin-bottom: 1rem;
+}
+
+
+.carvedCard {
+    background-color: hsla(0, 0%, 0%, 0.3);
+    box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
+    border: none;
+    outline: none;
+    color: white;
+    // border-radius: 25px;
+    padding: 30px 30px;
+    font-size: 16px;
+    line-height: 1.3;
+    width: 250px;
+    height: 250px;
+    overflow: auto;
+    transition: box-shadow 250ms linear, color 250ms linear;
+}
+
+.carvedCard:hover {
+    box-shadow: inset 0 10px 15px 0 rgba(0, 0, 0, 0.7);
+}
