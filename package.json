@@ -1,7 +1,7 @@
 {
     "name": "carved-react",
     "description": "Carved Design User Interface Components for React",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/plurid/carved-react.git"
@@ -21,6 +21,7 @@
         "eject": "react-scripts eject"
     },
     "dependencies": {
+        "@babel/cli": "^7.2.3",
         "@types/classnames": "^2.2.7",
         "@types/jest": "^24.0.0",
         "@types/react": "^16.8.2",
