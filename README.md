@@ -28,6 +28,6 @@ User Interface Components for [React][react]
 ```
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/carved-react/master/docs/images/components/CarvedInput-empty.png" height="80px">
-    <img src="https://raw.githubusercontent.com/plurid/carved-react/master/docs/images/components/CarvedInput-named.png" height="80px">
+    <img src="https://raw.githubusercontent.com/plurid/carved-react/master/docs/images/components/CarvedInput-empty.png" height="60px">
+    <img src="https://raw.githubusercontent.com/plurid/carved-react/master/docs/images/components/CarvedInput-named.png" height="60px">
 </p>
