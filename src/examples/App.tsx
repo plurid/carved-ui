@@ -1,6 +1,7 @@
 import React from "react";
 import { CarvedButton } from "../lib";
 import { CarvedCard } from "../lib";
+import { CarvedH1 } from "../lib";
 import { CarvedInput } from "../lib";
 import { CarvedSelector } from "../lib";
 
@@ -242,6 +243,34 @@ const App = () => (
 
 
         <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+
+
+
+
+        <h1>Headings</h1>
+        <br />
+        <br />
+        <br />
+
+        <CarvedH1
+            text="CarvedH1"
+        />
+
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
         <br />
         <br />
         <br />
