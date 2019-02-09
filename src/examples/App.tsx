@@ -20,10 +20,82 @@ import { CarvedSelector } from "../lib";
 
 const App = () => (
     <div className='appContainer'>
-        <br />
-        <br />
+        <h1>Carved</h1>
+
+        <h2>User Interface Components</h2>
+
+        <p>Carved Design uses 3 concepts to obtain all the elements</p>
+
+        <ul>
+            <li>the Carved Fjord</li>
+            <li>the Carved Karst</li>
+            <li>the Carved Crater</li>
+        </ul>
+
+        <CarvedHr />
+
+
+
+        <h3>The Carved Fjord</h3>
+
+        <CarvedFjord />
+
+        <h5>Description</h5>
+
+        <p>An element with more length than width.</p>
+
+        <h5>Uses</h5>
+
+        <ul>
+            <li>Nav Bar</li>
+            <li>Footer</li>
+            <li>Titles</li>
+        </ul>
+
+        <CarvedHr />
+
+
+
+        <h3>The Carved Karst</h3>
+
+        <CarvedKarst />
+
+        <h5>Description</h5>
+
+        <p>An element of almost equal length and width.</p>
+
+        <h5>Uses</h5>
+
+        <ul>
+            <li>Menus</li>
+            <li>Cards</li>
+        </ul>
+
+        <CarvedHr />
+
+
+
+        <h3>The Carved Crater</h3>
+
+        <CarvedCrater />
+
+        <h5>Description</h5>
+
+        <p>An element with border radius and hover effects, usually small in size</p>
+
+        <h5>Uses</h5>
+
+        <ul>
+            <li>Buttons</li>
+        </ul>
+
+        <CarvedHr />
+
+
+
+        <h1>Components</h1>
+
         <h1>CarvedInput</h1>
-        <br />
 
         <code>
             {
@@ -81,6 +153,8 @@ const App = () => (
             label="Password"
         />
 
+
+        <CarvedHr />
 
 
         <br />
@@ -229,23 +303,18 @@ const App = () => (
         <br />
 
 
+        <CarvedHr />
 
-        <br />
-        <br />
+
+
         <h1>CarvedButton</h1>
 
         <CarvedButton text="Submit" />
 
+        <CarvedHr />
 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
 
-        <br />
-        <br />
+
         <h1>CarvedCard</h1>
 
         <CarvedCard
@@ -262,63 +331,33 @@ const App = () => (
         <br />
         <br />
 
-
+        <CarvedHr />
 
 
 
         <h1>Headings</h1>
-        <br />
-        <br />
-        <br />
 
         <CarvedH1
             text="CarvedH1"
         />
 
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
+        <CarvedHr />
 
 
 
         <h1>Carved Crater</h1>
-        <br />
-        <br />
-        <br />
 
         <CarvedCrater />
 
+        <CarvedHr />
 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
 
 
         <h1>Carved Fjord</h1>
-        <br />
-        <br />
-        <br />
 
         <CarvedFjord />
 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
+        <CarvedHr />
 
 
 
@@ -356,13 +395,6 @@ const App = () => (
                 </CarvedKarst>
             </CarvedKarst>
         </div>
-
-
-        <br />
-        <br />
-        <br />
-        <br />
-
 
     </div>
 );
