@@ -6,6 +6,9 @@ import uuid from 'uuid/v4';
 
 import styles from './styles.module.scss';
 
+import CarvedDots from '../icons/CarvedDots';
+
+
 const cx = classNames.bind(styles);
 
 
@@ -104,6 +107,9 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
                     ? selectors[selected].label
                     : noneText? noneText : 'None'
                 }
+                <span className={ cx(styles.dots) }>
+                    <CarvedDots />
+                </span>
             </span>
         );
 
