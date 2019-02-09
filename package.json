@@ -10,7 +10,6 @@
     "license": "MIT",
     "main": "dist/index.js",
     "module": "dist/index.js",
-    "homepage": "https://caveljan.com/carved/",
     "files": [
         "dist"
     ],
