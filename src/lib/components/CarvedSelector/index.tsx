@@ -24,7 +24,7 @@ interface CarvedSelectorProperties {
     selectors: Array<Selector>
 }
 
-enum Expand {
+enum Direction {
     Up = 'UP',
     Down = 'DOWN',
     Left = 'LEFT',
@@ -47,7 +47,7 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
         const initialSelected = this.initialSelect()
 
         this.state = {
-            expand: expand ? expand.toUpperCase() : Expand.Down,
+            expand: expand ? expand.toUpperCase() : Direction.Down,
             expanded: expanded ? !!expanded : false,
             selected: initialSelected,
         };

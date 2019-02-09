@@ -70,7 +70,14 @@ class CarvedInput extends Component<CarvedInputProperties, CarvedInputState> {
                                     [styles.animate]: inputFocused
                                 }) }
                             >
-                                { this.state.value === '' ? label : ''}
+                                { this.state.value === '' ? (
+                                    <span>
+                                        {label}
+                                        <span className={ cx(styles.placeholder)}>
+                                            {placeholder}
+                                        </span>
+                                    </span>
+                                ) : ''}
                             </label>
                         )
                     }
@@ -82,7 +89,6 @@ class CarvedInput extends Component<CarvedInputProperties, CarvedInputState> {
                         onChange={this.onChangeProper.bind(this, onChange)}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
-                        placeholder={placeholder}
                     />
                 </div>
             </div>
