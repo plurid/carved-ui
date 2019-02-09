@@ -1,0 +1,10 @@
+.appContainer {
+    width: 50%;
+    margin: 15px auto;
+}
+
+@media (max-width: 1200px) {
+    .appContainer {
+        width: 100%;
+    }
+}

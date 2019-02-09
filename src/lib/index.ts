@@ -5,6 +5,7 @@ import CarvedKarst from './components/primitives/CarvedKarst';
 import CarvedButton from './components/CarvedButton';
 import CarvedCard from './components/CarvedCard';
 import CarvedH1 from './components/CarvedH1';
+import CarvedHr from './components/CarvedHr';
 import CarvedInput from './components/CarvedInput';
 import CarvedSelector from './components/CarvedSelector';
 
@@ -18,6 +19,7 @@ export {
     CarvedButton,
     CarvedCard,
     CarvedH1,
+    CarvedHr,
     CarvedInput,
     CarvedSelector,
 };

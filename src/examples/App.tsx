@@ -1,5 +1,8 @@
 import React from "react";
 
+import './styles.scss';
+
+
 import { CarvedCrater } from "../lib";
 import { CarvedFjord } from "../lib";
 import { CarvedKarst } from "../lib";
@@ -9,13 +12,14 @@ import { CarvedKarst } from "../lib";
 import { CarvedButton } from "../lib";
 import { CarvedCard } from "../lib";
 import { CarvedH1 } from "../lib";
+import { CarvedHr } from "../lib";
 import { CarvedInput } from "../lib";
 import { CarvedSelector } from "../lib";
 
 
 
 const App = () => (
-    <div style={{ width: '50%', margin: "15px auto" }}>
+    <div className='appContainer'>
         <br />
         <br />
         <h1>CarvedInput</h1>
@@ -323,7 +327,7 @@ const App = () => (
         <br />
         <br />
 
-        <div style={{ height: '500px'}}>
+        <div style={{ height: '500px',  overflow: 'hidden' }}>
             <CarvedKarst>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in justo mauris. Donec quis hendrerit ante. Nunc ut lacinia risus. Sed tempus, neque ac posuere vestibulum, nunc dui porttitor mauris, eu sodales massa est sit amet quam. Nunc vestibulum ante id arcu varius, sed finibus neque viverra. Aenean posuere, justo vel venenatis accumsan, diam ex iaculis quam, in ornare nisl quam vitae mi. Donec cursus odio in eleifend vehicula. Maecenas ac nisl non nisi ultrices sodales ut sit amet ipsum. Pellentesque iaculis vel est vulputate dapibus. Praesent viverra ante vel dui auctor, in tincidunt dolor gravida. Maecenas porta lobortis lacus, quis aliquet mauris congue eu.</p>
                 <CarvedKarst>
@@ -337,11 +341,29 @@ const App = () => (
             </CarvedKarst>
         </div>
 
+        <CarvedHr />
+
+        <div style={{ height: '500px', overflow: 'hidden' }}>
+            <CarvedKarst>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in justo mauris. Donec quis hendrerit ante. Nunc ut lacinia risus. Sed tempus, neque ac posuere vestibulum, nunc dui porttitor mauris, eu sodales massa est sit amet quam. Nunc vestibulum ante id arcu varius, sed finibus neque viverra. Aenean posuere, justo vel venenatis accumsan, diam ex iaculis quam, in ornare nisl quam vitae mi. Donec cursus odio in eleifend vehicula. Maecenas ac nisl non nisi ultrices sodales ut sit amet ipsum. Pellentesque iaculis vel est vulputate dapibus. Praesent viverra ante vel dui auctor, in tincidunt dolor gravida. Maecenas porta lobortis lacus, quis aliquet mauris congue eu.</p>
+                <CarvedKarst>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in justo mauris. Donec quis hendrerit ante. Nunc ut lacinia risus. Sed tempus, neque ac posuere vestibulum, nunc dui porttitor mauris, eu sodales massa est sit amet quam. Nunc vestibulum ante id arcu varius, sed finibus neque viverra. Aenean posuere, justo vel venenatis accumsan, diam ex iaculis quam, in ornare nisl quam vitae mi. Donec cursus odio in eleifend vehicula. Maecenas ac nisl non nisi ultrices sodales ut sit amet ipsum. Pellentesque iaculis vel est vulputate dapibus. Praesent viverra ante vel dui auctor, in tincidunt dolor gravida. Maecenas porta lobortis lacus, quis aliquet mauris congue eu.</p>
+                    <CarvedKarst>
+                        <p>Maecenas ac justo nisl. Sed vulputate nibh ut congue porttitor. Duis rutrum sem ut tortor accumsan, euismod scelerisque lacus vulputate. Nam vulputate vel turpis in tempus. Praesent facilisis sodales pharetra. Morbi neque turpis, pharetra eu orci et, euismod porttitor sem. In ut vestibulum felis. Duis sit amet commodo ipsum. Ut quis aliquet sapien.</p>
+                        <p>Vestibulum viverra lacus vel erat mattis, quis semper ligula lacinia. Vestibulum mollis nibh ante, ut egestas lorem tincidunt in. Ut in ante sit amet eros accumsan vulputate. Vivamus sed nisi gravida, egestas elit ornare, ullamcorper velit. Etiam non purus nec augue vestibulum placerat nec rhoncus felis. Integer maximus accumsan dui sed tempus. Vivamus vel lacus at urna eleifend malesuada non a enim. Suspendisse vel sem in risus convallis volutpat et sit amet lorem. Aliquam imperdiet maximus justo nec cursus. In efficitur enim quis placerat egestas. Donec dui diam, euismod non lacinia in, tempus et metus. Nunc id commodo nisl.</p>
+                        <p>Donec lacus nulla, facilisis sit amet tincidunt pretium, dapibus vel elit. Phasellus auctor massa aliquet, iaculis sem nec, sollicitudin ex. Cras luctus nisl eu ipsum vehicula, non posuere erat egestas. Nullam sit amet risus sit amet lacus varius sagittis. Duis sed placerat felis. Vivamus felis neque, congue non bibendum vel, sagittis vitae turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet dapibus mauris, id ornare risus.</p>
+                    </CarvedKarst>
+                </CarvedKarst>
+            </CarvedKarst>
+        </div>
+
+
         <br />
         <br />
         <br />
         <br />
-        <br />
+
+
     </div>
 );
 
