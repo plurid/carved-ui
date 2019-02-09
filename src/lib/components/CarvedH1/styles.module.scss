@@ -1,35 +1,92 @@
 .carvedFormGroup {
     margin-bottom: 1rem;
+    // background-color: #1D222B;
+    // background-color:rgb(176, 9, 19);
+    // box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
+    // background-color: #1D222B;
 }
 
 
-.carvedH1 {
-    width: auto;
-    height: 50px;
 
-    // background-color: hsla(0, 0%, 0%, 0.3);
+.carvedFormGroup h1 {
 
-    background: rgba(0, 0, 0, 0);
-    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
 
-    box-shadow: inset 0 5px 5px 0 rgba(0, 0, 0, 0.7);
-    border: none;
-    outline: none;
-    color: white;
-    // color: black;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-size: 100px;
+    background-color: hsl(220, 20%, 5%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: hsla(220, 20%, 20%, 0.5) 0px 3px 3px;
+
+
+    // text-transform: uppercase;
+    // font-family: sans-serif;
+    // font-size: 80px;
     text-align: center;
-    padding: 20px 15px;
-    min-width: 150px;
-    transition: box-shadow 250ms linear, color 250ms linear;
-    font-size: 40px;
+    // height: 100px;
+    // padding-top: 20px;
+    // background-color: hsl(220, 20%, 25%);
+    // // background-color: red;
+    // background-clip: text;
+    // color: transparent;
+    // // text-shadow: 0px 3px 3px #1D222E, 0 0 0 rgb(0, 0, 0), 0px 3px 3px #1D222B;
+    // // text-shadow: 0px 3px 3px rgb(176, 9, 19), 0 0 0 rgb(0, 0, 0), 0px 3px 3px rgb(176, 9, 19);
+    // text-shadow: 0px 3px 3px white, 0 0 0 rgb(0, 0, 0), 0px 3px 3px white;
+
+    // // text-shadow: hsla(0, 0%, 100%, 0.7) 0px 3px 3px;
 }
 
-.carvedButton:hover {
-    color: hsla(0, 0%, 100%, 0.75);
-    box-shadow: inset 0 10px 15px 0 rgba(0, 0, 0, 0.7);
+
+.carvedFormGroup h1::selection {
+    // background: #5af;
+    // color: #fff;
+    // color: gray;
+    text-shadow: none;
 }
 
-.carvedButton:active {
-    color: hsla(0, 0%, 100%, 0.50);
-    box-shadow: inset 0 20px 20px 0 rgba(0, 0, 0, 0.7);
-}
+
+
+// .carvedH1 {
+//     width: auto;
+//     // height: 50px;
+
+//     background-color: #666666;
+//     -webkit-background-clip: text;
+//     -moz-background-clip: text;
+//     background-clip: text;
+//     color: transparent;
+//     text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+//     // color: hsla(0, 0%, 0%, 0.3);
+//     text-transform: uppercase;
+
+
+
+//     // background-color: hsla(0, 0%, 0%, 0.3);
+
+//     // background: rgba(0, 0, 0, 0);
+//     // background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+
+//     // box-shadow: inset 0 5px 5px 0 rgba(0, 0, 0, 0.7);
+//     // border: none;
+//     // outline: none;
+//     // color: white;
+//     // color: black;
+//     text-align: center;
+//     padding: 20px 15px;
+//     // min-width: 150px;
+//     // transition: box-shadow 250ms linear, color 250ms linear;
+//     font-size: 100px;
+// }
+
+// .carvedButton:hover {
+//     color: hsla(0, 0%, 100%, 0.75);
+//     box-shadow: inset 0 10px 15px 0 rgba(0, 0, 0, 0.7);
+// }
+
+// .carvedButton:active {
+//     color: hsla(0, 0%, 100%, 0.50);
+//     box-shadow: inset 0 20px 20px 0 rgba(0, 0, 0, 0.7);
+// }
