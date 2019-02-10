@@ -1,7 +1,7 @@
 {
     "name": "carved-html",
     "version": "0.1.0",
-    "description": "Carved UI Design HTML Components",
+    "description": "HTML Custom Elements for Carved User Interface Design",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/plurid/carved-html.git"
