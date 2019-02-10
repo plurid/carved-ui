@@ -10,6 +10,7 @@ import { CarvedKarst } from "../lib";
 
 
 import { CarvedButton } from "../lib";
+import { DeCarvedButton } from "../lib";
 import { CarvedCard } from "../lib";
 import { CarvedH1 } from "../lib";
 import { CarvedHr } from "../lib";
@@ -310,6 +311,12 @@ const App = () => (
         <h1>CarvedButton</h1>
 
         <CarvedButton text="Submit" />
+
+        <CarvedHr />
+
+        <h1>DeCarvedButton</h1>
+
+        <DeCarvedButton text="Submit" />
 
         <CarvedHr />
 
