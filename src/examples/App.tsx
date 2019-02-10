@@ -20,11 +20,11 @@ import { CarvedSelector } from "../lib";
 
 const App = () => (
     <div className='appContainer'>
-        <h1>Carved</h1>
+        <CarvedH1 text="Carved" />
 
         <h2>User Interface Components</h2>
 
-        <p>Carved Design uses 3 concepts to obtain all the elements</p>
+        <p>Carved Design uses 3 concepts to derive all the components</p>
 
         <ul>
             <li>the Carved Fjord</li>
