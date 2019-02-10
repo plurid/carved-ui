@@ -1,7 +1,13 @@
 {
     "name": "carved-html",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Carved UI Design HTML Components",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/plurid/carved-html.git"
+    },
+    "license": "MIT",
+    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
     "module": "dist/esm/index.js",
     "main": "dist/index.js",
     "unpkg": "dist/carved-html.js",
@@ -28,6 +34,5 @@
         "jest": "23.6.0",
         "jest-cli": "23.6.0",
         "puppeteer": "1.8.0"
-    },
-    "license": "MIT"
+    }
 }
