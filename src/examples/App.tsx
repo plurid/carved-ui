@@ -31,7 +31,7 @@ class App extends Component {
                 <CarvedMenuBar>
                     <CarvedKarst>
                         <div className='logo'>
-                            <CarvedH1 text='Carved' />
+                            <CarvedH1 onClick={this.click} text='Carved' />
                         </div>
                     </CarvedKarst>
                 </CarvedMenuBar>

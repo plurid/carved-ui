@@ -1,32 +1,47 @@
 import React, { Component } from "react";
-import classNames from 'classnames/bind';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
-import styles from './styles.module.scss';
-
-const cx = classNames.bind(styles);
 
 const H1 = styled.h1`
     text-transform: uppercase;
     font-family: sans-serif;
-    font-size: 50px;
-    background-color: hsl(220, 20%, 10%);
+    font-size: 72pt;
+    background-color: hsl(0, 0%, 0%);
     -webkit-background-clip: text;
     -moz-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: hsla(220, 20%, 20%, 0.5) 0px 3px 3px;
+    text-shadow: ${props => props.theme.carvedH1.textShadow.color} 0px 3px 3px;
     text-align: center;
 
     ::selection {
-        color: hsl(220, 20%, 5%);
+        color: ${props => props.theme.carvedH1.textShadow.colorSelection};
         text-shadow: none;
     }
 `;
 
+H1.defaultProps = {
+    theme: {
+        carvedH1: {
+            textShadow: {
+                color: 'hsla(220, 20%, 20%, 0.5)',
+                colorSelection: 'hsl(0, 0%, 0%)',
+            },
+        },
+    },
+};
+
+const furorTheme = {
+    carvedH1: {
+        textShadow: {
+            color: 'hsla(360, 90%, 30%, 0.5)',
+            colorSelection: 'hsl(0, 0%, 0%)',
+        },
+    },
+}
 
 
-interface CarvedH1Properties {
+interface CarvedH1Properties extends React.Props<any> {
     text: string,
     onClick?: any,
 }
@@ -44,12 +59,20 @@ class CarvedH1 extends Component<CarvedH1Properties, CarvedH1State> {
     }
 
     render() {
-        const { text } = this.props;
+        const { text, onClick } = this.props;
 
         return (
-            <H1>
-                {text}
-            </H1>
+            <React.Fragment>
+                <H1 onClick={onClick}>
+                    {text}
+                </H1>
+
+                <ThemeProvider theme={furorTheme}>
+                    <H1>
+                        {text}
+                    </H1>
+                </ThemeProvider>
+            </React.Fragment>
         );
     }
 }
