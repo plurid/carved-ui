@@ -7,7 +7,7 @@ import { Component, Prop } from '@stencil/core';
     styleUrl: 'carved-button.css',
     shadow: true
 })
-export class MyComponent {
+export class CarvedButton {
     @Prop() text: string;
 
     render() {

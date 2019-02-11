@@ -7,7 +7,7 @@ import { Component, Prop } from '@stencil/core';
     styleUrl: 'carved-input.css',
     shadow: true
 })
-export class MyComponent {
+export class CarvedInput {
     @Prop() type: string;
     @Prop() label: string;
     @Prop() placeholder: string;
