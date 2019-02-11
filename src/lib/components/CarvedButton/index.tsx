@@ -23,6 +23,7 @@ const Button = styled.button`
     transition: box-shadow 250ms linear, color 250ms linear;
     font-size: 16px;
 
+
     :hover {
         color: hsla(0, 0%, 100%, 0.75);
         box-shadow: inset 0 10px 15px 0 rgba(0, 0, 0, 0.7);
@@ -37,6 +38,7 @@ const Button = styled.button`
 
 interface CarvedButtonProperties {
     text: string,
+    stratum?: object,
     onClick?: any,
 }
 
@@ -53,10 +55,10 @@ class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> 
     }
 
     render() {
-        const { text, onClick } = this.props;
+        const { text, onClick, stratum } = this.props;
 
         return (
-            <Button onClick={onClick}>
+            <Button onClick={onClick} style={ stratum }>
                 {text}
             </Button>
         );

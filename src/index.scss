@@ -1,26 +1,42 @@
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
+
 html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Roboto",
+        "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+
+
+    // Night
+    background-color: hsl(0, 0%, 10%);
+
+    // Dusk
+    background-color: hsl(0, 0%, 20%);
+
+    // Dawn
+    background-color: hsl(0, 0%, 70%);
+
+    // Light
+    background-color: hsl(0, 0%, 100%);
+
     // Ponton
     background-color: hsl(220, 20%, 20%);
 
     // Jaune
-    // background-color: rgb(220, 170, 60);
+    // background-color: hsl(35, 90%, 45%);
 
     // Furor
-    // background-color: rgb(180, 10, 20);
+    // background-color: hsl(360, 90%, 30%);
 
-    // background-color: white;
 
     // color: black;
     color: white;
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
 }
