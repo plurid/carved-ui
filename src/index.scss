@@ -1,11 +1,22 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
+    // Ponton
     background-color: hsl(220, 20%, 20%);
+
+    // Jaune
+    // background-color: rgb(220, 170, 60);
+
+    // Furor
+    // background-color: rgb(180, 10, 20);
+
     // background-color: white;
-    // background-color: red;
-    // background-color: rgb(176, 9, 19);
 
     // color: black;
     color: white;
+    height: 100%;
 }
 
 body {

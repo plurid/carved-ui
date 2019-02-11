@@ -26,10 +26,8 @@ class CarvedFjord extends Component<CarvedFjordProperties, CarvedFjordState> {
         const { children } = this.props;
 
         return (
-            <div className={ cx(styles.carvedFormGroup) }>
-                <button className={ cx(styles.carvedButton) }>
-                    {children}
-                </button>
+            <div className={ cx(styles.carvedFjord) }>
+                {children}
             </div>
         );
     }

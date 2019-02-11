@@ -1,9 +1,28 @@
 import React, { Component } from "react";
 import classNames from 'classnames/bind';
+import styled from 'styled-components';
 
 import styles from './styles.module.scss';
 
 const cx = classNames.bind(styles);
+
+const H1 = styled.h1`
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-size: 50px;
+    background-color: hsl(220, 20%, 10%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: hsla(220, 20%, 20%, 0.5) 0px 3px 3px;
+    text-align: center;
+
+    ::selection {
+        color: hsl(220, 20%, 5%);
+        text-shadow: none;
+    }
+`;
 
 
 
@@ -28,11 +47,9 @@ class CarvedH1 extends Component<CarvedH1Properties, CarvedH1State> {
         const { text } = this.props;
 
         return (
-            <div className={ cx(styles.carvedFormGroup) }>
-                <h1 className={ cx(styles.carvedH1) }>
-                    {text}
-                </h1>
-            </div>
+            <H1>
+                {text}
+            </H1>
         );
     }
 }

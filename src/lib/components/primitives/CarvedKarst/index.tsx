@@ -26,10 +26,8 @@ class CarvedKarst extends Component<CarvedKarstProperties, CarvedKarstState> {
         const { children } = this.props;
 
         return (
-            <div className={ cx(styles.carvedFormGroup) }>
-                <div className={ cx(styles.carvedKarst) }>
-                    {children}
-                </div>
+            <div className={ cx(styles.carvedKarst) }>
+                {children}
             </div>
         );
     }

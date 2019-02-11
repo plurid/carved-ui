@@ -8,6 +8,7 @@ import CarvedCard from './components/CarvedCard';
 import CarvedH1 from './components/CarvedH1';
 import CarvedHr from './components/CarvedHr';
 import CarvedInput from './components/CarvedInput';
+import CarvedMenuBar from './components/CarvedMenuBar';
 import CarvedSelector from './components/CarvedSelector';
 
 
@@ -23,5 +24,6 @@ export {
     CarvedH1,
     CarvedHr,
     CarvedInput,
+    CarvedMenuBar,
     CarvedSelector,
 };
