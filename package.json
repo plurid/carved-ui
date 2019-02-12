@@ -22,6 +22,7 @@
         "start:examples": "react-scripts start",
         "build:examples": "react-scripts build",
         "test": "react-scripts test",
+        "test.update": "react-scripts test --updateSnapshot",
         "eject": "react-scripts eject"
     },
     "dependencies": {
