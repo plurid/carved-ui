@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import classNames from 'classnames/bind';
 import styled from 'styled-components';
 
-import styles from './styles.module.scss';
 
-
-const cx = classNames.bind(styles);
 
 const Button = styled.button`
     width: auto;
@@ -36,13 +32,13 @@ const Button = styled.button`
 `;
 
 
-interface CarvedButtonProperties {
+type CarvedButtonProperties = {
     text: string,
     stratum?: object,
     onClick?: any,
 }
 
-interface CarvedButtonState {
+type CarvedButtonState = {
 }
 
 
@@ -58,7 +54,7 @@ class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> 
         const { text, onClick, stratum } = this.props;
 
         return (
-            <Button onClick={onClick} style={ stratum }>
+            <Button onClick={onClick} style={stratum}>
                 {text}
             </Button>
         );

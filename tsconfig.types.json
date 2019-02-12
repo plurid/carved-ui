@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "allowSyntheticDefaultImports": true,
+        "emitDeclarationOnly": true,
+        "outDir": "./dist/types",
+        "listEmittedFiles": false,
+        "jsx": "preserve"
+    },
+    "include": [
+        "src/lib"
+    ],
+    "exclude": [
+        "**/*.spec.tsx"
+    ]
+}

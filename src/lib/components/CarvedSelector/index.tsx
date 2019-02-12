@@ -3,11 +3,10 @@ import classNames from 'classnames/bind';
 
 import uuid from 'uuid/v4';
 
-
-import styles from './styles.module.scss';
-
 import CarvedDots from '../icons/CarvedDots';
 
+
+const styles = require('./styles.module.scss')
 
 const cx = classNames.bind(styles);
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from 'classnames/bind';
 import styled from 'styled-components';
 
-import styles from './styles.module.scss';
+const styles = require('./styles.module.scss')
 
 import CarvedFjord from '../primitives/CarvedFjord';
 
