@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 
 const Div = styled.div`
-    width: 100%;
-    height: 100%;
     background-color: hsla(0, 0%, 0%, 0.3);
     box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
     border: none;
@@ -15,12 +13,14 @@ const Div = styled.div`
 `;
 
 
-type CarvedStratumProperties = {
-    stratum?: object,
-    onClick?: any,
+interface CarvedStratumProperties {
+    stratum?: object;
+    onClick?: any;
+    children: any;
+    className?: string;
 }
 
-type CarvedStratumState = {
+interface CarvedStratumState {
 }
 
 
@@ -33,10 +33,10 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
     }
 
     render() {
-        const { children, onClick, stratum } = this.props;
+        const { children, onClick, stratum, className } = this.props;
 
         return (
-            <Div onClick={onClick} style={ stratum }>
+            <Div className={className} onClick={onClick} style={stratum}>
                 {children}
             </Div>
         );

@@ -1,24 +1,26 @@
 import React, { Component } from "react";
+import CarvedStratum from '../metaprimitive/CarvedStratum';
 import styled from 'styled-components';
 
 
 
-const Button = styled.button`
-    width: auto;
+const StyledCarvedButton = styled(CarvedStratum)`
+    width: 100px;
     height: 50px;
-    background-color: hsla(0, 0%, 0%, 0.3);
-    box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
     border: none;
     outline: none;
     color: white;
     cursor: pointer;
     user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 25px;
     padding: 10px 15px;
+    margin: 10px;
     min-width: 150px;
     transition: box-shadow 250ms linear, color 250ms linear;
     font-size: 16px;
-
 
     :hover {
         color: hsla(0, 0%, 100%, 0.75);
@@ -32,13 +34,13 @@ const Button = styled.button`
 `;
 
 
-type CarvedButtonProperties = {
-    text: string,
-    stratum?: object,
-    onClick?: any,
+interface CarvedButtonProperties {
+    text: string;
+    stratum?: object;
+    onClick?: any;
 }
 
-type CarvedButtonState = {
+interface CarvedButtonState {
 }
 
 
@@ -54,9 +56,9 @@ class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> 
         const { text, onClick, stratum } = this.props;
 
         return (
-            <Button onClick={onClick} style={stratum}>
+            <StyledCarvedButton onClick={onClick} stratum={stratum}>
                 {text}
-            </Button>
+            </StyledCarvedButton>
         );
     }
 }
