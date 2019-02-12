@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 import styled, { ThemeProvider } from 'styled-components';
 
-// import { backgroundColor } from '../../themes';
-import { themes } from '../../themes';
+import { createThemes, Themes } from '../../themes';
+
+const themes: Themes = createThemes();
+console.log(themes);
 
 
 const StyledCarvedButton = styled(CarvedStratum)`
@@ -11,9 +13,9 @@ const StyledCarvedButton = styled(CarvedStratum)`
     height: 50px;
     border: none;
     outline: none;
-    color: white;
+    color: ${props => props.theme.textColor};
     cursor: pointer;
-    background-color: ${props => props.theme.backgroundColor} ;
+    background-color: ${props => props.theme.backgroundColor};
     user-select: none;
     display: inline-flex;
     align-items: center;
@@ -38,11 +40,11 @@ const StyledCarvedButton = styled(CarvedStratum)`
 
 
 interface CarvedButtonProperties {
+    depth?: string;
+    onClick?: any;
     text: string;
     theme?: string;
-    depth?: string;
     stratum?: object;
-    onClick?: any;
 }
 
 interface CarvedButtonState {
@@ -60,7 +62,7 @@ class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> 
     render() {
         const { theme, depth, text, onClick, stratum } = this.props;
         const themeApp = theme ? theme : 'ponton';
-        const depthApp = depth ? depth: '0';
+        const depthApp = depth ? depth : '0';
 
         return (
             <ThemeProvider theme={ themes[themeApp][depthApp] }>

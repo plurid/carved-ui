@@ -54,8 +54,8 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
             selected: initialSelected,
         };
 
-        console.log(selectors);
-        console.log(this.state);
+        // console.log(selectors);
+        // console.log(this.state);
     }
 
     initialSelect() {

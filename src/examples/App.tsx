@@ -31,19 +31,35 @@ class App extends Component {
     render() {
         return (
             <div>
-                <CarvedStratum stratum={{ margin: '50px 0'}}>
+                <CarvedStratum
+                    theme="dusk"
+                    depth="1"
+                    stratum={{ margin: '50px 0'}}
+                >
                     <h1>Carved Stratum 1</h1>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
-                        <CarvedStratum stratum={{ margin: '50px 0'}}>
+                        <CarvedStratum
+                            theme="dusk"
+                            depth="2"
+                            stratum={{ margin: '50px 0'}}
+                        >
                             <h1>Carved Stratum 2</h1>
                             <div>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
-                                <CarvedStratum stratum={{ margin: '50px 0'}}>
+                                <CarvedStratum
+                                    theme="dusk"
+                                    depth="3"
+                                    stratum={{ margin: '50px 0'}}
+                                >
                                     <h1>Carved Stratum 3</h1>
                                     <div>
                                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
-                                        <CarvedStratum stratum={{ margin: '50px 0'}}>
+                                        <CarvedStratum
+                                            theme="dusk"
+                                            depth="4"
+                                            stratum={{ margin: '50px 0'}}
+                                        >
                                             <h1>Carved Stratum 4</h1>
                                             <div>
                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
@@ -354,15 +370,14 @@ class App extends Component {
                     <h1>CarvedButton</h1>
 
                     <CarvedButton
-                        stratum={ { color: 'red' } }
-                        theme="dusk"
+                        theme="dawn"
                         depth="1"
-                        text="Submit"
+                        text="SubmitA"
                         onClick={this.click}
                     />
 
                     <CarvedButton
-                        theme="ponton"
+                        theme="dawn"
                         depth="2"
                         text="SubmitB"
                         onClick={this.click}
@@ -370,7 +385,9 @@ class App extends Component {
                     </CarvedButton>
 
                     <CarvedButton
-                        text="Submit"
+                        theme="dawn"
+                        depth="3"
+                        text="SubmitC"
                         onClick={this.click}
                     />
 
