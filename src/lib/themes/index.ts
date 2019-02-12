@@ -11,7 +11,9 @@ interface ThemeLevel {
 }
 
 
+
 const DEPTH_LEVELS = 6;
+
 
 export function createTheme(color: string): Theme {
     const theme: Theme = {};
@@ -29,6 +31,7 @@ export function createTheme(color: string): Theme {
 
     return theme;
 }
+
 
 interface ColorElements {
     hue: number,
@@ -99,89 +102,4 @@ export function createThemes(): Themes {
         themes[theme.name] = createTheme(theme.color);
     }
     return themes;
-}
-
-
-
-const night = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    }
-    // backgroundColor: 'hsl(0, 0%, 10%)',
-}
-
-const dusk = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    }
-    // backgroundColor: 'hsl(0, 0%, 20%)',
-}
-
-const dawn = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    }
-    // backgroundColor: 'hsl(0, 0%, 70%)',
-}
-
-const light = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    }
-    // backgroundColor: 'hsl(0, 0%, 100%)',
-}
-
-const ponton = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    },
-    "2": {
-        backgroundColor: 'hsl(220, 20%, 10%)',
-    },
-}
-
-const jaune = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(220, 20%, 15%)',
-    }
-    // backgroundColor: 'hsl(35, 90%, 45%)',
-}
-
-const furor = {
-    "0": {
-        backgroundColor: 'hsl(220, 20%, 20%)',
-    },
-    "1": {
-        backgroundColor: 'hsl(360, 90%, 25%)',
-    }
-    // backgroundColor: 'hsl(360, 90%, 30%)',
-}
-
-
-export const themes: Themes = {
-    night,
-    dusk,
-    dawn,
-    light,
-    ponton,
-    jaune,
-    furor,
 }
