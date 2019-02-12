@@ -46,6 +46,7 @@
         "@types/react-dom": "^16.8.0",
         "@types/react-test-renderer": "^16.8.0",
         "@types/styled-components": "^4.1.8",
+        "@types/styled-theming": "^2.2.0",
         "@types/uuid": "^3.4.4",
         "babel-plugin-styled-components": "^1.10.0",
         "react-test-renderer": "^16.8.1",

@@ -353,8 +353,26 @@ class App extends Component {
 
                     <h1>CarvedButton</h1>
 
-                    <CarvedButton text="Submit" onClick={this.click} stratum={ { color: 'red' } } />
-                    <CarvedButton text="Submit" onClick={this.click} />
+                    <CarvedButton
+                        stratum={ { color: 'red' } }
+                        theme="dusk"
+                        depth="1"
+                        text="Submit"
+                        onClick={this.click}
+                    />
+
+                    <CarvedButton
+                        theme="ponton"
+                        depth="2"
+                        text="SubmitB"
+                        onClick={this.click}
+                    >
+                    </CarvedButton>
+
+                    <CarvedButton
+                        text="Submit"
+                        onClick={this.click}
+                    />
 
                     <CarvedHr />
 
