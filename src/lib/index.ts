@@ -1,3 +1,5 @@
+import CarvedStratum from './components/metaprimitive/CarvedStratum';
+
 import CarvedCrater from './components/primitives/CarvedCrater';
 import CarvedFjord from './components/primitives/CarvedFjord';
 import CarvedKarst from './components/primitives/CarvedKarst';
@@ -14,6 +16,8 @@ import CarvedSelector from './components/CarvedSelector';
 
 
 export {
+    CarvedStratum,
+
     CarvedCrater,
     CarvedFjord,
     CarvedKarst,

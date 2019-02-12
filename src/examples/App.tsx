@@ -3,20 +3,23 @@ import React, { Component } from "react";
 import './styles.scss';
 
 
-import { CarvedCrater } from "../lib";
-import { CarvedFjord } from "../lib";
-import { CarvedKarst } from "../lib";
+import {
+    CarvedStratum,
 
+    CarvedCrater,
+    CarvedFjord,
+    CarvedKarst,
 
+    CarvedButton,
+    DeCarvedButton,
+    CarvedCard,
+    CarvedH1,
+    CarvedHr,
+    CarvedInput,
+    CarvedMenuBar,
+    CarvedSelector,
+} from '../lib';
 
-import { CarvedButton } from "../lib";
-import { DeCarvedButton } from "../lib";
-import { CarvedCard } from "../lib";
-import { CarvedH1 } from "../lib";
-import { CarvedHr } from "../lib";
-import { CarvedInput } from "../lib";
-import { CarvedMenuBar } from "../lib";
-import { CarvedSelector } from "../lib";
 
 
 
@@ -28,6 +31,32 @@ class App extends Component {
     render() {
         return (
             <div>
+                <CarvedStratum stratum={{ margin: '50px 0'}}>
+                    <h1>Carved Stratum 1</h1>
+                    <div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
+                        <CarvedStratum stratum={{ margin: '50px 0'}}>
+                            <h1>Carved Stratum 2</h1>
+                            <div>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
+                                <CarvedStratum stratum={{ margin: '50px 0'}}>
+                                    <h1>Carved Stratum 3</h1>
+                                    <div>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
+                                        <CarvedStratum stratum={{ margin: '50px 0'}}>
+                                            <h1>Carved Stratum 4</h1>
+                                            <div>
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
+                                            </div>
+                                        </CarvedStratum>
+                                    </div>
+                                </CarvedStratum>
+                            </div>
+                        </CarvedStratum>
+                    </div>
+                </CarvedStratum>
+
+
                 <CarvedMenuBar>
                     <CarvedKarst>
                         <div className='logo'>
