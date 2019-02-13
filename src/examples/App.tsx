@@ -33,7 +33,7 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="hsl(150, 80%, 30%)"
+                theme="hsl(200, 80%, 30%)"
             >
                 <CarvedButton
                     text="Submit"
