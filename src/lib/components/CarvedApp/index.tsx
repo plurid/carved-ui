@@ -48,15 +48,16 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
 
         const childrenWithProps = React.Children.map(children, (child: any) => {
             if (child.type) {
+                let childWithProps = child;
                 const name = child.type.name;
+                // console.log(name);
 
                 if (name) {
                     const carvedRegex = /Carved/;
                     const carvedTest = carvedRegex.test(name);
+                    // console.log(name, carvedTest);
 
                     if (carvedTest) {
-                        let childWithProps = child;
-
                         if (!child.props.depth) {
                             childWithProps = React.cloneElement(childWithProps, {
                                 depthComputed: nestingLevel,
@@ -68,24 +69,27 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
                                 themeComputed: theme,
                             });
                         }
-
-                        return childWithProps;
                     }
                 }
+
+                if (child.props.children && typeof child.props.children !== 'string') {
+                    console.log(child.props.children);
+                    let nesting = (parseInt(nestingLevel) + 1) + '';
+                    let childChildrenWithProps = child.props.children;
+                    childChildrenWithProps = this.setChildrenProps(childChildrenWithProps, nesting);
+                    childWithProps = React.cloneElement(childWithProps, {
+                        children: childChildrenWithProps,
+                    });
+                }
+
+                return childWithProps;
             }
 
-            if (child.props.children && typeof child.props.children !== 'string') {
-                let nesting = (parseInt(nestingLevel) + 1) + '';
-                let childChildrenWithProps = child.props.children;
-                childChildrenWithProps = this.setChildrenProps(childChildrenWithProps, nesting);
-                return React.cloneElement(child, {
-                    children: childChildrenWithProps,
-                });
-            }
+
             return child;
         });
 
-        console.log(childrenWithProps);
+        // console.log(childrenWithProps);
         return childrenWithProps;
     }
 
