@@ -15,10 +15,14 @@ const Div = styled.div`
     box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
     border: none;
     color: ${props => props.theme.textColor};
-    padding: 50px 50px;
+    padding: 50px;
     padding-bottom: 30px;
     transition: box-shadow 250ms linear, color 250ms linear;
     font-size: 16px;
+
+    @media (max-width: 700px) {
+        padding: 15px;
+    }
 `;
 
 
@@ -26,12 +30,15 @@ interface CarvedStratumProperties {
     className?: string;
     children: any;
     depth?: string;
+    parentDepthLevel?: string;
+    depthLevel?: string;
     stratum?: object;
     onClick?: any;
     theme?: string;
 }
 
 interface CarvedStratumState {
+    depthLevel: string;
 }
 
 
@@ -39,14 +46,41 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
     constructor(props: CarvedStratumProperties) {
         super(props);
 
+        const { parentDepthLevel, depth } = this.props;
+        let d = '0';
+
+        if (parentDepthLevel) {
+            d = (parseInt(parentDepthLevel) + 1) + '';
+        }
+
+        if (depth) {
+            d = depth;
+        }
+        // console.log(this.props);
+
+        console.log(d);
+
         this.state = {
+            depthLevel: d
         };
     }
 
     render() {
         const { theme, depth, children, onClick, stratum, className } = this.props;
         const currentTheme = getTheme(themes, theme, depth);
-        console.log('AAAA', currentTheme);
+        // console.log(children);
+        console.log('--------');
+
+        const childrenWithProps = React.Children.map(children, child => {
+            console.log(child);
+
+            if (child.type) {
+                console.log(child.type.name);
+            }
+
+            return React.cloneElement(child, { depthLevel: this.state.depthLevel })
+        }
+        );
 
         return (
             <ThemeProvider theme={currentTheme}>

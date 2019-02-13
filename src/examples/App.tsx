@@ -36,6 +36,16 @@ class App extends Component {
                     depth="1"
                     stratum={{ margin: '50px 0'}}
                 >
+                    <CarvedButton
+                        theme="hsl(300, 80%, 20%)"
+                        depth="2"
+                        text="Cancel"
+                    />
+                    <CarvedButton
+                        theme="hsl(300, 80%, 20%)"
+                        depth="2"
+                        text="Send Message"
+                    />
                     <h1>Carved Stratum 1</h1>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
@@ -44,6 +54,11 @@ class App extends Component {
                             depth="2"
                             stratum={{ margin: '50px 0'}}
                         >
+                            <CarvedButton
+                                theme="hsl(300, 80%, 20%)"
+                                depth="3"
+                                text="Cancel"
+                            />
                             <h1>Carved Stratum 2</h1>
                             <div>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!

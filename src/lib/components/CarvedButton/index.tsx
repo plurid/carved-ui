@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { createThemes, Themes } from '../../themes';
+import { createThemes, Themes, getTheme } from '../../themes';
 
 const themes: Themes = createThemes();
-console.log(themes);
+// console.log(themes);
 
 
 const StyledCarvedButton = styled(CarvedStratum)`
@@ -61,11 +61,10 @@ class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> 
 
     render() {
         const { theme, depth, text, onClick, stratum } = this.props;
-        const themeApp = theme ? theme : 'ponton';
-        const depthApp = depth ? depth : '0';
+        const currentTheme = getTheme(themes, theme, depth);
 
         return (
-            <ThemeProvider theme={ themes[themeApp][depthApp] }>
+            <ThemeProvider theme={ currentTheme }>
                 <StyledCarvedButton onClick={onClick} stratum={stratum}>
                     {text}
                 </StyledCarvedButton>
