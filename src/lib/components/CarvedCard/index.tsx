@@ -15,38 +15,41 @@ const StyledCarvedCard= styled(CarvedStratum)`
 
 
 interface CarvedCardProperties {
-    depth?: string;
-    depthLevel?: string;
-    text?: string;
-    theme?: string;
-    stratum?: object;
+    depth: string;
+    depthComputed: string;
+    text: string;
+    theme: string;
+    themeComputed: string;
+    stratum: object;
 }
 
 interface CarvedCardState {
     depth: string;
+    theme: string;
 }
 
 
-class CarvedCard extends Component<CarvedCardProperties, CarvedCardState> {
+class CarvedCard extends Component<Partial<CarvedCardProperties>, CarvedCardState> {
     constructor(props: CarvedCardProperties) {
         super(props);
 
-        const { depth, depthLevel } = this.props;
+        const { depth, depthComputed, theme, themeComputed } = this.props;
 
         this.state = {
-            depth: depth || depthLevel || '0',
+            depth: depth || depthComputed || '0',
+            theme: theme || themeComputed || 'ponton',
         };
     }
 
     render() {
-        const { theme, text, children, stratum } = this.props;
-        const { depth } = this.state;
+        const { text, children } = this.props;
+        const { depth, theme } = this.state;
         const currentTheme = getTheme(themes, theme, depth);
 
         return (
             <ThemeProvider theme={currentTheme}>
                 <StyledCarvedCard>
-                    {children}
+                    {text || children}
                 </StyledCarvedCard>
             </ThemeProvider>
         );

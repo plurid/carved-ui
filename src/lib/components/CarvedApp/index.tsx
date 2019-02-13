@@ -55,13 +55,21 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
                     const carvedTest = carvedRegex.test(name);
 
                     if (carvedTest) {
+                        let childWithProps = child;
+
                         if (!child.props.depth) {
-                            console.log(child);
-                            return React.cloneElement(child, {
-                                depthLevel: '1',
-                                theme,
+                            childWithProps = React.cloneElement(childWithProps, {
+                                depthComputed: '1',
                             });
                         }
+
+                        if (!child.props.theme) {
+                            childWithProps = React.cloneElement(childWithProps, {
+                                themeComputed: theme,
+                            });
+                        }
+
+                        return childWithProps;
                     }
                 }
             }

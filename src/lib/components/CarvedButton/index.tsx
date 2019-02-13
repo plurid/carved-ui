@@ -40,34 +40,36 @@ const StyledCarvedButton = styled(CarvedStratum)`
 
 
 interface CarvedButtonProperties {
-    depth?: string;
-    depthLevel?: string;
-    onClick?: any;
-    text?: string;
-    theme?: string;
-    stratum?: object;
+    depth: string;
+    depthComputed: string;
+    onClick: any;
+    text: string;
+    theme: string;
+    themeComputed: string;
+    stratum: object;
 }
 
 interface CarvedButtonState {
     depth: string;
+    theme: string;
 }
 
 
-class CarvedButton extends Component<CarvedButtonProperties, CarvedButtonState> {
+class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButtonState> {
     constructor(props: CarvedButtonProperties) {
         super(props);
 
-        const { depth, depthLevel } = this.props;
-        console.log('bbb', this.props.depthLevel);
+        const { theme, depth, depthComputed, themeComputed } = this.props;
 
         this.state = {
-            depth: depth || depthLevel || '0',
+            depth: depth || depthComputed || '0',
+            theme: theme || themeComputed || 'ponton',
         };
     }
 
     render() {
-        const { theme, text, children, onClick, stratum } = this.props;
-        const { depth } = this.state;
+        const { text, children, onClick, stratum } = this.props;
+        const { theme, depth } = this.state;
         const currentTheme = getTheme(themes, theme, depth);
 
         return (
