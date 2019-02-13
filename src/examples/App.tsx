@@ -38,8 +38,18 @@ class App extends Component {
                 <CarvedButton
                     text="Submit"
                 />
+                <CarvedButton
+                    text="Cancel"
+                />
 
                 <CarvedCard>
+                    <CarvedButton
+                        text="Submit"
+                    />
+                    <CarvedButton
+                        text="Cancel"
+                    />
+
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
                 </CarvedCard>
 
@@ -53,8 +63,38 @@ class App extends Component {
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
 
                     <CarvedCard>
+                        <CarvedButton
+                            text="Submit"
+                        />
+                        <CarvedButton
+                            text="Cancel"
+                        />
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
                     </CarvedCard>
+                </div>
+
+                <div>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+
+                    <CarvedCard>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+                    </CarvedCard>
+
+                    <div>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+
+                        <CarvedCard>
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+                        </CarvedCard>
+
+                        <div>
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+
+                            <CarvedCard>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
+                            </CarvedCard>
+                        </div>
+                    </div>
                 </div>
             </CarvedApp>
         );

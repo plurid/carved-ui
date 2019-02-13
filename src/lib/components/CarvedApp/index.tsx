@@ -43,7 +43,7 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
         document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
     }
 
-    setChildrenProps = (children: ReactNode, currentTheme: ThemeLevel) => {
+    setChildrenProps = (children: ReactNode, nestingLevel: string = '1') => {
         const { theme } = this.props;
 
         const childrenWithProps = React.Children.map(children, (child: any) => {
@@ -59,7 +59,7 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
 
                         if (!child.props.depth) {
                             childWithProps = React.cloneElement(childWithProps, {
-                                depthComputed: '1',
+                                depthComputed: nestingLevel,
                             });
                         }
 
@@ -72,6 +72,15 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
                         return childWithProps;
                     }
                 }
+            }
+
+            if (child.props.children && typeof child.props.children !== 'string') {
+                let nesting = (parseInt(nestingLevel) + 1) + '';
+                let childChildrenWithProps = child.props.children;
+                childChildrenWithProps = this.setChildrenProps(childChildrenWithProps, nesting);
+                return React.cloneElement(child, {
+                    children: childChildrenWithProps,
+                });
             }
             return child;
         });
@@ -86,7 +95,7 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
         const currentTheme = getTheme(themes, theme, depth);
         this.setHTMLBodyColors(currentTheme);
 
-        const childrenWithProps = this.setChildrenProps(children, currentTheme);
+        const childrenWithProps = this.setChildrenProps(children);
 
         return (
             <ThemeProvider theme={ currentTheme }>
