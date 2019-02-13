@@ -8,7 +8,6 @@ const cx = classNames.bind(styles);
 
 
 interface CarvedCardProperties {
-    text: string,
     onClick?: any,
 }
 
@@ -25,12 +24,12 @@ class CarvedCard extends Component<CarvedCardProperties, CarvedCardState> {
     }
 
     render() {
-        const { text } = this.props;
+        const { children } = this.props;
 
         return (
             <div className={ cx(styles.carvedFormGroup) }>
                 <div className={ cx(styles.carvedCard) }>
-                    {text}
+                    {children}
                 </div>
             </div>
         );

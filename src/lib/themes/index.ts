@@ -7,7 +7,8 @@ export interface Theme {
 }
 
 export interface ThemeLevel {
-    [key: string]: string,
+    backgroundColor: string,
+    textColor: string,
 }
 
 
@@ -24,14 +25,14 @@ const DEFAULT_LEVEL = '0';
  * @param depthDifference Difference between depth levels, from 0 to 1 (default: 0.3).
  * @param lightnessInversionLimit Inversion limit for text color lightness (default: 50).
  * @param lightnessInversionLow Value if under inversion limit (default: 10).
- * @param lightnessInversionHigh Value if over inversion limit (default: 80).
+ * @param lightnessInversionHigh Value if over inversion limit (default: 90).
  */
 export function createTheme(
     color: string,
     depthDifference: number = 0.3,
     lightnessInversionLimit: number = 50,
     lightnessInversionLow: number = 10,
-    lightnessInversionHigh: number = 80
+    lightnessInversionHigh: number = 90
 ): Theme {
     const depthDiff = (depthDifference < 0) || (depthDifference > 1)
         ? 0.7
@@ -95,7 +96,7 @@ export function getTheme(
     theme: string = DEFAULT_THEME,
     depth: string = DEFAULT_LEVEL
 ) {
-    let currentTheme: ThemeLevel = {};
+    let currentTheme: ThemeLevel;
     const hslRegex: RegExp = /hsl/;
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
 
