@@ -33,7 +33,7 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="hsl(300, 80%, 30%)"
+                theme="hsl(350, 80%, 30%)"
             >
                 <CarvedButton
                     text="Submit"
@@ -81,15 +81,11 @@ class App extends Component {
                     </CarvedCard>
 
                     <div>
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
-
                         <CarvedCard>
                             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
                         </CarvedCard>
 
                         <div>
-                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
-
                             <CarvedCard>
                                 <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
                             </CarvedCard>

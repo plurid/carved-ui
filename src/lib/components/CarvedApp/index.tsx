@@ -1,8 +1,7 @@
-import React, { Component, ReactNode, ReactElement } from "react";
+import React, { Component, ReactNode } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
 import { createThemes, getTheme, ThemeLevel, Themes } from '../../themes';
-import { ReactNodeLike } from "prop-types";
 
 
 
@@ -102,9 +101,9 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
         const childrenWithProps = this.setChildrenProps(children);
 
         return (
-            <ThemeProvider theme={ currentTheme }>
+            <ThemeProvider theme={currentTheme}>
                 <Div>
-                    { childrenWithProps }
+                    {childrenWithProps}
                 </Div>
             </ThemeProvider>
         );
