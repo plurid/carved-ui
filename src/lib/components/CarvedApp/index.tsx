@@ -13,26 +13,36 @@ const Div = styled.div`
 
 
 interface CarvedAppProperties {
-    depth?: string;
-    theme?: string;
+    depth: string;
+    autoDepth: string | boolean;
+    theme: string;
 }
 
 interface CarvedAppState {
     depth: string;
+    autoDepth: boolean;
 }
 
 
-class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
+class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> {
     constructor(props: CarvedAppProperties) {
         super(props);
 
-        let { depth } = this.props;
+        let { depth, autoDepth } = this.props;
+
         if (!depth) {
             depth = '0';
         }
 
+        if (autoDepth === 'false') {
+            autoDepth = false;
+        } else {
+            autoDepth = true;
+        }
+
         this.state = {
-            depth
+            depth,
+            autoDepth
         };
     }
 
@@ -44,6 +54,7 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
 
     setChildrenProps = (children: ReactNode, nestingLevel: string = '1') => {
         const { theme } = this.props;
+        const { autoDepth } = this.state;
 
         const childrenWithProps = React.Children.map(children, (child: any) => {
             if (child.type) {
@@ -57,10 +68,12 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
                     // console.log(name, carvedTest);
 
                     if (carvedTest) {
-                        if (!child.props.depth) {
-                            childWithProps = React.cloneElement(childWithProps, {
-                                depthComputed: nestingLevel,
-                            });
+                        if (autoDepth) {
+                            if (!child.props.depth) {
+                                childWithProps = React.cloneElement(childWithProps, {
+                                    depthComputed: nestingLevel,
+                                });
+                            }
                         }
 
                         if (!child.props.theme) {
@@ -88,7 +101,6 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
             return child;
         });
 
-        // console.log(childrenWithProps);
         return childrenWithProps;
     }
 
