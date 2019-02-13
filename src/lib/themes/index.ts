@@ -17,13 +17,36 @@ const DEFAULT_THEME = 'ponton';
 const DEFAULT_LEVEL = '0';
 
 
-export function createTheme(color: string): Theme {
+/**
+ * Creates a Theme with DEPTH_LEVELS based on a single color.
+ *
+ * @param color Base color of the theme.
+ * @param depthDifference Difference between depth levels, from 0 to 1 (default: 0.3).
+ * @param lightnessInversionLimit Inversion limit for text color lightness (default: 50).
+ * @param lightnessInversionLow Value if under inversion limit (default: 10).
+ * @param lightnessInversionHigh Value if over inversion limit (default: 80).
+ */
+export function createTheme(
+    color: string,
+    depthDifference: number = 0.3,
+    lightnessInversionLimit: number = 50,
+    lightnessInversionLow: number = 10,
+    lightnessInversionHigh: number = 80
+): Theme {
+    const depthDiff = (depthDifference < 0) || (depthDifference > 1)
+        ? 0.7
+        : 1 - depthDifference;
+
     const theme: Theme = {};
     const { hue, saturation, lightness } = getColorElements(color);
 
     for (let i = 0; i < DEPTH_LEVELS; i++) {
-        const reducedLightness = i === 0 ? lightness : Math.ceil(lightness * 0.7 ** i);
-        const invertedLightness = reducedLightness > 50 ? 10 : 80;
+        const reducedLightness = i === 0
+            ? lightness
+            : Math.ceil(lightness * depthDiff ** i);
+        const invertedLightness = reducedLightness > lightnessInversionLimit
+            ? lightnessInversionLow
+            : lightnessInversionHigh;
 
         (theme[i] as ThemeLevel) = {
             backgroundColor: `hsl(${hue}, ${saturation}%, ${reducedLightness}%)`,
