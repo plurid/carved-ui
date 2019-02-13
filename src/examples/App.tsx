@@ -32,7 +32,7 @@ class App extends Component {
         return (
             <div>
                 <CarvedStratum
-                    theme="hsl(350, 30%, 50%)"
+                    theme="hsl(300, 80%, 20%)"
                     depth="1"
                     stratum={{ margin: '50px 0'}}
                 >
@@ -40,7 +40,7 @@ class App extends Component {
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
                         <CarvedStratum
-                            theme="hsl(350, 30%, 50%)"
+                            theme="hsl(300, 80%, 20%)"
                             depth="2"
                             stratum={{ margin: '50px 0'}}
                         >
@@ -48,7 +48,7 @@ class App extends Component {
                             <div>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
                                 <CarvedStratum
-                                    theme="hsl(350, 30%, 50%)"
+                                    theme="hsl(300, 80%, 20%)"
                                     depth="3"
                                     stratum={{ margin: '50px 0'}}
                                 >
@@ -56,7 +56,7 @@ class App extends Component {
                                     <div>
                                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem omnis obcaecati tempora nam corrupti, esse magnam reprehenderit explicabo excepturi maxime culpa non ad? Rem impedit assumenda officiis laudantium. Cumque, numquam!
                                         <CarvedStratum
-                                            theme="hsl(350, 30%, 50%)"
+                                            theme="hsl(300, 80%, 20%)"
                                             depth="4"
                                             stratum={{ margin: '50px 0'}}
                                         >

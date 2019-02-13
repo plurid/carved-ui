@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
-import { createTheme, createThemes, Themes } from '../../../themes';
+import {
+    Themes,
+    createThemes,
+    getTheme
+} from '../../../themes';
 
 const themes: Themes = createThemes();
 
@@ -11,7 +15,8 @@ const Div = styled.div`
     box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
     border: none;
     color: ${props => props.theme.textColor};
-    padding: 10px 15px;
+    padding: 50px 50px;
+    padding-bottom: 30px;
     transition: box-shadow 250ms linear, color 250ms linear;
     font-size: 16px;
 `;
@@ -40,7 +45,7 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
 
     render() {
         const { theme, depth, children, onClick, stratum, className } = this.props;
-        const currentTheme = getTheme(theme, depth);
+        const currentTheme = getTheme(themes, theme, depth);
         console.log('AAAA', currentTheme);
 
         return (
@@ -54,17 +59,3 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
 }
 
 export default CarvedStratum;
-
-
-function getTheme(theme: string = 'ponton', depth: string = '0') {
-    const hslRegex = /hsl/;
-    let currentTheme: any = {};
-
-    if (hslRegex.test(theme)) {
-        currentTheme = createTheme(theme)[depth];
-    } else {
-        currentTheme = themes[theme][depth];
-    }
-
-    return currentTheme;
-}

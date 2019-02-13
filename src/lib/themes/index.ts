@@ -2,24 +2,26 @@ export interface Themes {
     [key: string]: Theme
 }
 
-interface Theme {
+export interface Theme {
     [key: string]: ThemeLevel,
 }
 
-interface ThemeLevel {
+export interface ThemeLevel {
     [key: string]: string,
 }
 
 
 
 const DEPTH_LEVELS = 6;
+const DEFAULT_THEME = 'ponton';
+const DEFAULT_LEVEL = '0';
 
 
 export function createTheme(color: string): Theme {
     const theme: Theme = {};
     const { hue, saturation, lightness } = getColorElements(color);
 
-    for (let i = 0; i <= DEPTH_LEVELS; i++) {
+    for (let i = 0; i < DEPTH_LEVELS; i++) {
         const reducedLightness = i === 0 ? lightness : Math.ceil(lightness * 0.7 ** i);
         const invertedLightness = reducedLightness > 50 ? 10 : 80;
 
@@ -64,7 +66,36 @@ function getColorElements(color: string): ColorElements {
 }
 
 
-const defaultThemes = [
+
+export function getTheme(
+    themes: Themes,
+    theme: string = DEFAULT_THEME,
+    depth: string = DEFAULT_LEVEL
+) {
+    let currentTheme: ThemeLevel = {};
+    const hslRegex: RegExp = /hsl/;
+    const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
+
+    if (hslRegex.test(theme)) {
+        currentTheme = createTheme(theme)[depthLevel];
+    } else {
+        currentTheme = themes[theme][depthLevel];
+    }
+
+    return currentTheme;
+}
+
+
+
+
+
+type DefaultTheme = {
+    name: string;
+    color: string;
+}
+
+
+const defaultThemes: DefaultTheme[] = [
     {
         name: 'night',
         color: 'hsl(0, 0%, 10%)',
