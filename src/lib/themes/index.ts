@@ -73,7 +73,7 @@ interface ColorElements {
  *
  * @param color
  */
-function getColorElements(color: string): ColorElements {
+export function getColorElements(color: string): ColorElements {
     const hueRegex = /\((\d+)/;
     const saturationRegex = /\(\d+,\s?(\d+)/;
     const lightnessRegex = /\(\d+,\s?\d+%,\s?(\d+)/;
