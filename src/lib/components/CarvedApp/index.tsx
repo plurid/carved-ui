@@ -1,14 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, ReactNode, ReactElement } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
 import { createThemes, getTheme, ThemeLevel, Themes } from '../../themes';
+import { ReactNodeLike } from "prop-types";
 
 
 
 const themes: Themes = createThemes();
 
 const Div = styled.div`
-    min-height: 100vh;
+    /* min-height: 100vh; */
 `;
 
 
@@ -42,7 +43,33 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
         document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
     }
 
-    setChildrenProps = (currentTheme: ThemeLevel) => {
+    setChildrenProps = (children: ReactNode, currentTheme: ThemeLevel) => {
+        const { theme } = this.props;
+
+        const childrenWithProps = React.Children.map(children, (child: any) => {
+            if (child.type) {
+                const name = child.type.name;
+
+                if (name) {
+                    const carvedRegex = /Carved/;
+                    const carvedTest = carvedRegex.test(name);
+
+                    if (carvedTest) {
+                        if (!child.props.depth) {
+                            console.log(child);
+                            return React.cloneElement(child, {
+                                depthLevel: '1',
+                                theme,
+                            });
+                        }
+                    }
+                }
+            }
+            return child;
+        });
+
+        console.log(childrenWithProps);
+        return childrenWithProps;
     }
 
     render() {
@@ -51,12 +78,12 @@ class CarvedApp extends Component<CarvedAppProperties, CarvedAppState> {
         const currentTheme = getTheme(themes, theme, depth);
         this.setHTMLBodyColors(currentTheme);
 
-        const childrenWithProps = this.setChildrenProps(currentTheme);
+        const childrenWithProps = this.setChildrenProps(children, currentTheme);
 
         return (
             <ThemeProvider theme={ currentTheme }>
                 <Div>
-                    { children }
+                    { childrenWithProps }
                 </Div>
             </ThemeProvider>
         );

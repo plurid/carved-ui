@@ -56,9 +56,6 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
         if (depth) {
             d = depth;
         }
-        // console.log(this.props);
-
-        console.log(d);
 
         this.state = {
             depthLevel: d
@@ -68,19 +65,6 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
     render() {
         const { theme, depth, children, onClick, stratum, className } = this.props;
         const currentTheme = getTheme(themes, theme, depth);
-        // console.log(children);
-        console.log('--------');
-
-        const childrenWithProps = React.Children.map(children, child => {
-            console.log(child);
-
-            if (child.type) {
-                console.log(child.type.name);
-            }
-
-            return React.cloneElement(child, { depthLevel: this.state.depthLevel })
-        }
-        );
 
         return (
             <ThemeProvider theme={currentTheme}>

@@ -1,17 +1,29 @@
 import React, { Component } from "react";
-import classNames from 'classnames/bind';
+import styled, { ThemeProvider } from 'styled-components';
+import CarvedStratum from '../metaprimitive/CarvedStratum';
 
-const styles = require('./styles.module.scss')
+import { createThemes, Themes, getTheme } from '../../themes';
 
-const cx = classNames.bind(styles);
 
+const themes: Themes = createThemes();
+
+
+const StyledCarvedCard= styled(CarvedStratum)`
+    color: ${props => props.theme.textColor};
+    background-color: ${props => props.theme.backgroundColor};
+`;
 
 
 interface CarvedCardProperties {
-    onClick?: any,
+    depth?: string;
+    depthLevel?: string;
+    text?: string;
+    theme?: string;
+    stratum?: object;
 }
 
 interface CarvedCardState {
+    depth: string;
 }
 
 
@@ -19,19 +31,24 @@ class CarvedCard extends Component<CarvedCardProperties, CarvedCardState> {
     constructor(props: CarvedCardProperties) {
         super(props);
 
+        const { depth, depthLevel } = this.props;
+
         this.state = {
+            depth: depth || depthLevel || '0',
         };
     }
 
     render() {
-        const { children } = this.props;
+        const { theme, text, children, stratum } = this.props;
+        const { depth } = this.state;
+        const currentTheme = getTheme(themes, theme, depth);
 
         return (
-            <div className={ cx(styles.carvedFormGroup) }>
-                <div className={ cx(styles.carvedCard) }>
+            <ThemeProvider theme={currentTheme}>
+                <StyledCarvedCard>
                     {children}
-                </div>
-            </div>
+                </StyledCarvedCard>
+            </ThemeProvider>
         );
     }
 }
