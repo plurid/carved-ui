@@ -49,7 +49,6 @@ export function createTheme(themeParameters: any): Theme {
 
     const theme: Theme = {};
     const { hue, saturation, lightness } = getColorElements(themeColor);
-    console.log(themeColor)
 
     for (let i = 0; i < DEPTH_LEVELS; i++) {
         const reducedLightness = i === 0
@@ -70,8 +69,6 @@ export function createTheme(themeParameters: any): Theme {
             shadowPosition: `${horizontalShadowPosition}px ${verticalShadowPosition}px`,
         };
     }
-
-    console.log(theme);
 
     return theme;
 }

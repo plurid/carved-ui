@@ -32,7 +32,6 @@ export function getColorElements(color: string): ColorElements {
             hue = parseFloat(color.match(hueRegex)![1]);
             saturation = parseFloat(color.match(saturationRegex)![1]);
             lightness = parseFloat(color.match(lightnessRegex)![1]);
-            console.log('hsl', hue);
         } catch (err) {
             const humanErrorMessage = `\nColor representation not adequate.\nAdequate HSL examples: "hsl(220, 20%, 40%)" or "hsl(220.01, 20.10%, 40.99%)".\n\n`
             console.log(humanErrorMessage, err);
