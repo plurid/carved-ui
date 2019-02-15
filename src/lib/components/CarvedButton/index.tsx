@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { createThemes, Themes, getTheme } from '../../themes';
+import { createDefaultThemes, Themes, getTheme } from '../../themes';
 
-const themes: Themes = createThemes();
+const themes: Themes = createDefaultThemes();
 // console.log(themes);
 
 

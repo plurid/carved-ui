@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 
-import { createThemes, Themes, getTheme } from '../../themes';
+import { createDefaultThemes, Themes, getTheme } from '../../themes';
 
 
-const themes: Themes = createThemes();
+const themes: Themes = createDefaultThemes();
 
 
 const StyledCarvedCard= styled(CarvedStratum)`

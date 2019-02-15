@@ -32,7 +32,7 @@ export function createTheme(
     depthDifference: number = 0.3,
     lightnessInversionLimit: number = 50,
     lightnessInversionLow: number = 10,
-    lightnessInversionHigh: number = 90
+    lightnessInversionHigh: number = 90,
 ): Theme {
     const depthDiff = (depthDifference < 0) || (depthDifference > 1)
         ? 0.7
@@ -94,14 +94,25 @@ export function getColorElements(color: string): ColorElements {
 export function getTheme(
     themes: Themes,
     theme: string = DEFAULT_THEME,
-    depth: string = DEFAULT_LEVEL
+    depth: string = DEFAULT_LEVEL,
+    depthDifference: number = 0.3,
+    lightnessInversionLimit: number = 50,
+    lightnessInversionLow: number = 10,
+    lightnessInversionHigh: number = 90,
 ) {
     let currentTheme: ThemeLevel;
     const hslRegex: RegExp = /hsl/;
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
+    console.log('bbb', depthDifference);
 
     if (hslRegex.test(theme)) {
-        currentTheme = createTheme(theme)[depthLevel];
+        currentTheme = createTheme(
+            theme,
+            depthDifference,
+            lightnessInversionLimit,
+            lightnessInversionLow,
+            lightnessInversionHigh
+        )[depthLevel];
     } else {
         currentTheme = themes[theme][depthLevel];
     }
@@ -151,7 +162,7 @@ const defaultThemes: DefaultTheme[] = [
 ]
 
 
-export function createThemes(): Themes {
+export function createDefaultThemes(): Themes {
     const themes: Themes = {}
     for (let theme of defaultThemes) {
         themes[theme.name] = createTheme(theme.color);

@@ -3,11 +3,11 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import {
     Themes,
-    createThemes,
+    createDefaultThemes,
     getTheme
 } from '../../../themes';
 
-const themes: Themes = createThemes();
+const themes: Themes = createDefaultThemes();
 
 
 const Div = styled.div`
