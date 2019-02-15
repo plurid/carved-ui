@@ -1,9 +1,4 @@
 import React, { Component } from "react";
-import classNames from 'classnames/bind';
-
-const styles = require('./styles.module.scss')
-
-const cx = classNames.bind(styles);
 
 
 
@@ -24,7 +19,7 @@ class CarvedHr extends Component<CarvedHrProperties, CarvedHrState> {
 
     render() {
         return (
-            <hr className={ cx(styles.carvedHr) }>
+            <hr>
             </hr>
         );
     }

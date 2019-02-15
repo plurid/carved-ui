@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
-import {
-    Themes,
-    createDefaultThemes,
-    getTheme
-} from '../../../themes';
+import { ThemeContext } from '../../CarvedApp';
 
-const themes: Themes = createDefaultThemes();
 
 
 const Div = styled.div`
@@ -43,6 +38,8 @@ interface CarvedStratumState {
 
 
 class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumState> {
+    static contextType = ThemeContext;
+
     constructor(props: CarvedStratumProperties) {
         super(props);
 
@@ -63,11 +60,13 @@ class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumStat
     }
 
     render() {
-        const { theme, depth, children, onClick, stratum, className } = this.props;
-        const currentTheme = getTheme(themes, theme, depth);
+        const { children, onClick, stratum, className } = this.props;
+        const { depthLevel } = this.state;
+        const { currentTheme } = this.context;
+        const themeDepthed = parseInt(depthLevel) < 6 ? currentTheme[depthLevel] : currentTheme['5'];
 
         return (
-            <ThemeProvider theme={currentTheme}>
+            <ThemeProvider theme={themeDepthed}>
                 <Div className={className} onClick={onClick} style={stratum}>
                     {children}
                 </Div>

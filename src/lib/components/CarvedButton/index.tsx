@@ -2,14 +2,8 @@ import React, { Component } from "react";
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { createDefaultThemes, Themes, getTheme } from '../../themes';
-
 import { ThemeContext } from '../CarvedApp';
 
-
-
-const themes: Themes = createDefaultThemes();
-// console.log(themes);
 
 
 const StyledCarvedButton = styled(CarvedStratum)`
