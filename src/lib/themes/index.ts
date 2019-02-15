@@ -77,7 +77,7 @@ export function getTheme(
     let currentThemeLevel: ThemeLevel;
     const hslRegex: RegExp = /^hsl/;
     const rgbRegex: RegExp = /^rgb/;
-    const hexRegex: RegExp = /^#/
+    const hexRegex: RegExp = /^#/;
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
 
     currentTheme = themes['ponton'];
@@ -107,11 +107,9 @@ export function getTheme(
 
     return {
         currentTheme,
-        currentThemeLevel
+        currentThemeLevel,
     };
 }
-
-
 
 
 
@@ -154,7 +152,7 @@ const defaultThemes: DefaultTheme[] = [
 
 
 export function createDefaultThemes(): Themes {
-    const themes: Themes = {}
+    const themes: Themes = {};
     for (let theme of defaultThemes) {
         themes[theme.name] = createTheme(theme.color);
     }
