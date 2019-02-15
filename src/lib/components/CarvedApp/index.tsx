@@ -85,7 +85,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                 }
 
                 if (child.props.children && typeof child.props.children !== 'string') {
-                    console.log(child.props.children);
+                    // console.log(child.props.children);
                     let nesting = (parseInt(nestingLevel) + 1) + '';
                     let childChildrenWithProps = child.props.children;
                     childChildrenWithProps = this.setChildrenProps(childChildrenWithProps, nesting);
