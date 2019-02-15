@@ -34,7 +34,7 @@ interface CarvedAppState {
     lightnessInversionHigh: number;
     shadowAngle: number;
     shadowDistance: number;
-    theme: string;
+    themeColor: string;
 }
 
 
@@ -89,7 +89,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
             lightnessInversionHigh: lightnessInvHigh,
             shadowAngle: shAngle,
             shadowDistance: shDistance,
-            theme,
+            themeColor: theme,
         }
 
         return state;
@@ -97,6 +97,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
 
     setTheme = (defaultParameters: any) => {
         const { currentTheme, currentThemeLevel} = getTheme(defaultParameters);
+
         this.setHTMLBodyColors(currentThemeLevel);
         return {
             currentTheme,

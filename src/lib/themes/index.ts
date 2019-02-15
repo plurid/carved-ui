@@ -34,7 +34,7 @@ export interface ThemeLevel {
  */
 export function createTheme(themeParameters: any): Theme {
     const {
-        color,
+        themeColor,
         depthDifference,
         lightnessInversionLimit,
         lightnessInversionLow,
@@ -48,7 +48,8 @@ export function createTheme(themeParameters: any): Theme {
         : 1 - depthDifference;
 
     const theme: Theme = {};
-    const { hue, saturation, lightness } = getColorElements(color);
+    const { hue, saturation, lightness } = getColorElements(themeColor);
+    console.log(themeColor)
 
     for (let i = 0; i < DEPTH_LEVELS; i++) {
         const reducedLightness = i === 0
@@ -70,13 +71,15 @@ export function createTheme(themeParameters: any): Theme {
         };
     }
 
+    console.log(theme);
+
     return theme;
 }
 
 
 
 export function getTheme(themeParameters: any) {
-    const { defaultThemes, theme, depth } = themeParameters;
+    const { defaultThemes, themeColor, depth } = themeParameters;
 
     let currentTheme: Theme;
     let currentThemeLevel: ThemeLevel;
@@ -89,13 +92,13 @@ export function getTheme(themeParameters: any) {
 
     try {
         if (
-            hslRegex.test(theme)
-            || rgbRegex.test(theme)
-            || hexRegex.test(theme)
+            hslRegex.test(themeColor)
+            || rgbRegex.test(themeColor)
+            || hexRegex.test(themeColor)
         ) {
             currentTheme = createTheme(themeParameters);
         } else {
-            currentTheme = defaultThemes[theme];
+            currentTheme = defaultThemes[themeColor];
         }
     } catch (err) {
         const humanErrorMessage = `\nTheme string not adequate.\nAdequate theme examples: color strings "hsl(220, 20%, 40%)", "rgb(82, 95, 122)", "#525f7a", or default themes words: "night", "dusk", "dawn", "light", "ponton", "jaune", "furor".\n\n`
