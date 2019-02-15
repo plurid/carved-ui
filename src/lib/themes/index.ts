@@ -1,3 +1,7 @@
+import { getColorElements } from './color';
+
+
+
 export interface Themes {
     [key: string]: Theme
 }
@@ -59,37 +63,6 @@ export function createTheme(
 }
 
 
-interface ColorElements {
-    hue: number,
-    saturation: number,
-    lightness: number,
-}
-
-
-/**
- * Extract from color, e.g. 'hsl(220, 20%, 40%)',
- * the hue = 220
- * the saturation = 20
- * the lightness = 40
- *
- * @param color
- */
-export function getColorElements(color: string): ColorElements {
-    const hueRegex = /\((\d+)/;
-    const saturationRegex = /\(\d+,\s?(\d+)/;
-    const lightnessRegex = /\(\d+,\s?\d+%,\s?(\d+)/;
-    const hue = parseInt(color.match(hueRegex)![1]);
-    const saturation = parseInt(color.match(saturationRegex)![1]);
-    const lightness = parseInt(color.match(lightnessRegex)![1]);
-
-    return {
-        hue,
-        saturation,
-        lightness,
-    }
-}
-
-
 
 export function getTheme(
     themes: Themes,
@@ -102,20 +75,32 @@ export function getTheme(
 ) {
     let currentTheme: Theme;
     let currentThemeLevel: ThemeLevel;
-    const hslRegex: RegExp = /hsl/;
+    const hslRegex: RegExp = /^hsl/;
+    const rgbRegex: RegExp = /^rgb/;
+    const hexRegex: RegExp = /^#/
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
-    // console.log('bbb', depthDifference);
 
-    if (hslRegex.test(theme)) {
-        currentTheme = createTheme(
-            theme,
-            depthDifference,
-            lightnessInversionLimit,
-            lightnessInversionLow,
-            lightnessInversionHigh
-        );
-    } else {
-        currentTheme = themes[theme];
+    currentTheme = themes['ponton'];
+
+    try {
+        if (
+            hslRegex.test(theme)
+            || rgbRegex.test(theme)
+            || hexRegex.test(theme)
+        ) {
+            currentTheme = createTheme(
+                theme,
+                depthDifference,
+                lightnessInversionLimit,
+                lightnessInversionLow,
+                lightnessInversionHigh
+            );
+        } else {
+            currentTheme = themes[theme];
+        }
+    } catch (err) {
+        const humanErrorMessage = `\nTheme string not adequate.\nAdequate theme examples: color strings "hsl(220, 20%, 40%)", "rgb(82, 95, 122)", "#525f7a", or default themes words: "night", "dusk", "dawn", "light", "ponton", "jaune", "furor".\n\n`
+        console.log(humanErrorMessage, err);
     }
 
     currentThemeLevel = currentTheme[depthLevel];
