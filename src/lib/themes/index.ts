@@ -100,10 +100,11 @@ export function getTheme(
     lightnessInversionLow: number = 10,
     lightnessInversionHigh: number = 90,
 ) {
-    let currentTheme: ThemeLevel;
+    let currentTheme: Theme;
+    let currentThemeLevel: ThemeLevel;
     const hslRegex: RegExp = /hsl/;
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
-    console.log('bbb', depthDifference);
+    // console.log('bbb', depthDifference);
 
     if (hslRegex.test(theme)) {
         currentTheme = createTheme(
@@ -112,12 +113,17 @@ export function getTheme(
             lightnessInversionLimit,
             lightnessInversionLow,
             lightnessInversionHigh
-        )[depthLevel];
+        );
     } else {
-        currentTheme = themes[theme][depthLevel];
+        currentTheme = themes[theme];
     }
 
-    return currentTheme;
+    currentThemeLevel = currentTheme[depthLevel];
+
+    return {
+        currentTheme,
+        currentThemeLevel
+    };
 }
 
 

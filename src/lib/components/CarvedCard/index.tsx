@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 import CarvedStratum from '../metaprimitive/CarvedStratum';
 
-import { createDefaultThemes, Themes, getTheme } from '../../themes';
+import { ThemeContext } from '../CarvedApp';
 
-
-const themes: Themes = createDefaultThemes();
 
 
 const StyledCarvedCard= styled(CarvedStratum)`
@@ -30,6 +28,8 @@ interface CarvedCardState {
 
 
 class CarvedCard extends Component<Partial<CarvedCardProperties>, CarvedCardState> {
+    static contextType = ThemeContext;
+
     constructor(props: CarvedCardProperties) {
         super(props);
 
@@ -44,10 +44,11 @@ class CarvedCard extends Component<Partial<CarvedCardProperties>, CarvedCardStat
     render() {
         const { text, children } = this.props;
         const { depth, theme } = this.state;
-        const currentTheme = getTheme(themes, theme, depth);
+        const { currentTheme } = this.context;
+        const themeDepthed = parseInt(depth) < 6 ? currentTheme[depth] : currentTheme['5'];
 
         return (
-            <ThemeProvider theme={currentTheme}>
+            <ThemeProvider theme={themeDepthed}>
                 <StyledCarvedCard>
                     {text || children}
                 </StyledCarvedCard>

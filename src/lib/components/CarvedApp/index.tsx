@@ -1,20 +1,18 @@
 import React, { Component, ReactNode } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
-import { createDefaultThemes, getTheme, ThemeLevel, Themes } from '../../themes';
+import { createDefaultThemes, getTheme, ThemeLevel, Themes, Theme } from '../../themes';
 
 
 
-const themes: Themes = createDefaultThemes();
+export const ThemeContext = React.createContext({});
 
-const Div = styled.div`
-    /* min-height: 100vh; */
-`;
+const Div = styled.div``;
 
 
 interface CarvedAppProperties {
-    depth: string;
     autoDepth: string | boolean;
+    depth: string;
     depthDifference: string | undefined;
     lightnessInversionLimit: string | undefined;
     lightnessInversionLow: string | undefined;
@@ -23,12 +21,16 @@ interface CarvedAppProperties {
 }
 
 interface CarvedAppState {
-    depth: string;
     autoDepth: boolean;
+    currentTheme?: Theme;
+    currentThemeLevel?: ThemeLevel;
+    defaultThemes: Themes;
+    depth: string;
     depthDifference: number;
     lightnessInversionLimit: number;
     lightnessInversionLow: number;
     lightnessInversionHigh: number;
+    theme: string;
 }
 
 
@@ -36,23 +38,31 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     constructor(props: CarvedAppProperties) {
         super(props);
 
+        const defaultParameters = this.setDefaultParameters();
+        const currentTheme = this.setTheme(defaultParameters);
+
         this.state = {
-            ...this.setDefaultParameters(),
+            ...defaultParameters,
+            ...currentTheme,
         };
     }
 
     setDefaultParameters = () => {
+        const defaultThemes = createDefaultThemes();
+
         const floatOrDefault: any = (val: any, def: number) => val ? parseFloat(val) : def;
 
         let {
-            depth,
             autoDepth,
+            depth,
             depthDifference,
             lightnessInversionLimit,
             lightnessInversionLow,
             lightnessInversionHigh,
+            theme,
         } = this.props;
 
+        theme = !theme ? 'ponton' : theme;
         depth = !depth ? '0' : depth;
         autoDepth = autoDepth === 'false' ? false : true;
         let depthDiff = floatOrDefault(depthDifference, 0.3);
@@ -60,23 +70,53 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         let lightnessInvLow = floatOrDefault(lightnessInversionLow, 10);
         let lightnessInvHigh = floatOrDefault(lightnessInversionHigh, 90);
 
-        const state: CarvedAppState = {
-            depth,
+        const state = {
             autoDepth,
+            defaultThemes,
+            depth,
             depthDifference: depthDiff,
             lightnessInversionLimit: lightnessInvLimit,
             lightnessInversionLow: lightnessInvLow,
             lightnessInversionHigh: lightnessInvHigh,
+            theme,
         }
 
         return state;
     }
 
+    setTheme = (defaultParameters: any) => {
+        const {
+            defaultThemes,
+            depth,
+            depthDifference,
+            lightnessInversionLimit,
+            lightnessInversionLow,
+            lightnessInversionHigh,
+            theme,
+        } = defaultParameters;
+
+        const { currentTheme, currentThemeLevel} = getTheme(
+            defaultThemes,
+            theme,
+            depth,
+            depthDifference,
+            lightnessInversionLimit,
+            lightnessInversionLow,
+            lightnessInversionHigh,
+        );
+
+        this.setHTMLBodyColors(currentThemeLevel);
+
+        return {
+            currentTheme,
+            currentThemeLevel,
+        }
+    }
 
     setHTMLBodyColors = (currentTheme: ThemeLevel) => {
+        document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
         document.body.style.backgroundColor = currentTheme.backgroundColor;
         document.body.style.color = currentTheme.textColor;
-        document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
     }
 
     setChildrenProps = (children: ReactNode, nestingLevel: string = this.state.depth) => {
@@ -129,31 +169,18 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     }
 
     render() {
-        const { theme, children } = this.props;
-        const {
-            depth,
-            depthDifference,
-            lightnessInversionLimit,
-            lightnessInversionLow,
-            lightnessInversionHigh,
-        } = this.state;
-        const currentTheme = getTheme(
-            themes, theme, depth,
-            depthDifference,
-            lightnessInversionLimit,
-            lightnessInversionLow,
-            lightnessInversionHigh
-            );
-        this.setHTMLBodyColors(currentTheme);
-
+        const { currentThemeLevel } = this.state;
+        const { children } = this.props;
         const childrenWithProps = this.setChildrenProps(children);
 
         return (
-            <ThemeProvider theme={currentTheme}>
-                <Div>
-                    {childrenWithProps}
-                </Div>
-            </ThemeProvider>
+            <ThemeContext.Provider value={this.state}>
+                <ThemeProvider theme={currentThemeLevel}>
+                    <Div>
+                        {childrenWithProps}
+                    </Div>
+                </ThemeProvider>
+            </ThemeContext.Provider>
         );
     }
 }

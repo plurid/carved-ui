@@ -4,6 +4,10 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import { createDefaultThemes, Themes, getTheme } from '../../themes';
 
+import { ThemeContext } from '../CarvedApp';
+
+
+
 const themes: Themes = createDefaultThemes();
 // console.log(themes);
 
@@ -56,6 +60,8 @@ interface CarvedButtonState {
 
 
 class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButtonState> {
+    static contextType = ThemeContext;
+
     constructor(props: CarvedButtonProperties) {
         super(props);
 
@@ -69,11 +75,12 @@ class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButt
 
     render() {
         const { text, children, onClick, stratum } = this.props;
-        const { theme, depth } = this.state;
-        const currentTheme = getTheme(themes, theme, depth);
+        const { depth } = this.state;
+        const { currentTheme } = this.context;
+        const themeDepthed = parseInt(depth) < 6 ? currentTheme[depth] : currentTheme['5'];
 
         return (
-            <ThemeProvider theme={currentTheme}>
+            <ThemeProvider theme={themeDepthed}>
                 <StyledCarvedButton onClick={onClick} stratum={stratum}>
                     {text || children}
                 </StyledCarvedButton>
