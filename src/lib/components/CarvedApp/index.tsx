@@ -17,6 +17,8 @@ interface CarvedAppProperties {
     lightnessInversionLimit: string | undefined;
     lightnessInversionLow: string | undefined;
     lightnessInversionHigh: string | undefined;
+    shadowAngle: string;
+    shadowDistance: string;
     theme: string;
 }
 
@@ -30,6 +32,8 @@ interface CarvedAppState {
     lightnessInversionLimit: number;
     lightnessInversionLow: number;
     lightnessInversionHigh: number;
+    shadowAngle: number;
+    shadowDistance: number;
     theme: string;
 }
 
@@ -59,6 +63,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
             lightnessInversionLimit,
             lightnessInversionLow,
             lightnessInversionHigh,
+            shadowAngle,
+            shadowDistance,
             theme,
         } = this.props;
 
@@ -70,6 +76,9 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         let lightnessInvLow = floatOrDefault(lightnessInversionLow, 10);
         let lightnessInvHigh = floatOrDefault(lightnessInversionHigh, 90);
 
+        let shAngle = floatOrDefault(shadowAngle, 90);
+        let shDistance = floatOrDefault(shadowDistance, 5);
+
         const state = {
             autoDepth,
             defaultThemes,
@@ -78,6 +87,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
             lightnessInversionLimit: lightnessInvLimit,
             lightnessInversionLow: lightnessInvLow,
             lightnessInversionHigh: lightnessInvHigh,
+            shadowAngle: shAngle,
+            shadowDistance: shDistance,
             theme,
         }
 
@@ -85,28 +96,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     }
 
     setTheme = (defaultParameters: any) => {
-        const {
-            defaultThemes,
-            depth,
-            depthDifference,
-            lightnessInversionLimit,
-            lightnessInversionLow,
-            lightnessInversionHigh,
-            theme,
-        } = defaultParameters;
-
-        const { currentTheme, currentThemeLevel} = getTheme(
-            defaultThemes,
-            theme,
-            depth,
-            depthDifference,
-            lightnessInversionLimit,
-            lightnessInversionLow,
-            lightnessInversionHigh,
-        );
-
+        const { currentTheme, currentThemeLevel} = getTheme(defaultParameters);
         this.setHTMLBodyColors(currentThemeLevel);
-
         return {
             currentTheme,
             currentThemeLevel,

@@ -1,4 +1,6 @@
 import { getColorElements } from './color';
+import { shadowPositioning } from './shadow';
+import { DEPTH_LEVELS } from './constants';
 
 
 
@@ -12,32 +14,35 @@ export interface Theme {
 
 export interface ThemeLevel {
     backgroundColor: string,
+    shadowPosition: string,
     textColor: string,
 }
 
 
 
-const DEPTH_LEVELS = 6;
-const DEFAULT_THEME = 'ponton';
-const DEFAULT_LEVEL = '0';
-
-
 /**
  * Creates a Theme with DEPTH_LEVELS based on a single color.
  *
- * @param color Base color of the theme.
- * @param depthDifference Difference between depth levels, from 0 to 1 (default: 0.3).
- * @param lightnessInversionLimit Inversion limit for text color lightness (default: 50).
- * @param lightnessInversionLow Value if under inversion limit (default: 10).
- * @param lightnessInversionHigh Value if over inversion limit (default: 90).
+ * @param themeParameters contains
+ * color                        Base color of the theme.
+ * depthDifference              Difference between depth levels, from 0 to 1 (default: 0.3).
+ * lightnessInversionLimit      Inversion limit for text color lightness (default: 50).
+ * lightnessInversionLow        Value if under inversion limit (default: 10).
+ * lightnessInversionHigh       Value if over inversion limit (default: 90).
+ * shadowAngle
+ * shadowDistance
  */
-export function createTheme(
-    color: string,
-    depthDifference: number = 0.3,
-    lightnessInversionLimit: number = 50,
-    lightnessInversionLow: number = 10,
-    lightnessInversionHigh: number = 90,
-): Theme {
+export function createTheme(themeParameters: any): Theme {
+    const {
+        color,
+        depthDifference,
+        lightnessInversionLimit,
+        lightnessInversionLow,
+        lightnessInversionHigh,
+        shadowAngle,
+        shadowDistance,
+    } = themeParameters
+
     const depthDiff = (depthDifference < 0) || (depthDifference > 1)
         ? 0.7
         : 1 - depthDifference;
@@ -53,9 +58,15 @@ export function createTheme(
             ? lightnessInversionLow
             : lightnessInversionHigh;
 
+        const {
+            horizontalShadowPosition,
+            verticalShadowPosition
+        } = shadowPositioning(shadowAngle, shadowDistance);
+
         (theme[i] as ThemeLevel) = {
             backgroundColor: `hsl(${hue}, ${saturation}%, ${reducedLightness}%)`,
             textColor: `hsl(0, 0%, ${invertedLightness}%)`,
+            shadowPosition: `${horizontalShadowPosition}px ${verticalShadowPosition}px`,
         };
     }
 
@@ -64,15 +75,9 @@ export function createTheme(
 
 
 
-export function getTheme(
-    themes: Themes,
-    theme: string = DEFAULT_THEME,
-    depth: string = DEFAULT_LEVEL,
-    depthDifference: number = 0.3,
-    lightnessInversionLimit: number = 50,
-    lightnessInversionLow: number = 10,
-    lightnessInversionHigh: number = 90,
-) {
+export function getTheme(themeParameters: any) {
+    const { defaultThemes, theme, depth } = themeParameters;
+
     let currentTheme: Theme;
     let currentThemeLevel: ThemeLevel;
     const hslRegex: RegExp = /^hsl/;
@@ -80,7 +85,7 @@ export function getTheme(
     const hexRegex: RegExp = /^#/;
     const depthLevel: string = parseInt(depth) <= 5 ? depth : '5';
 
-    currentTheme = themes['ponton'];
+    currentTheme = defaultThemes['ponton'];
 
     try {
         if (
@@ -88,15 +93,9 @@ export function getTheme(
             || rgbRegex.test(theme)
             || hexRegex.test(theme)
         ) {
-            currentTheme = createTheme(
-                theme,
-                depthDifference,
-                lightnessInversionLimit,
-                lightnessInversionLow,
-                lightnessInversionHigh
-            );
+            currentTheme = createTheme(themeParameters);
         } else {
-            currentTheme = themes[theme];
+            currentTheme = defaultThemes[theme];
         }
     } catch (err) {
         const humanErrorMessage = `\nTheme string not adequate.\nAdequate theme examples: color strings "hsl(220, 20%, 40%)", "rgb(82, 95, 122)", "#525f7a", or default themes words: "night", "dusk", "dawn", "light", "ponton", "jaune", "furor".\n\n`

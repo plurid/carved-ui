@@ -7,7 +7,8 @@ import { ThemeContext } from '../../CarvedApp';
 
 const Div = styled.div`
     background-color: ${props => props.theme.backgroundColor};
-    box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
+    /* box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7); */
+    box-shadow: inset ${props => props.theme.shadowPosition} 10px 0 rgba(0, 0, 0, 0.7);
     border: none;
     color: ${props => props.theme.textColor};
     padding: 50px;
