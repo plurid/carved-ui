@@ -14,6 +14,14 @@ export interface Theme {
 
 export interface ThemeLevel {
     backgroundColor: string,
+    backgroundColorAccept: string,
+    backgroundColorAcceptThemed: string,
+    backgroundColorDecline: string,
+    backgroundColorDeclineThemed: string,
+    backgroundColorWarning: string,
+    backgroundColorWarningThemed: string,
+    backgroundColorHazard: string,
+    backgroundColorHazardThemed: string,
     shadowPosition: string,
     textColor: string,
 }
@@ -65,6 +73,14 @@ export function createTheme(themeParameters: any): Theme {
 
         (theme[i] as ThemeLevel) = {
             backgroundColor: `hsl(${hue}, ${saturation}%, ${reducedLightness}%)`,
+            backgroundColorAccept: `hsl(${220}, ${60}%, ${reducedLightness}%)`,
+            backgroundColorAcceptThemed: `hsl(${hue + 20}, ${saturation + 10}%, ${reducedLightness}%)`,
+            backgroundColorDecline: `hsl(${300}, ${10}%, ${reducedLightness}%)`,
+            backgroundColorDeclineThemed: `hsl(${hue - 20}, ${10}%, ${reducedLightness}%)`,
+            backgroundColorWarning: `hsl(${60}, ${50}%, ${reducedLightness}%)`,
+            backgroundColorWarningThemed: `hsl(${hue - 100}, ${saturation}%, ${reducedLightness}%)`,
+            backgroundColorHazard: `hsl(${350}, ${50}%, ${reducedLightness}%)`,
+            backgroundColorHazardThemed: `hsl(${hue - 200}, ${saturation + 100}%, ${reducedLightness}%)`,
             textColor: `hsl(0, 0%, ${invertedLightness}%)`,
             shadowPosition: `${horizontalShadowPosition}px ${verticalShadowPosition}px`,
         };
@@ -140,7 +156,7 @@ const defaultThemes: DefaultTheme[] = [
     },
     {
         name: 'ponton',
-        color: 'hsl(220, 20%, 20%)',
+        color: 'hsl(210, 25%, 30%)',
     },
     {
         name: 'jaune',

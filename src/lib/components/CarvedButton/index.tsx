@@ -13,7 +13,28 @@ const StyledCarvedButton = styled(CarvedStratum)`
     outline: none;
     color: ${props => props.theme.textColor};
     cursor: pointer;
-    background-color: ${props => props.theme.backgroundColor};
+    background-color: ${props => {
+        switch(props.kind) {
+            case 'accept':
+                return props.theme.backgroundColorAccept;
+            case 'acceptThemed':
+                return props.theme.backgroundColorAcceptThemed;
+            case 'decline':
+                return props.theme.backgroundColorDecline;
+            case 'declineThemed':
+                return props.theme.backgroundColorDeclineThemed;
+            case 'warning':
+                return props.theme.backgroundColorWarning;
+            case 'warningThemed':
+                return props.theme.backgroundColorWarningThemed;
+            case 'hazard':
+                return props.theme.backgroundColorHazard;
+            case 'hazardThemed':
+                return props.theme.backgroundColorHazardThemed;
+            default:
+                return props.theme.backgroundColor;
+        }
+    }};
     user-select: none;
     display: inline-flex;
     align-items: center;
@@ -42,6 +63,7 @@ interface CarvedButtonProperties {
     depth: string;
     depthComputed: string;
     onClick: any;
+    kind: string;
     text: string;
     theme: string;
     themeComputed: string;
@@ -51,6 +73,7 @@ interface CarvedButtonProperties {
 interface CarvedButtonState {
     depth: string;
     theme: string;
+    kind?: string;
 }
 
 
@@ -60,23 +83,24 @@ class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButt
     constructor(props: CarvedButtonProperties) {
         super(props);
 
-        const { theme, depth, depthComputed, themeComputed } = this.props;
+        const { theme, depth, depthComputed, themeComputed, kind } = this.props;
 
         this.state = {
             depth: depth || depthComputed || '0',
             theme: theme || themeComputed || 'ponton',
+            kind,
         };
     }
 
     render() {
         const { text, children, onClick, stratum } = this.props;
-        const { depth } = this.state;
+        const { depth, kind } = this.state;
         const { currentTheme } = this.context;
         const themeDepthed = parseInt(depth) < 6 ? currentTheme[depth] : currentTheme['5'];
 
         return (
             <ThemeProvider theme={themeDepthed}>
-                <StyledCarvedButton onClick={onClick} stratum={stratum}>
+                <StyledCarvedButton onClick={onClick} kind={kind} stratum={stratum}>
                     {text || children}
                 </StyledCarvedButton>
             </ThemeProvider>

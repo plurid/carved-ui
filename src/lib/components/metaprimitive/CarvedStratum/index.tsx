@@ -31,6 +31,7 @@ interface CarvedStratumProperties {
     stratum?: object;
     onClick?: any;
     theme?: string;
+    kind?: string
 }
 
 interface CarvedStratumState {
