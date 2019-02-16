@@ -6,6 +6,8 @@ import CarvedKarst from './components/primitives/CarvedKarst';
 
 import CarvedApp from './components/CarvedApp';
 
+import CarvedContainer from './components/CarvedContainer';
+
 import CarvedButton from './components/CarvedButton';
 import DeCarvedButton from './components/DeCarvedButton';
 import CarvedCard from './components/CarvedCard';
@@ -25,6 +27,8 @@ export {
     CarvedKarst,
 
     CarvedApp,
+
+    CarvedContainer,
 
     CarvedButton,
     DeCarvedButton,

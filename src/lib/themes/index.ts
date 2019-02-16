@@ -24,6 +24,7 @@ export interface ThemeLevel {
     backgroundColorHazardThemed: string,
     shadowPosition: string,
     textColor: string,
+    textColorCarved: string,
 }
 
 
@@ -76,12 +77,13 @@ export function createTheme(themeParameters: any): Theme {
             backgroundColorAccept: `hsl(${220}, ${60}%, ${reducedLightness}%)`,
             backgroundColorAcceptThemed: `hsl(${hue + 20}, ${saturation + 10}%, ${reducedLightness}%)`,
             backgroundColorDecline: `hsl(${300}, ${10}%, ${reducedLightness}%)`,
-            backgroundColorDeclineThemed: `hsl(${hue - 20}, ${10}%, ${reducedLightness}%)`,
+            backgroundColorDeclineThemed: `hsl(${hue}, ${20}%, ${reducedLightness}%)`,
             backgroundColorWarning: `hsl(${60}, ${50}%, ${reducedLightness}%)`,
             backgroundColorWarningThemed: `hsl(${hue - 100}, ${saturation}%, ${reducedLightness}%)`,
             backgroundColorHazard: `hsl(${350}, ${50}%, ${reducedLightness}%)`,
             backgroundColorHazardThemed: `hsl(${hue - 200}, ${saturation + 100}%, ${reducedLightness}%)`,
             textColor: `hsl(0, 0%, ${invertedLightness}%)`,
+            textColorCarved: `hsl(${hue}, ${saturation}%, ${reducedLightness - 1}%)`,
             shadowPosition: `${horizontalShadowPosition}px ${verticalShadowPosition}px`,
         };
     }
