@@ -87,6 +87,8 @@ export function getTheme(themeParameters: any) {
 
     currentTheme = defaultThemes['ponton'];
 
+    console.log(currentTheme);
+
     try {
         if (
             hslRegex.test(themeColor)
@@ -103,6 +105,7 @@ export function getTheme(themeParameters: any) {
     }
 
     currentThemeLevel = currentTheme[depthLevel];
+
 
     return {
         currentTheme,
@@ -152,8 +155,20 @@ const defaultThemes: DefaultTheme[] = [
 
 export function createDefaultThemes(): Themes {
     const themes: Themes = {};
-    for (let theme of defaultThemes) {
-        themes[theme.name] = createTheme(theme.color);
+    const defaultThemeParameters = {
+        themeColor: '',
+        depthDifference: 0.3,
+        lightnessInversionLimit: 50,
+        lightnessInversionLow: 10,
+        lightnessInversionHigh: 90,
+        shadowAngle: 90,
+        shadowDistance: 5,
     }
+
+    for (let theme of defaultThemes) {
+        defaultThemeParameters.themeColor = theme.color;
+        themes[theme.name] = createTheme(defaultThemeParameters);
+    }
+
     return themes;
 }

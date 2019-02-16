@@ -96,7 +96,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     }
 
     setTheme = (defaultParameters: any) => {
-        const { currentTheme, currentThemeLevel} = getTheme(defaultParameters);
+        const { currentTheme, currentThemeLevel } = getTheme(defaultParameters);
 
         this.setHTMLBodyColors(currentThemeLevel);
         return {
