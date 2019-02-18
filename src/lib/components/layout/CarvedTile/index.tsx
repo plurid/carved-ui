@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
+import CarvedStratum from '../../primitives/CarvedStratum';
+
 import { ThemeContext } from '../../app/CarvedApp';
 
 
 
-const Div = styled.div`
-    width: 100%;
+const StyledCarvedTile = styled(CarvedStratum)`
+    margin: 20px;
+    color: ${props => props.theme.textColor};
+    background-color: ${props => props.theme.backgroundColor};
+    background-image: linear-gradient(0deg, ${props => props.theme.backgroundColor}, ${props => props.theme.backgroundColorGradient});
 `;
+
 
 
 interface CarvedTileProperties {
@@ -46,9 +52,9 @@ class CarvedTile extends Component<Partial<CarvedTileProperties>, CarvedTileStat
 
         return (
             <ThemeProvider theme={themeDepthed}>
-                <Div>
+                <StyledCarvedTile>
                     {children}
-                </Div>
+                </StyledCarvedTile>
             </ThemeProvider>
         );
     }
