@@ -1,6 +1,9 @@
 import React, { Component, ReactNode } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
+import '../../../styles/reboot.css';
+
+
 import { createDefaultThemes, getTheme, ThemeLevel, Themes, Theme } from '../../../themes';
 
 
