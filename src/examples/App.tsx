@@ -37,7 +37,7 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="hsl(230, 30%, 40%)"
+                theme="dusk"
             >
                 <CarvedDoline>
                     <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi doloribus necessitatibus modi perferendis ratione. Facilis nemo laudantium maiores delectus, sit aut provident itaque deserunt est rerum nam dolorum, aperiam praesentium.</p>

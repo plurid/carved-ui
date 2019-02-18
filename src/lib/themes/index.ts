@@ -14,6 +14,7 @@ export interface Theme {
 
 export interface ThemeLevel {
     backgroundColor: string,
+    backgroundColorGradient: string,
     backgroundColorAccept: string,
     backgroundColorAcceptThemed: string,
     backgroundColorDecline: string,
@@ -74,6 +75,7 @@ export function createTheme(themeParameters: any): Theme {
 
         (theme[i] as ThemeLevel) = {
             backgroundColor: `hsl(${hue}, ${saturation}%, ${reducedLightness}%)`,
+            backgroundColorGradient: `hsl(${hue}, ${saturation}%, ${reducedLightness - 2}%)`,
 
             backgroundColorAccept: `hsl(${220}, ${60}%, ${40}%)`,
             backgroundColorAcceptThemed: `hsl(${hue + 50}, ${saturation + 30}%, ${reducedLightness + 3}%)`,
