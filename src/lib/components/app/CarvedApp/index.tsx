@@ -110,6 +110,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     }
 
     setHTMLBodyColors = (currentTheme: ThemeLevel) => {
+        document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
         document.body.style.backgroundColor = currentTheme.backgroundColor;
         document.body.style.color = currentTheme.textColor;
     }
