@@ -44,7 +44,7 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="ponton"
+                theme="hsl(220, 40%, 40%)"
             >
                 <CarvedPolje>
                     <CarvedH1 text="Buttons H1">
@@ -105,30 +105,38 @@ class App extends Component {
                     />
                 </CarvedPolje>
 
-                <CarvedKarst>
-                    <CarvedPolje>
-                        <p><a href="#">Lorem</a> ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                    </CarvedPolje>
-                    <CarvedKarst>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                <div>
+                    <div>
                         <CarvedKarst>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                            <CarvedPolje>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                            </CarvedPolje>
+                            <CarvedKarst>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                                <CarvedKarst>
+                                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                                </CarvedKarst>
+
+                                <div>
+                                    <div>
+                                        <div style={{ display: 'grid', margin: '20px 0', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '20px' }}>
+                                            <CarvedDoline>
+                                                <p>AAAAAAA Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                                            </CarvedDoline>
+                                            <CarvedDoline>
+                                                <p>BBBBBBB Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                                            </CarvedDoline>
+                                            <CarvedDoline>
+                                                <p>CCCCCCC Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                                            </CarvedDoline>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CarvedKarst>
+
                         </CarvedKarst>
-
-                        <CarvedDoline>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                        </CarvedDoline>
-                        <CarvedDoline>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                        </CarvedDoline>
-                    </CarvedKarst>
-
-
-                    <CarvedFjord>
-                        TEXT
-                    </CarvedFjord>
-                </CarvedKarst>
-
+                    </div>
+                </div>
 
                 <CarvedHR />
 

@@ -8,9 +8,9 @@ import { ThemeContext } from '../../app/CarvedApp';
 const Div = styled.div`
     background-color: ${props => props.theme.backgroundColor};
     /* box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7); */
-    box-shadow: inset ${props => props.theme.shadowPosition} 10px 0 rgba(0, 0, 0, 0.7),
-                inset 0px -1px 10px -3px rgba(0, 0, 0, 0.7),
-                inset 0px 1px 10px -3px rgba(0, 0, 0, 0.7);
+    box-shadow: inset ${props => props.theme.shadowPosition} 10px 0 rgba(0, 0, 0, 0.5),
+                inset 0px -1px 10px -3px rgba(0, 0, 0, 0.5),
+                inset 0px 1px 10px -3px rgba(0, 0, 0, 0.5);
     border: none;
     color: ${props => props.theme.textColor};
     padding: 50px;

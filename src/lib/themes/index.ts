@@ -118,7 +118,7 @@ export function getTheme(themeParameters: any) {
 
     currentTheme = defaultThemes['ponton'];
 
-    console.log(currentTheme);
+    // console.log(currentTheme);
 
     try {
         if (
