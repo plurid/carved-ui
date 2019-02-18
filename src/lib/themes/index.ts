@@ -3,6 +3,11 @@ import { shadowPositioning } from './shadow';
 import { DEPTH_LEVELS } from './constants';
 
 
+export {
+    getColorElements,
+    shadowPositioning
+};
+
 
 export interface Themes {
     [key: string]: Theme

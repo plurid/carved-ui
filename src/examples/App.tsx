@@ -4,26 +4,26 @@ import './styles.scss';
 
 
 import {
-    CarvedStratum,
-
-    CarvedCrater,
-    CarvedFjord,
-    CarvedKarst,
-
     CarvedApp,
 
+    CarvedStratum,
+
+    CarvedSection,
     CarvedContainer,
+    CarvedTile,
+    CarvedRow,
+
+    CarvedKarst,
+    CarvedPolje,
+    CarvedDoline,
+    CarvedFjord,
 
     CarvedButton,
-    DeCarvedButton,
     CarvedCard,
     CarvedH1,
     CarvedHR,
     CarvedInput,
-    CarvedMenuBar,
     CarvedSelector,
-
-    CarvedDoline,
 } from '../lib';
 
 
@@ -39,11 +39,7 @@ class App extends Component {
             <CarvedApp
                 theme="dusk"
             >
-                <CarvedDoline>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi doloribus necessitatibus modi perferendis ratione. Facilis nemo laudantium maiores delectus, sit aut provident itaque deserunt est rerum nam dolorum, aperiam praesentium.</p>
-                </CarvedDoline>
-
-                <CarvedContainer>
+                <CarvedPolje>
                     <CarvedH1 text="Buttons">
                     </CarvedH1>
 
@@ -85,8 +81,7 @@ class App extends Component {
                         text="Hazard"
                         kind="hazardThemed"
                     />
-
-                </CarvedContainer>
+                </CarvedPolje>
 
 
                 <CarvedHR />

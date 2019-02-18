@@ -1,44 +1,63 @@
-import CarvedStratum from './components/metaprimitive/CarvedStratum';
+// app
+import CarvedApp from './components/app/CarvedApp';
 
-import CarvedCrater from './components/primitives/CarvedCrater';
-import CarvedFjord from './components/primitives/CarvedFjord';
-import CarvedKarst from './components/primitives/CarvedKarst';
+// primives
+import CarvedStratum from './components/primitives/CarvedStratum';
 
-import CarvedApp from './components/CarvedApp';
+// layout
+import CarvedSection from './components/layout/CarvedSection';
+import CarvedContainer from './components/layout/CarvedContainer';
+import CarvedTile from './components/layout/CarvedTile';
+import CarvedRow from './components/layout/CarvedRow';
 
-import CarvedContainer from './components/CarvedContainer';
+// typography
+import CarvedH1 from './components/typography/CarvedH1';
+import CarvedH2 from './components/typography/CarvedH2';
+import CarvedH3 from './components/typography/CarvedH3';
+import CarvedH4 from './components/typography/CarvedH4';
+import CarvedH5 from './components/typography/CarvedH5';
+import CarvedH6 from './components/typography/CarvedH6';
 
-import CarvedButton from './components/CarvedButton';
-import DeCarvedButton from './components/DeCarvedButton';
-import CarvedCard from './components/CarvedCard';
-import CarvedH1 from './components/CarvedH1';
-import CarvedHR from './components/CarvedHR';
-import CarvedInput from './components/CarvedInput';
-import CarvedMenuBar from './components/CarvedMenuBar';
-import CarvedSelector from './components/CarvedSelector';
+// elements
+import CarvedButton from './components/elements/CarvedButton';
+import CarvedCard from './components/elements/CarvedCard';
+import CarvedInput from './components/elements/CarvedInput';
+import CarvedSelector from './components/elements/CarvedSelector';
+import CarvedHR from './components/elements/CarvedHR';
 
 
 
 export {
-    CarvedStratum,
-
-    CarvedCrater,
-    CarvedFjord,
-    CarvedKarst,
-
+    // app
     CarvedApp,
 
+    // primitves
+    CarvedStratum,
+
+    // layout
+    CarvedSection,
     CarvedContainer,
+    CarvedTile,
+    CarvedRow,
 
-    CarvedButton,
-    DeCarvedButton,
-    CarvedCard,
+    // layout aliases
+    CarvedSection as CarvedKarst,
+    CarvedContainer as CarvedPolje,
+    CarvedTile as CarvedDoline,
+    CarvedRow as CarvedFjord,
+
+    // typography
     CarvedH1,
-    CarvedHR,
-    CarvedInput,
-    CarvedMenuBar,
-    CarvedSelector,
+	CarvedH2,
+	CarvedH3,
+	CarvedH4,
+	CarvedH5,
+    CarvedH6,
 
-
-    CarvedCard as CarvedDoline,
-};
+    // elements
+	CarvedButton,
+	CarvedCard,
+	CarvedInput,
+	CarvedSelector,
+	CarvedHR,
+}
