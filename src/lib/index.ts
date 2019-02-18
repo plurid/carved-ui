@@ -12,7 +12,7 @@ import CarvedButton from './components/CarvedButton';
 import DeCarvedButton from './components/DeCarvedButton';
 import CarvedCard from './components/CarvedCard';
 import CarvedH1 from './components/CarvedH1';
-import CarvedHr from './components/CarvedHr';
+import CarvedHR from './components/CarvedHR';
 import CarvedInput from './components/CarvedInput';
 import CarvedMenuBar from './components/CarvedMenuBar';
 import CarvedSelector from './components/CarvedSelector';
@@ -34,7 +34,7 @@ export {
     DeCarvedButton,
     CarvedCard,
     CarvedH1,
-    CarvedHr,
+    CarvedHR,
     CarvedInput,
     CarvedMenuBar,
     CarvedSelector,

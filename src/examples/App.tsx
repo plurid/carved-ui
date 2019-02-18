@@ -18,7 +18,7 @@ import {
     DeCarvedButton,
     CarvedCard,
     CarvedH1,
-    CarvedHr,
+    CarvedHR,
     CarvedInput,
     CarvedMenuBar,
     CarvedSelector,
@@ -87,6 +87,9 @@ class App extends Component {
                     />
 
                 </CarvedContainer>
+
+
+                <CarvedHR />
 
 
                 <CarvedCard>

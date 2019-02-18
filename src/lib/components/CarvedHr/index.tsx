@@ -1,16 +1,26 @@
 import React, { Component } from "react";
+import styled from 'styled-components';
 
 
+const HR = styled.hr`
+    width: 100%;
+    background-color: hsla(0, 0%, 0%, 0.3);
+    border: none;
+    height: 15px;
+    margin: 80px 0;
+    box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
+`;
 
-interface CarvedHrProperties {
+
+interface CarvedHRProperties {
 }
 
-interface CarvedHrState {
+interface CarvedHRState {
 }
 
 
-class CarvedHr extends Component<CarvedHrProperties, CarvedHrState> {
-    constructor(props: CarvedHrProperties) {
+class CarvedHR extends Component<CarvedHRProperties, CarvedHRState> {
+    constructor(props: CarvedHRProperties) {
         super(props);
 
         this.state = {
@@ -19,10 +29,10 @@ class CarvedHr extends Component<CarvedHrProperties, CarvedHrState> {
 
     render() {
         return (
-            <hr>
-            </hr>
+            <HR>
+            </HR>
         );
     }
 }
 
-export default CarvedHr;
+export default CarvedHR;
