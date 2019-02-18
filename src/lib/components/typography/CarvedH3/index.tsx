@@ -7,7 +7,7 @@ import { ThemeContext } from '../../app/CarvedApp';
 const H3 = styled.h3`
     text-transform: uppercase;
     font-family: sans-serif;
-    font-size: 5rem;
+    font-size: 4rem;
     word-break: break-all;
     background-color: hsla(0, 0%, 0%, 0.8);
     -webkit-background-clip: text;
@@ -24,11 +24,11 @@ const H3 = styled.h3`
     }
 
     @media (max-width: 1200px) {
-        font-size: 4rem;
+        font-size: 3rem;
     }
 
     @media (max-width: 800px) {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 `;
 

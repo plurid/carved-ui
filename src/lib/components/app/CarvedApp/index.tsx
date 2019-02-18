@@ -7,7 +7,8 @@ import { createDefaultThemes, getTheme, ThemeLevel, Themes, Theme } from '../../
 
 export const ThemeContext = React.createContext({});
 
-const Div = styled.div``;
+const Div = styled.div`
+`;
 
 
 interface CarvedAppProperties {

@@ -20,7 +20,14 @@ import {
 
     CarvedButton,
     CarvedCard,
+
     CarvedH1,
+    CarvedH2,
+    CarvedH3,
+    CarvedH4,
+    CarvedH5,
+    CarvedH6,
+
     CarvedHR,
     CarvedInput,
     CarvedSelector,
@@ -37,11 +44,26 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="dusk"
+                theme="ponton"
             >
                 <CarvedPolje>
-                    <CarvedH1 text="Buttons">
+                    <CarvedH1 text="Buttons H1">
                     </CarvedH1>
+
+                    <CarvedH2 text="Buttons H2">
+                    </CarvedH2>
+
+                    <CarvedH3 text="Buttons H3">
+                    </CarvedH3>
+
+                    <CarvedH4 text="Buttons H4">
+                    </CarvedH4>
+
+                    <CarvedH5 text="Buttons H5">
+                    </CarvedH5>
+
+                    <CarvedH6 text="Buttons H6">
+                    </CarvedH6>
 
                     <h2>Default Kinds</h2>
                     <CarvedButton
@@ -85,7 +107,7 @@ class App extends Component {
 
                 <CarvedKarst>
                     <CarvedPolje>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
+                        <p><a href="#">Lorem</a> ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
                     </CarvedPolje>
                     <CarvedKarst>
                         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
