@@ -22,6 +22,8 @@ import {
     CarvedInput,
     CarvedMenuBar,
     CarvedSelector,
+
+    CarvedDoline,
 } from '../lib';
 
 
@@ -35,8 +37,12 @@ class App extends Component {
     render() {
         return (
             <CarvedApp
-                theme="ponton"
+                theme="hsl(230, 30%, 40%)"
             >
+                <CarvedDoline>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi doloribus necessitatibus modi perferendis ratione. Facilis nemo laudantium maiores delectus, sit aut provident itaque deserunt est rerum nam dolorum, aperiam praesentium.</p>
+                </CarvedDoline>
+
                 <CarvedContainer>
                     <CarvedH1 text="Buttons">
                     </CarvedH1>
@@ -105,9 +111,68 @@ class App extends Component {
                             kind="hazard"
                         />
 
+                        <h2>
+                            Themed Kinds
+                        </h2>
+                        <CarvedButton
+                            text="Submit"
+                            kind="acceptThemed"
+                        />
+                        <CarvedButton
+                            text="Cancel"
+                            kind="declineThemed"
+                        />
+                        <CarvedButton
+                            text="Warning"
+                            kind="warningThemed"
+                        />
+                        <CarvedButton
+                            text="Hazard"
+                            kind="hazardThemed"
+                        />
+
                         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
 
                         <CarvedCard>
+                            <h2>Default Kinds</h2>
+                            <CarvedButton
+                                text="Submit"
+                                kind="accept"
+                            />
+                            <CarvedButton
+                                text="Cancel"
+                                kind="decline"
+                            />
+                            <CarvedButton
+                                text="Warning"
+                                kind="warning"
+                            />
+                            <CarvedButton
+                                text="Hazard"
+                                kind="hazard"
+                            />
+                            <br />
+
+                            <h2>
+                                Themed Kinds
+                            </h2>
+                            <CarvedButton
+                                text="Submit"
+                                kind="acceptThemed"
+                            />
+                            <CarvedButton
+                                text="Cancel"
+                                kind="declineThemed"
+                            />
+                            <CarvedButton
+                                text="Warning"
+                                kind="warningThemed"
+                            />
+                            <CarvedButton
+                                text="Hazard"
+                                kind="hazardThemed"
+                            />
+
                             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, nulla inventore maxime asperiores praesentium, nisi quae at modi voluptatem porro officiis vel. Minus quod eos qui dolore est sequi nihil!</p>
                         </CarvedCard>
                     </CarvedContainer>

@@ -38,4 +38,7 @@ export {
     CarvedInput,
     CarvedMenuBar,
     CarvedSelector,
+
+
+    CarvedCard as CarvedDoline,
 };

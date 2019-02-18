@@ -8,7 +8,7 @@ const H1 = styled.h1`
     font-family: sans-serif;
     font-size: 6rem;
     word-break: break-all;
-    background-color: hsl(0, 0%, 0%);
+    background-color: hsla(0, 0%, 0%, 0.8);
     -webkit-background-clip: text;
     -moz-background-clip: text;
     background-clip: text;

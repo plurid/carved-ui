@@ -74,16 +74,22 @@ export function createTheme(themeParameters: any): Theme {
 
         (theme[i] as ThemeLevel) = {
             backgroundColor: `hsl(${hue}, ${saturation}%, ${reducedLightness}%)`,
-            backgroundColorAccept: `hsl(${220}, ${60}%, ${reducedLightness}%)`,
-            backgroundColorAcceptThemed: `hsl(${hue + 20}, ${saturation + 10}%, ${reducedLightness}%)`,
-            backgroundColorDecline: `hsl(${300}, ${10}%, ${reducedLightness}%)`,
-            backgroundColorDeclineThemed: `hsl(${hue}, ${20}%, ${reducedLightness}%)`,
-            backgroundColorWarning: `hsl(${60}, ${50}%, ${reducedLightness}%)`,
-            backgroundColorWarningThemed: `hsl(${hue - 100}, ${saturation}%, ${reducedLightness}%)`,
-            backgroundColorHazard: `hsl(${350}, ${50}%, ${reducedLightness}%)`,
-            backgroundColorHazardThemed: `hsl(${hue - 200}, ${saturation + 100}%, ${reducedLightness}%)`,
+
+            backgroundColorAccept: `hsl(${220}, ${60}%, ${40}%)`,
+            backgroundColorAcceptThemed: `hsl(${hue + 50}, ${saturation + 30}%, ${reducedLightness + 3}%)`,
+
+            backgroundColorDecline: `hsl(${300}, ${5}%, ${50}%)`,
+            backgroundColorDeclineThemed: `hsl(${hue - 20}, ${saturation - 10}%, ${reducedLightness + 3}%)`,
+
+            backgroundColorWarning: `hsl(${60}, ${50}%, ${50}%)`,
+            backgroundColorWarningThemed: `hsl(${hue - 100}, ${saturation + 50}%, ${reducedLightness + 3}%)`,
+
+            backgroundColorHazard: `hsl(${355}, ${60}%, ${40}%)`,
+            backgroundColorHazardThemed: `hsl(${hue - 150}, ${saturation + 10}%, ${reducedLightness + 3}%)`,
+
             textColor: `hsl(0, 0%, ${invertedLightness}%)`,
             textColorCarved: `hsl(${hue}, ${saturation}%, ${reducedLightness - 1}%)`,
+
             shadowPosition: `${horizontalShadowPosition}px ${verticalShadowPosition}px`,
         };
     }
@@ -142,19 +148,19 @@ type DefaultTheme = {
 const defaultThemes: DefaultTheme[] = [
     {
         name: 'night',
-        color: 'hsl(0, 0%, 10%)',
+        color: 'hsl(210, 0%, 10%)',
     },
     {
         name: 'dusk',
-        color: 'hsl(0, 0%, 20%)',
+        color: 'hsl(210, 0%, 20%)',
     },
     {
         name: 'dawn',
-        color: 'hsl(0, 0%, 70%)',
+        color: 'hsl(210, 0%, 70%)',
     },
     {
         name: 'light',
-        color: 'hsl(0, 0%, 100%)',
+        color: 'hsl(210, 0%, 100%)',
     },
     {
         name: 'ponton',
