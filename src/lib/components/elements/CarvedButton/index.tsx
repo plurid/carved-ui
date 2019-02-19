@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import CarvedStratum from '../../primitives/CarvedStratum';
 import styled, { ThemeProvider } from 'styled-components';
+
+import CarvedStratum from '../../primitives/CarvedStratum';
 
 import { ThemeContext } from '../../app/CarvedApp';
 

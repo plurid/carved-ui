@@ -21,9 +21,10 @@ import CarvedH6 from './components/typography/CarvedH6';
 // elements
 import CarvedButton from './components/elements/CarvedButton';
 import CarvedCard from './components/elements/CarvedCard';
-import CarvedInput from './components/elements/CarvedInput';
-import CarvedSelector from './components/elements/CarvedSelector';
 import CarvedHR from './components/elements/CarvedHR';
+import CarvedInput from './components/elements/CarvedInput';
+import CarvedMenuBar from './components/elements/CarvedMenuBar';
+import CarvedSelector from './components/elements/CarvedSelector';
 
 
 
@@ -57,7 +58,8 @@ export {
     // elements
 	CarvedButton,
 	CarvedCard,
-	CarvedInput,
-	CarvedSelector,
 	CarvedHR,
+	CarvedInput,
+    CarvedMenuBar,
+    CarvedSelector,
 }

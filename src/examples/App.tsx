@@ -28,8 +28,9 @@ import {
     CarvedH5,
     CarvedH6,
 
-    CarvedHR,
     CarvedInput,
+    CarvedHR,
+    CarvedMenuBar,
     CarvedSelector,
 } from '../lib';
 
@@ -46,34 +47,16 @@ class App extends Component {
             <CarvedApp
                 theme="hsl(220, 40%, 40%)"
             >
-                <div>
+                <CarvedMenuBar>
                     <div>
-                        <CarvedKarst>
-                            <CarvedPolje>
-                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                            </CarvedPolje>
-                            <CarvedKarst>
-                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                                <CarvedKarst>
-                                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                                </CarvedKarst>
-
-                                <div style={{ display: 'grid', margin: '20px 0', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '20px' }}>
-                                    <CarvedDoline>
-                                        <p>AAAAAAA Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                                    </CarvedDoline>
-                                    <CarvedDoline>
-                                        <p>BBBBBBB Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                                    </CarvedDoline>
-                                    <CarvedDoline>
-                                        <p>CCCCCCC Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi explicabo corporis culpa accusantium eveniet natus quasi, consequuntur eligendi? Quis, itaque fugit dignissimos ratione molestiae libero voluptas recusandae ut. Harum, vel!</p>
-                                    </CarvedDoline>
-                                </div>
-                            </CarvedKarst>
-
-                        </CarvedKarst>
+                        Carved
                     </div>
-                </div>
+                    <ul>
+                        <li>About</li>
+                        <li>Documentation</li>
+                        <li>Support</li>
+                    </ul>
+                </CarvedMenuBar>
             </CarvedApp>
         );
     }

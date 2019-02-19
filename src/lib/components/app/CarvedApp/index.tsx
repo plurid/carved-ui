@@ -47,10 +47,12 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         super(props);
 
         const defaultParameters = this.setDefaultParameters();
+        const defaultFunctionality = this.setDefaultFunctionality();
         const currentTheme = this.setTheme(defaultParameters);
 
         this.state = {
             ...defaultParameters,
+            ...defaultFunctionality,
             ...currentTheme,
         };
     }
@@ -109,6 +111,21 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         }
     }
 
+    setDefaultFunctionality = () => {
+        const incrementDepth = (depth: string): string  => {
+            return (parseInt(depth) + 1) + '';
+        }
+
+        const decrementDepth = (depth: string): string  => {
+            return (parseInt(depth) - 1) + '';
+        }
+
+        return {
+            incrementDepth,
+            decrementDepth
+        }
+    }
+
     setHTMLBodyColors = (currentTheme: ThemeLevel) => {
         document.querySelector('html')!.style.backgroundColor = currentTheme.backgroundColor;
         document.body.style.backgroundColor = currentTheme.backgroundColor;
@@ -119,8 +136,6 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         const { theme } = this.props;
         const { autoDepth } = this.state;
 
-        console.log(nestingLevel);
-        console.log(children);
         const childrenWithProps = React.Children.map(children, (child: any) => {
             if (child.type) {
                 let childWithProps = child;
@@ -165,11 +180,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                 return childWithProps;
             }
 
-
             return child;
         });
-
-        // console.log(childrenWithProps);
 
         return childrenWithProps;
     }
