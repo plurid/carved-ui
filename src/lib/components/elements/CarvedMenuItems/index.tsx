@@ -13,6 +13,7 @@ const StyledCarvedMenuItems = styled(CarvedStratum)`
     box-shadow: none;
     height: 100%;
     justify-self: right;
+    align-items: center;
 `;
 
 
