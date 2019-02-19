@@ -1,4 +1,4 @@
-import React, { Component, ReactChildren } from "react";
+import React, { Component } from "react";
 import styled from 'styled-components';
 
 import CarvedStratum from '../../primitives/CarvedStratum';
@@ -6,24 +6,17 @@ import CarvedStratum from '../../primitives/CarvedStratum';
 import { ThemeContext } from '../../app/CarvedApp';
 
 
-const StyledCarvedMenuBar = styled(CarvedStratum)`
-    color: ${props => {
-        const { currentTheme, depth } = props.theme;
-        return currentTheme[depth].textColor;
-    }};
-    background-color: ${props =>  {
-        const { currentTheme, depth } = props.theme;
-        return currentTheme[depth].backgroundColor;
-    }};
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    min-height: 60px;
-    padding: 0 15px;
+
+const StyledCarvedMenuItems = styled(CarvedStratum)`
+    display: flex;
+    background-color: transparent;
+    box-shadow: none;
+    height: 100%;
+    justify-self: right;
 `;
 
 
-interface CarvedMenuBarProperties {
+interface CarvedMenuItemsProperties {
     children: any;
     depth: string;
     depthComputed: string;
@@ -31,16 +24,16 @@ interface CarvedMenuBarProperties {
     themeComputed: string;
 }
 
-interface CarvedMenuBarState {
+interface CarvedMenuItemsState {
     depth: string;
     theme: string;
 }
 
 
-class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMenuBarState> {
+class CarvedMenuItems extends Component<Partial<CarvedMenuItemsProperties>, CarvedMenuItemsState> {
     static contextType = ThemeContext;
 
-    constructor(props: CarvedMenuBarProperties) {
+    constructor(props: CarvedMenuItemsProperties) {
         super(props);
 
         const { theme, depth, depthComputed, themeComputed } = this.props;
@@ -58,11 +51,11 @@ class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMe
         context.depth = depth;
 
         return (
-            <StyledCarvedMenuBar theme={context}>
+            <StyledCarvedMenuItems theme={context}>
                 {children}
-            </StyledCarvedMenuBar>
+            </StyledCarvedMenuItems>
         );
     }
 }
 
-export default CarvedMenuBar;
+export default CarvedMenuItems;

@@ -31,6 +31,8 @@ import {
     CarvedInput,
     CarvedHR,
     CarvedMenuBar,
+    CarvedMenuItem,
+    CarvedMenuItems,
     CarvedSelector,
 } from '../lib';
 
@@ -51,11 +53,17 @@ class App extends Component {
                     <div>
                         Carved
                     </div>
-                    <ul>
-                        <li>About</li>
-                        <li>Documentation</li>
-                        <li>Support</li>
-                    </ul>
+                    <CarvedMenuItems>
+                        <CarvedMenuItem>
+                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
+                        </CarvedMenuItem>
+                        <CarvedMenuItem>
+                            <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
+                        </CarvedMenuItem>
+                        <CarvedMenuItem>About</CarvedMenuItem>
+                        <CarvedMenuItem>Documentation</CarvedMenuItem>
+                        <CarvedMenuItem>Support</CarvedMenuItem>
+                    </CarvedMenuItems>
                 </CarvedMenuBar>
             </CarvedApp>
         );

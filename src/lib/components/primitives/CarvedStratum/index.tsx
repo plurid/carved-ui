@@ -15,8 +15,8 @@ const Div = styled.div`
     color: ${props => props.theme.textColor};
     /* padding: 50px; */
     /* padding-bottom: 30px; */
-    transition: box-shadow 250ms linear, color 250ms linear;
-    font-size: 16px;
+    /* transition: box-shadow 250ms linear, color 250ms linear; */
+    /* font-size: 16px; */
 
     /* @media (max-width: 700px) {
         padding: 15px;
