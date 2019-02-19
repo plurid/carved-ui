@@ -119,10 +119,9 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         const { theme } = this.props;
         const { autoDepth } = this.state;
 
+        console.log(nestingLevel);
         console.log(children);
         const childrenWithProps = React.Children.map(children, (child: any) => {
-            let carvedLevel = 0;
-
             if (child.type) {
                 let childWithProps = child;
                 const name = child.type.name;
@@ -132,7 +131,6 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                     const carvedTest = carvedRegex.test(name);
 
                     if (carvedTest) {
-                        carvedLevel += 1;
                         if (autoDepth) {
                             if (!child.props.depth) {
                                 childWithProps = React.cloneElement(childWithProps, {
@@ -150,12 +148,13 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                 }
 
                 if (child.props.children && typeof child.props.children !== 'string') {
-                    console.log(carvedLevel);
-                    // console.log(child.props.children);
-                    console.log(parseInt(nestingLevel));
+                    let nesting;
+                    if (name) {
+                        nesting = (parseInt(nestingLevel) + 1) + '';
+                    } else {
+                        nesting = nestingLevel;
+                    }
 
-                    let nesting = (parseInt(nestingLevel) + 1) + '';
-                    // let nesting = (carvedLevel + 1) + '';
                     let childChildrenWithProps = child.props.children;
                     childChildrenWithProps = this.setChildrenProps(childChildrenWithProps, nesting);
                     childWithProps = React.cloneElement(childWithProps, {
@@ -170,6 +169,7 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
             return child;
         });
 
+        // console.log(childrenWithProps);
 
         return childrenWithProps;
     }
