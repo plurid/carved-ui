@@ -19,7 +19,16 @@ const StyledCarvedMenuItem = styled(CarvedStratum)`
     display: grid;
     font-size: 0.9rem;
     justify-items: center;
-    height: 100%;
+    height: ${props => {
+        let val;
+        props.theme.component.pill === true ? val = '60%' : val = '100%';
+        return val;
+    }};
+    border-radius: ${props => {
+        let val;
+        props.theme.component.pill === true ? val = '10000px' : val = '0px';
+        return val;
+    }};
     min-width: 60px;
     padding: 0 15px;
     text-align: center;
@@ -45,35 +54,50 @@ interface CarvedMenuItemProperties {
     children: any;
     depth: string;
     depthComputed: string;
+    decarved: boolean;
     theme: string;
     themeComputed: string;
+    pill: boolean;
 }
 
 interface CarvedMenuItemState {
     depth: string;
+    decarved: boolean;
     theme: string;
+    pill: boolean;
 }
 
 
 class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, CarvedMenuItemState> {
+    public static defaultProps = {
+        decarved: false,
+        pill: false,
+    };
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedMenuItemProperties) {
         super(props);
 
-        const { theme, depth, depthComputed, themeComputed } = this.props;
+        const { theme, depth, depthComputed, themeComputed, decarved, pill } = this.props;
 
         this.state = {
             depth: depth || depthComputed || '0',
             theme: theme || themeComputed || 'ponton',
+            decarved: decarved ? true : false,
+            pill: pill ? true : false,
         };
     }
 
     render() {
         const { children } = this.props;
-        const { depth } = this.state;
+        const { depth, decarved, pill } = this.state;
         const context = { ...this.context };
         context.depth = depth;
+        context.component = {
+            decarved,
+            pill,
+        }
 
         return (
             <StyledCarvedMenuItem theme={context}>
