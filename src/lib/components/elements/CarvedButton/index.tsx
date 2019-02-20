@@ -42,8 +42,7 @@ const StyledCarvedButton = styled(CarvedStratum)`
     justify-content: center;
     border-radius: 25px;
     padding: 10px 15px;
-    margin: 10px;
-    margin-top: 0;
+    margin-right: 10px;
     min-width: 150px;
     transition: box-shadow 250ms linear, color 250ms linear;
     font-size: 16px;

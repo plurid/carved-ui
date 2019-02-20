@@ -61,9 +61,18 @@ class CarvedMenuList extends Component<Partial<CarvedMenuListProperties>, Carved
         const context = { ...this.context };
         context.depth = depth;
 
+        // console.log(this.props);
+        let childrenWithProps;
+        if (children) {
+            childrenWithProps = React.Children.map(children, child =>
+                React.cloneElement(child, { depth: parseInt(depth) + 1 + '' })
+            );
+            // console.log('expand', (childrenWithProps as any).props);
+        }
+
         return (
             <StyledCarvedMenuList theme={context}>
-                {children}
+                {childrenWithProps}
             </StyledCarvedMenuList>
         );
     }

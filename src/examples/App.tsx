@@ -43,6 +43,7 @@ const Expansion = (
         <CarvedMenuItem>About</CarvedMenuItem>
         <CarvedMenuItem>Documentation</CarvedMenuItem>
         <CarvedMenuItem>Support</CarvedMenuItem>
+        <CarvedMenuItem>Support</CarvedMenuItem>
     </CarvedMenuList>
 );
 
@@ -63,7 +64,7 @@ class App extends Component {
                         Carved
                     </div>
                     <CarvedMenuItems>
-                        <CarvedMenuItem expand={Expansion}>
+                        <CarvedMenuItem pill expand={Expansion}>
                             <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
                         </CarvedMenuItem>
                         <CarvedMenuItem>

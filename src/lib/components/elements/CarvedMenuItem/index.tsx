@@ -1,4 +1,4 @@
-import React, { Component, ReactChild } from "react";
+import React, { Component } from "react";
 import styled from 'styled-components';
 
 import { ThemeContext } from '../../app/CarvedApp';
@@ -14,7 +14,7 @@ const StyledCarvedMenuItem = styled.div`
         if (parseInt(decrementDepth(depth)) > 0) {
             return currentTheme[decrementDepth(depth)].textColor;
         } else {
-            return currentTheme['4'].textColor;
+            return currentTheme[depth].textColor;
         }
     }};
     cursor: pointer;
@@ -24,7 +24,7 @@ const StyledCarvedMenuItem = styled.div`
     position: relative;
     height: ${props => {
         let val;
-        props.theme.component.pill === true ? val = '60%' : val = '100%';
+        props.theme.component.pill === true ? val = '36px' : val = '100%';
         return val;
     }};
     border-radius: ${props => {
@@ -53,7 +53,7 @@ const StyledCarvedMenuItem = styled.div`
             if (parseInt(decrementDepth(depth)) > 0) {
                 return currentTheme[decrementDepth(depth)].backgroundColor;
             } else {
-                return currentTheme['4'].backgroundColor;
+                return currentTheme[depth].backgroundColor;
             }
         }};
         box-shadow: ${props => {
@@ -77,16 +77,64 @@ const StyledCarvedMenuItem = styled.div`
         }
     }
 
+    .expand::before {
+        position: absolute;
+        content: '';
+        right: 20px;
+
+        top: ${props => {
+            const val = props.theme.component.pill === true ? '-12px' : '-10px';
+            return val;
+        }};
+        height: 10px;
+        width: 20px;
+
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+
+        border-bottom: ${props => {
+                            const val = props.theme.component.pill === true ? '12px' : '10px';
+                            return val;
+                        }}
+                        solid
+                        ${props =>  {
+                            const { currentTheme, depth, decrementDepth,  } = props.theme;
+                            if (parseInt(decrementDepth(depth)) > 0) {
+                                return currentTheme[decrementDepth(depth)].backgroundColor;
+                            } else {
+                                return currentTheme[depth].backgroundColor;
+                            }
+                        }};
+    }
+
+    .expand::after {
+        position: absolute;
+        content: '';
+        right: 0;
+        top: ${props => {
+            const val = props.theme.component.pill === true ? '-12px' : '-10px';
+            return val;
+        }};
+        height: ${props => {
+            const val = props.theme.component.pill === true ? '12px' : '10px';
+            return val;
+        }};
+        width: 100%;
+    }
+
     .expand {
         cursor: default;
         display: none;
         position: absolute;
-        top: 60px;
+        top: ${props => {
+            const val = props.theme.component.pill === true ? '48px' : '70px';
+            return val;
+        }};
         right: 0;
         min-width: 200px;
         background-color: ${props =>  {
-            const { currentTheme, depth } = props.theme;
-            return currentTheme[depth].backgroundColor;
+            const { currentTheme, depth, decrementDepth } = props.theme;
+            return currentTheme[decrementDepth(depth)].backgroundColor;
         }};
         /* background-color: inherit; */
         box-shadow: inherit;
@@ -102,7 +150,7 @@ interface CarvedMenuItemProperties {
     theme: string;
     themeComputed: string;
     pill: boolean;
-    expand: ReactChild;
+    expand: any;
 }
 
 interface CarvedMenuItemState {
@@ -144,15 +192,25 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
             pill,
         };
 
+        let expandWithProps;
+        if (expand) {
+            expandWithProps = React.Children.map(expand, child =>
+                React.cloneElement(child, { depth: depth })
+            );
+        }
+
         return (
             <StyledCarvedMenuItem
                 role="button"
                 theme={context}
             >
                 {children}
-                <span className="expand">
-                    {expand}
-                </span>
+
+                {expandWithProps &&
+                    <span className="expand">
+                        {expandWithProps}
+                    </span>
+                }
             </StyledCarvedMenuItem>
         );
     }

@@ -191,6 +191,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         const { children } = this.props;
         const childrenWithProps = this.setChildrenProps(children);
 
+        console.log(childrenWithProps);
+
         return (
             <ThemeContext.Provider value={this.state}>
                 <ThemeProvider theme={currentThemeLevel}>

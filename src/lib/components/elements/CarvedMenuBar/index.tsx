@@ -57,6 +57,8 @@ class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMe
         const context = { ...this.context };
         context.depth = depth;
 
+        console.log('context', context);
+
         return (
             <StyledCarvedMenuBar theme={context}>
                 {children}
