@@ -26,6 +26,7 @@ import CarvedInput from './components/elements/CarvedInput';
 import CarvedMenuBar from './components/elements/CarvedMenuBar';
 import CarvedMenuItem from './components/elements/CarvedMenuItem';
 import CarvedMenuItems from './components/elements/CarvedMenuItems';
+import CarvedMenuList from './components/elements/CarvedMenuList';
 import CarvedSelector from './components/elements/CarvedSelector';
 
 
@@ -65,5 +66,6 @@ export {
     CarvedMenuBar,
     CarvedMenuItem,
     CarvedMenuItems,
+    CarvedMenuList,
     CarvedSelector,
 }

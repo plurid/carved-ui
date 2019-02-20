@@ -7,8 +7,8 @@ import { ThemeContext } from '../../app/CarvedApp';
 
 
 
-const StyledCarvedMenuItems = styled(CarvedStratum)`
-    display: flex;
+const StyledCarvedMenuList = styled(CarvedStratum)`
+    /* display: flex; */
     color: ${props => {
         const { currentTheme, depth } = props.theme;
         return currentTheme[depth].textColor;
@@ -16,13 +16,18 @@ const StyledCarvedMenuItems = styled(CarvedStratum)`
     background-color: transparent;
     box-shadow: none;
     height: 100%;
-    min-height: 60px;
-    justify-self: right;
+    min-height: 45px;
+    justify-self: left;
     align-items: center;
+
+    div {
+        justify-items: left;
+        min-height: 45px;
+    }
 `;
 
 
-interface CarvedMenuItemsProperties {
+interface CarvedMenuListProperties {
     children: any;
     depth: string;
     depthComputed: string;
@@ -30,16 +35,16 @@ interface CarvedMenuItemsProperties {
     themeComputed: string;
 }
 
-interface CarvedMenuItemsState {
+interface CarvedMenuListState {
     depth: string;
     theme: string;
 }
 
 
-class CarvedMenuItems extends Component<Partial<CarvedMenuItemsProperties>, CarvedMenuItemsState> {
+class CarvedMenuList extends Component<Partial<CarvedMenuListProperties>, CarvedMenuListState> {
     static contextType = ThemeContext;
 
-    constructor(props: CarvedMenuItemsProperties) {
+    constructor(props: CarvedMenuListProperties) {
         super(props);
 
         const { theme, depth, depthComputed, themeComputed } = this.props;
@@ -57,11 +62,11 @@ class CarvedMenuItems extends Component<Partial<CarvedMenuItemsProperties>, Carv
         context.depth = depth;
 
         return (
-            <StyledCarvedMenuItems theme={context}>
+            <StyledCarvedMenuList theme={context}>
                 {children}
-            </StyledCarvedMenuItems>
+            </StyledCarvedMenuList>
         );
     }
 }
 
-export default CarvedMenuItems;
+export default CarvedMenuList;
