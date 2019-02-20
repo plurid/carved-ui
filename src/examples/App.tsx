@@ -54,7 +54,7 @@ class App extends Component {
                         Carved
                     </div>
                     <CarvedMenuItems>
-                        <CarvedMenuItem pill decarved>
+                        <CarvedMenuItem>
                             <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
                         </CarvedMenuItem>
                         <CarvedMenuItem>

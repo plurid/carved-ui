@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import styled from 'styled-components';
 
-import CarvedStratum from '../../primitives/CarvedStratum';
+// import CarvedStratum from '../../primitives/CarvedStratum';
 
 import { ThemeContext } from '../../app/CarvedApp';
 
 
 
-const StyledCarvedMenuItem = styled(CarvedStratum)`
+const StyledCarvedMenuItem = styled.div`
     align-items: center;
     background-color: transparent;
     box-shadow: none;
@@ -33,6 +33,14 @@ const StyledCarvedMenuItem = styled(CarvedStratum)`
     padding: 0 15px;
     text-align: center;
     user-select: none;
+
+    :focus {
+        outline-offset: -1px;
+        outline: 1px solid ${props =>  {
+            const { currentTheme, depth } = props.theme;
+            return currentTheme[depth].textColor;
+        }};
+    }
 
     :hover {
         background-color: ${props =>  {
@@ -100,7 +108,7 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
         }
 
         return (
-            <StyledCarvedMenuItem theme={context}>
+            <StyledCarvedMenuItem tabIndex={0} theme={context}>
                 {children}
             </StyledCarvedMenuItem>
         );
