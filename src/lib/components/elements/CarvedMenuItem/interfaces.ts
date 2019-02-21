@@ -3,10 +3,10 @@ export interface CarvedMenuItemProperties {
     depth: string;
     depthComputed: string;
     decarved: boolean;
+    expand: any;
     theme: string;
     themeComputed: string;
     pill: boolean;
-    expand: any;
     preIcon: string;
     preIconAlt: string;
     preIconStyle: object;
@@ -25,9 +25,9 @@ export interface CarvedMenuItemProperties {
 export interface CarvedMenuItemState {
     depth: string;
     decarved: boolean;
-    theme: string;
-    pill: boolean;
     hasPreIcon: boolean;
     hasPostIcon: boolean;
+    pill: boolean;
     showTooltip: boolean;
+    theme: string;
 }

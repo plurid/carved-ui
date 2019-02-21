@@ -80,9 +80,9 @@ export const StyledCarvedMenuItem = styled.div`
             display: block;
         }
 
-        .tooltip {
+        /* .tooltip {
             display: block;
-        }
+        } */
     }
 
     .expand::before {
@@ -157,7 +157,7 @@ export const StyledCarvedMenuItem = styled.div`
         justify-self: right;
     }
 
-    .tooltip {
+    /* .tooltip {
         display: none;
         position: absolute;
         z-index: 1000;
@@ -170,5 +170,20 @@ export const StyledCarvedMenuItem = styled.div`
             return currentTheme[decrementDepth(depth)].backgroundColor;
         }};
         box-shadow: inherit;
-    }
+    } */
+`;
+
+
+export const StyledTooltip = styled.span`
+    position: absolute;
+    z-index: 1000;
+    padding: 10px;
+    top: ${props => {
+        return props.theme.component.pill === true ? '60px' : '70px';
+    }};
+    background-color: ${props =>  {
+        const { currentTheme, depth, decrementDepth } = props.theme;
+        return currentTheme[decrementDepth(depth)].backgroundColor;
+    }};
+    box-shadow: inherit;
 `;

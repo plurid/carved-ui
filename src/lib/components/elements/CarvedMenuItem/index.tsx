@@ -5,12 +5,17 @@ import {
     CarvedMenuItemState,
 } from './interfaces';
 import {
+    DEFAULT_DEPTH,
+    DEFAULT_THEME,
     ICON_DEFAULT_WIDTH,
     ICON_DEFAULT_HEIGHT,
     PRE_ICON_DEFAULT_ALT,
     POST_ICON_DEFAULT_ALT,
 } from './defaults';
-import { StyledCarvedMenuItem } from './styled';
+import {
+    StyledCarvedMenuItem,
+    StyledTooltip,
+} from './styled';
 import { ThemeContext } from '../../app/CarvedApp';
 
 
@@ -20,22 +25,33 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
         decarved: false,
         pill: false,
     };
-
     static contextType = ThemeContext;
+
+    private holdTimeout: ReturnType<typeof setTimeout> = setTimeout(() => null, 1);
+
 
     constructor(props: CarvedMenuItemProperties) {
         super(props);
 
-        const { theme, depth, depthComputed, themeComputed, decarved, pill, preIcon, postIcon } = this.props;
+        const {
+            decarved,
+            depth,
+            depthComputed,
+            pill,
+            preIcon,
+            postIcon,
+            theme,
+            themeComputed,
+        } = this.props;
 
         this.state = {
-            depth: depth || depthComputed || '0',
-            theme: theme || themeComputed || 'ponton',
             decarved: decarved ? true : false,
-            pill: pill ? true : false,
+            depth: depth || depthComputed || DEFAULT_DEPTH,
             hasPreIcon: preIcon ? true : false,
             hasPostIcon: postIcon ? true : false,
+            pill: pill ? true : false,
             showTooltip: false,
+            theme: theme || themeComputed || DEFAULT_THEME,
         };
     }
 
@@ -49,7 +65,7 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
                     ? parseInt(tooltipDelay)
                     : tooltipDelay;
             }
-            setTimeout(() => {
+            this.holdTimeout = setTimeout(() => {
                 this.setState( {
                     showTooltip: true
                 });
@@ -60,6 +76,7 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
     onMouseLeave = () => {
         const { tooltip } = this.props;
         if (tooltip) {
+            clearTimeout(this.holdTimeout);
             this.setState( {
                showTooltip: false
            });
@@ -138,9 +155,11 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
                 }
 
                 {tooltip && showTooltip &&
-                    <span className="tooltip">
+                    <StyledTooltip
+                        theme={context}
+                    >
                         {tooltip}
-                    </span>
+                    </StyledTooltip>
                 }
 
                 {expandWithProps &&
