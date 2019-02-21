@@ -73,6 +73,15 @@ class App extends Component {
                         <CarvedMenuItem>About</CarvedMenuItem>
                         <CarvedMenuItem expand={Expansion}>Documentation</CarvedMenuItem>
                         <CarvedMenuItem>Support</CarvedMenuItem>
+                        <CarvedMenuItem>
+                            <CarvedSelector
+                                selectors={
+                                [
+                                    {value: 'en', label: 'English'},
+                                    {value: 'ro', label: 'Română'},
+                                ]
+                            } />
+                        </CarvedMenuItem>
                     </CarvedMenuItems>
                 </CarvedMenuBar>
             </CarvedApp>

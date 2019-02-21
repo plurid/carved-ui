@@ -46,7 +46,6 @@ const StyledCarvedMenuItem = styled.div`
         }};
     } */
 
-
     :hover {
         background-color: ${props =>  {
             const { currentTheme, depth, decrementDepth,  } = props.theme;

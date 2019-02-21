@@ -29,6 +29,8 @@ import CarvedMenuItems from './components/elements/CarvedMenuItems';
 import CarvedMenuList from './components/elements/CarvedMenuList';
 import CarvedSelector from './components/elements/CarvedSelector';
 
+// icons
+
 
 
 export {
@@ -68,4 +70,6 @@ export {
     CarvedMenuItems,
     CarvedMenuList,
     CarvedSelector,
+
+    // icons
 }

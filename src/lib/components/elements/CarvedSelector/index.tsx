@@ -114,44 +114,40 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
 
         return (
             <span
-                className={ cx(styles.carvedFormGroup) }
+                style={style}
+                className={ cx(styles.carvedSelector) }
+                onClick={this.expand}
             >
-                <span
-                    style={style}
-                    className={ cx(styles.carvedSelector) }
-                    onClick={this.expand}
-                >
-                    {currentSelection}
+                {currentSelection}
 
-                    {expanded && (
+                {expanded && (
+                    <span
+                        className={ cx(styles.carvedSelectorItemsWrapper) }
+                    >
                         <span
-                            className={ cx(styles.carvedSelectorItemsWrapper) }
+                            className={ cx(styles.carvedSelectorItems) }
                         >
-                            <span
-                                className={ cx(styles.carvedSelectorItems) }
-                            >
-                                {currentSelection}
-                                {selectors.map((selector, index) => {
-                                    const { value, label } = selector;
+                            {currentSelection}
+                            {selectors.map((selector, index) => {
+                                const { value, label } = selector;
 
-                                    if (index === selected) {
-                                        return null;
-                                    }
+                                if (index === selected) {
+                                    return null;
+                                }
 
-                                    return (
-                                        <span
-                                            key={uuid()}
-                                            className={ cx(styles.carvedSelectorItem) }
-                                            onClick={this.setSelector.bind(this, index)}
-                                        >
-                                            {label}
-                                        </span>
-                                    );
-                                })}
-                            </span>
+                                return (
+                                    <span
+                                        key={uuid()}
+                                        className={ cx(styles.carvedSelectorItem) }
+                                        onClick={this.setSelector.bind(this, index)}
+                                    >
+                                        {label}
+                                    </span>
+                                );
+                            })}
                         </span>
-                    )}
-                </span>
+                    </span>
+                )}
             </span>
         );
     }
