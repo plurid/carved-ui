@@ -19,6 +19,13 @@ const StyledCarvedMenuItem = styled.div`
     }};
     cursor: pointer;
     display: grid;
+    grid-template-columns: ${props => {
+        let val = '';
+        props.theme.component.hasPreIcon === true ? val += '30px ' : val += '';
+        val += 'auto ';
+        props.theme.component.hasPostIcon === true ? val += '30px ' : val += '';
+        return val;
+    }};
     font-size: 0.9rem;
     justify-items: center;
     position: relative;
@@ -36,6 +43,7 @@ const StyledCarvedMenuItem = styled.div`
     padding: 0 15px;
     text-align: center;
     user-select: none;
+
 
     /* TODO focus needs behavior */
     /* :focus {
@@ -72,6 +80,10 @@ const StyledCarvedMenuItem = styled.div`
                     }} 0px 1px 10px -3px rgba(0, 0, 0, 0.5);
 
         .expand {
+            display: block;
+        }
+
+        .tooltip {
             display: block;
         }
     }
@@ -124,6 +136,7 @@ const StyledCarvedMenuItem = styled.div`
     .expand {
         cursor: default;
         display: none;
+        z-index: 1000;
         position: absolute;
         top: ${props => {
             const val = props.theme.component.pill === true ? '48px' : '70px';
@@ -138,7 +151,36 @@ const StyledCarvedMenuItem = styled.div`
         /* background-color: inherit; */
         box-shadow: inherit;
     }
+
+    .preIcon {
+        justify-self: left;
+    }
+
+    .postIcon {
+        justify-self: right;
+    }
+
+    .tooltip {
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        padding: 10px;
+        top: ${props => {
+            return props.theme.component.pill === true ? '60px' : '70px';
+        }};
+        background-color: ${props =>  {
+            const { currentTheme, depth, decrementDepth } = props.theme;
+            return currentTheme[decrementDepth(depth)].backgroundColor;
+        }};
+        box-shadow: inherit;
+    }
 `;
+
+
+const ICON_DEFAULT_WIDTH = '20px';
+const ICON_DEFAULT_HEIGHT = '20px';
+const PRE_ICON_DEFAULT_ALT = 'PreIcon';
+const POST_ICON_DEFAULT_ALT = 'PostIcon';
 
 
 interface CarvedMenuItemProperties {
@@ -150,6 +192,18 @@ interface CarvedMenuItemProperties {
     themeComputed: string;
     pill: boolean;
     expand: any;
+    preIcon: string;
+    preIconAlt: string;
+    preIconStyle: object;
+    preIconHeight: string;
+    preIconWidth: string;
+    postIcon: string;
+    postIconAlt: string;
+    postIconStyle: object;
+    postIconHeight: string;
+    postIconWidth: string;
+    tooltip: string;
+    tooltipDelay: number | string;
 }
 
 interface CarvedMenuItemState {
@@ -157,6 +211,9 @@ interface CarvedMenuItemState {
     decarved: boolean;
     theme: string;
     pill: boolean;
+    hasPreIcon: boolean;
+    hasPostIcon: boolean;
+    showTooltip: boolean;
 }
 
 
@@ -171,24 +228,80 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
     constructor(props: CarvedMenuItemProperties) {
         super(props);
 
-        const { theme, depth, depthComputed, themeComputed, decarved, pill } = this.props;
+        const { theme, depth, depthComputed, themeComputed, decarved, pill, preIcon, postIcon } = this.props;
 
         this.state = {
             depth: depth || depthComputed || '0',
             theme: theme || themeComputed || 'ponton',
             decarved: decarved ? true : false,
             pill: pill ? true : false,
+            hasPreIcon: preIcon ? true : false,
+            hasPostIcon: postIcon ? true : false,
+            showTooltip: false,
         };
     }
 
+
+    onMouseEnter = () => {
+        const { tooltip } = this.props;
+        if (tooltip) {
+            const { tooltipDelay } = this.props;
+            let delay = 700;
+            if (tooltipDelay) {
+                delay = typeof tooltipDelay === 'string'
+                    ? parseInt(tooltipDelay)
+                    : tooltipDelay;
+            }
+            setTimeout(() => {
+                this.setState( {
+                    showTooltip: true
+                });
+            }, delay);
+        }
+    }
+
+    onMouseLeave = () => {
+        const { tooltip } = this.props;
+        if (tooltip) {
+            this.setState( {
+               showTooltip: false
+           });
+        }
+    }
+
     render() {
-        const { children, expand } = this.props;
-        const { depth, decarved, pill } = this.state;
+        const {
+            children,
+            expand,
+            preIcon,
+            preIconAlt,
+            preIconStyle,
+            preIconHeight,
+            preIconWidth,
+            postIcon,
+            postIconAlt,
+            postIconStyle,
+            postIconHeight,
+            postIconWidth,
+            tooltip,
+         } = this.props;
+
+        const {
+            depth,
+            decarved,
+            pill,
+            hasPreIcon,
+            hasPostIcon,
+            showTooltip,
+        } = this.state;
+
         const context = { ...this.context };
         context.depth = depth;
         context.component = {
             decarved,
             pill,
+            hasPreIcon,
+            hasPostIcon,
         };
 
         let expandWithProps;
@@ -202,8 +315,36 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
             <StyledCarvedMenuItem
                 role="button"
                 theme={context}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
             >
+                {preIcon &&
+                    <img
+                        className="preIcon"
+                        src={preIcon}
+                        style={preIconStyle}
+                        alt={preIconAlt || PRE_ICON_DEFAULT_ALT}
+                        height={preIconHeight || preIconWidth || ICON_DEFAULT_HEIGHT}
+                        width={preIconWidth || preIconHeight || ICON_DEFAULT_WIDTH}
+                    />
+                }
                 {children}
+                {postIcon &&
+                    <img
+                        className="postIcon"
+                        src={postIcon}
+                        style={postIconStyle}
+                        alt={postIconAlt || POST_ICON_DEFAULT_ALT}
+                        height={postIconHeight || postIconWidth || ICON_DEFAULT_HEIGHT}
+                        width={postIconWidth || postIconHeight || ICON_DEFAULT_WIDTH}
+                    />
+                }
+
+                {tooltip && showTooltip &&
+                    <span className="tooltip">
+                        {tooltip}
+                    </span>
+                }
 
                 {expandWithProps &&
                     <span className="expand">

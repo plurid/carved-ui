@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styled from 'styled-components';
 import classNames from 'classnames/bind';
 
 import uuid from 'uuid/v4';
@@ -6,9 +7,29 @@ import uuid from 'uuid/v4';
 import CarvedDots from '../../icons/CarvedDots';
 
 
+
 const styles = require('./styles.module.scss')
 
 const cx = classNames.bind(styles);
+
+
+const StyledCarvedSelector = styled.span`
+    position: relative;
+    flex-direction: column;
+    padding: 0px 0;
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 60px;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    text-align: left;
+    cursor: pointer;
+`;
+
+
 
 
 
@@ -113,9 +134,8 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
         );
 
         return (
-            <span
+            <StyledCarvedSelector
                 style={style}
-                className={ cx(styles.carvedSelector) }
                 onClick={this.expand}
             >
                 {currentSelection}
@@ -148,7 +168,7 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
                         </span>
                     </span>
                 )}
-            </span>
+            </StyledCarvedSelector>
         );
     }
 }
