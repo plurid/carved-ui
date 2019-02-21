@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import MenuBar from '../../layout/MenuBar';
+
 import {
     CarvedApp,
 
@@ -25,11 +27,23 @@ import {
     CarvedH5,
     CarvedH6,
 
+    CarvedMenuBar,
+    CarvedMenuItems,
+    CarvedMenuItem,
+    CarvedMenuList,
+
     CarvedHR,
     CarvedInput,
     CarvedSelector,
 } from 'carved-react';
 
+const Expansion = (
+    <CarvedMenuList>
+        <CarvedMenuItem>About</CarvedMenuItem>
+        <CarvedMenuItem>Documentation</CarvedMenuItem>
+        <CarvedMenuItem>Support</CarvedMenuItem>
+    </CarvedMenuList>
+);
 
 
 class CarvedTest extends Component {
@@ -39,6 +53,24 @@ class CarvedTest extends Component {
                 <CarvedApp
                     theme="hsl(220, 40%, 40%)"
                 >
+                    {/* <MenuBar /> */}
+                    <CarvedMenuBar>
+                        <div>
+                            Carved
+                        </div>
+                        <CarvedMenuItems>
+                            <CarvedMenuItem pill decarved expand={Expansion}>
+                                <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
+                            </CarvedMenuItem>
+                            <CarvedMenuItem>
+                                <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
+                            </CarvedMenuItem>
+                            <CarvedMenuItem>About</CarvedMenuItem>
+                            <CarvedMenuItem decarved expand={Expansion}>Documentation</CarvedMenuItem>
+                            <CarvedMenuItem>Support</CarvedMenuItem>
+                        </CarvedMenuItems>
+                    </CarvedMenuBar>
+
                     <CarvedPolje>
                         <CarvedH1 text="Buttons H1">
                         </CarvedH1>

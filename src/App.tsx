@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import CarvedTest from './components/pages/CarvedTest';
+import CarvedTestMenuBar from './components/pages/CarvedTestMenuBar';
 
 
 
@@ -10,7 +11,10 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <Route path="/test" component={CarvedTest} />
+                <Switch>
+                    <Route exact path="/test" component={CarvedTest} />
+                    <Route exact path="/test/menu-bar" component={CarvedTestMenuBar} />
+                </Switch>
             </Router>
         );
     }
