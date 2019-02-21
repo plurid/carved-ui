@@ -2239,6 +2239,22 @@ capture-exit@^1.2.0:
   dependencies:
     rsvp "^3.3.3"
 
+carved-html@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/carved-html/-/carved-html-0.2.1.tgz#a394ec203cb8bb9bd54bfb25a4c1d045c93a6c26"
+  integrity sha512-ptNM/om/Y1RpoPYRwNWLxldLoxl3jjcZE4Jn37A10VJTAhBnhIrJ/X5TM04ci7/oAwH1NbM6za30QK42M2WLGQ==
+
+carved-react@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/carved-react/-/carved-react-0.2.1.tgz#868e13f2607dee9842803cb530925f9f6bb784c6"
+  integrity sha512-02Y6vqXRwRbtuyWd+wuDQqxXDacJl4upiXAa2lmrNTEUQItEGAYa2i8M8k7ljfXvm6ZPm8zg1Hf5qaTdppALXA==
+  dependencies:
+    classnames "^2.2.6"
+    node-sass "^4.11.0"
+    react "^16.8.1"
+    react-dom "^16.8.1"
+    react-scripts "2.1.3"
+
 case-sensitive-paths-webpack-plugin@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/case-sensitive-paths-webpack-plugin/-/case-sensitive-paths-webpack-plugin-2.1.2.tgz#c899b52175763689224571dad778742e133f0192"

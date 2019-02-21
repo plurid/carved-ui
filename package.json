@@ -18,6 +18,8 @@
         "@types/classnames": "^2.2.7",
         "@types/react-router-dom": "^4.3.1",
         "@webcomponents/webcomponentsjs": "^2.2.7",
+        "carved-html": "^0.2.1",
+        "carved-react": "^0.2.1",
         "classnames": "^2.2.6",
         "node-sass": "^4.11.0",
         "react": "^16.8.1",
