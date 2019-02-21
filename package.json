@@ -1,6 +1,6 @@
 {
     "name": "carved-html",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "HTML Custom Elements for Carved User Interface Design",
     "repository": {
         "type": "git",
