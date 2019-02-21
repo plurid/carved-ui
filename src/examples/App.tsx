@@ -41,13 +41,15 @@ import {
 const Expansion = (
     <CarvedMenuList>
         <CarvedMenuItem
-            preIcon="https://image.flaticon.com/icons/png/512/64/64572.png"
+            preIcon="http://s16574.pcdn.co/wp-content/uploads/2018/05/About-icon.png"
             preIconStyle={{ filter: 'invert(1)' }}
-            postIcon="https://image.flaticon.com/icons/png/512/64/64572.png"
-            postIconStyle={{ filter: 'invert(1)' }}
         >About</CarvedMenuItem>
-        <CarvedMenuItem>Documentation</CarvedMenuItem>
-        <CarvedMenuItem>Support</CarvedMenuItem>
+        <CarvedMenuItem
+            preIcon="https://image.flaticon.com/icons/svg/35/35920.svg"
+            preIconStyle={{ filter: 'invert(1)' }}
+            postIcon="https://static.thenounproject.com/png/10897-200.png"
+            postIconStyle={{ filter: 'invert(1)' }}
+        >Documentation</CarvedMenuItem>
         <CarvedMenuItem>Support</CarvedMenuItem>
     </CarvedMenuList>
 );
@@ -69,7 +71,19 @@ class App extends Component {
                         Carved
                     </div>
                     <CarvedMenuItems>
+                        <CarvedMenuItem expand={Expansion}>
+                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
+                        </CarvedMenuItem>
+
+                        <CarvedMenuItem decarved expand={Expansion}>
+                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
+                        </CarvedMenuItem>
+
                         <CarvedMenuItem pill expand={Expansion}>
+                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
+                        </CarvedMenuItem>
+
+                        <CarvedMenuItem pill decarved expand={Expansion}>
                             <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
                         </CarvedMenuItem>
 
@@ -80,24 +94,37 @@ class App extends Component {
                         </CarvedMenuItem>
 
                         <CarvedMenuItem
-                            preIcon="https://image.flaticon.com/icons/png/512/64/64572.png"
+                            pill
+                            tooltip="Notification"
+                        >
+                            <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
+                        </CarvedMenuItem>
+
+                        <CarvedMenuItem
+                            pill
+                            decarved
+                            tooltip="Notification"
+                        >
+                            <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
+                        </CarvedMenuItem>
+
+                        <CarvedMenuItem
+                            preIcon="http://s16574.pcdn.co/wp-content/uploads/2018/05/About-icon.png"
                             preIconStyle={{ filter: 'invert(1)' }}
-                            postIcon="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png"
-                            postIconStyle={{ filter: 'invert(1)' }}
                         >
                             About
                         </CarvedMenuItem>
 
                         <CarvedMenuItem
-                            preIcon="https://image.flaticon.com/icons/png/512/64/64572.png"
+                            preIcon="https://image.flaticon.com/icons/svg/35/35920.svg"
                             preIconStyle={{ filter: 'invert(1)' }}
-                            postIcon="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png"
+                            postIcon="https://static.thenounproject.com/png/10897-200.png"
                             postIconStyle={{ filter: 'invert(1)' }}
                             expand={Expansion}
                         >
                             Documentation
                         </CarvedMenuItem>
-                        <CarvedMenuItem>Support</CarvedMenuItem>
+
                         <CarvedMenuItem>
                             <CarvedSelector
                                 selectors={
@@ -108,17 +135,10 @@ class App extends Component {
                                 ]
                             } />
                         </CarvedMenuItem>
+
+                        <CarvedMenuItem>Support</CarvedMenuItem>
                     </CarvedMenuItems>
                 </CarvedMenuBar>
-
-                <CarvedSelector
-                    selectors={
-                    [
-                        {value: 'en', label: 'English'},
-                        {value: 'ro', label: 'Română'},
-                        {value: 'fr', label: 'Français'},
-                    ]
-                } />
             </CarvedApp>
         );
     }
