@@ -14,12 +14,19 @@ const H6 = styled.h6`
     -moz-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: ${props => props.theme.textColorCarved} 0px 2px 2px;
+    text-shadow: ${props =>  {
+                    const { currentTheme, depth, decrementDepth } = props.theme;
+                    return currentTheme[decrementDepth(depth)].textColorCarved;
+                }} 0px 2px 2px;
     text-align: left;
     line-height: 1;
 
+
     ::selection {
-        color: ${props => props.theme.textColor};
+        color: ${props =>  {
+            const { currentTheme, depth, decrementDepth } = props.theme;
+            return currentTheme[decrementDepth(depth)].textColor;
+        }};
         text-shadow: none;
     }
 
@@ -39,7 +46,8 @@ interface CarvedH6Properties extends React.Props<any> {
     depthComputed: string;
     theme: string;
     themeComputed: string;
-    onClick: any,
+    onClick: any;
+    style: object;
 }
 
 interface CarvedH6State {
@@ -63,15 +71,19 @@ class CarvedH6 extends Component<Partial<CarvedH6Properties>, CarvedH6State> {
     }
 
     render() {
-        const { text, children } = this.props;
+        const { text, children, style } = this.props;
         const { depth } = this.state;
-        const { currentTheme } = this.context;
-        const themeDepthed = parseInt(depth) < 6 ? currentTheme[parseInt(depth) - 2 + ''] : currentTheme['5'];
+        // const { currentTheme } = this.context;
+        // const themeDepthed = parseInt(depth) < 6 ? currentTheme[parseInt(depth) - 2 + ''] : currentTheme['5'];
+
+        const context = { ...this.context };
+        context.depth = depth;
+
 
         return (
             <React.Fragment>
-                <ThemeProvider theme={themeDepthed}>
-                    <H6>
+                <ThemeProvider theme={context}>
+                    <H6 style={style}>
                         {children || text}
                     </H6>
                 </ThemeProvider>

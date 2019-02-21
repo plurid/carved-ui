@@ -67,9 +67,9 @@ class App extends Component {
                 theme="hsl(220, 40%, 40%)"
             >
                 <CarvedMenuBar>
-                    <div>
+                    <CarvedH6 style={{ marginBottom: 0}}>
                         Carved
-                    </div>
+                    </CarvedH6>
                     <CarvedMenuItems>
                         <CarvedMenuItem expand={Expansion}>
                             <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
