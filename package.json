@@ -1,7 +1,7 @@
 {
     "name": "carved-react",
     "description": "Carved Design User Interface Components for React",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/plurid/carved-react.git"
@@ -23,6 +23,7 @@
         "dist": "yarn dist.clear && yarn dist.rollup",
         "dist.rollup": "rollup -c",
         "dist.clear": "rm -rf dist",
+        "prepublishOnly": "yarn dist",
         "start.examples": "react-scripts start",
         "build.examples": "react-scripts build",
         "test": "react-scripts test",
