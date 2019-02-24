@@ -36,6 +36,8 @@ interface CarvedAppState {
     lightnessInversionLimit: number;
     lightnessInversionLow: number;
     lightnessInversionHigh: number;
+    incrementDepth: any;
+    decrementDepth: any;
     shadowAngle: number;
     shadowDistance: number;
     themeColor: string;

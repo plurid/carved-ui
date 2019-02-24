@@ -85,7 +85,7 @@ export const StyledCarvedMenuItem = styled.div`
         } */
     }
 
-    .expand::before {
+    /* .expand::before {
         position: absolute;
         content: '';
         right: 20px;
@@ -113,7 +113,7 @@ export const StyledCarvedMenuItem = styled.div`
                                 return currentTheme[depth].backgroundColor;
                             }
                         }};
-    }
+    } */
 
     .expand::after {
         position: absolute;

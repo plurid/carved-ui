@@ -8,7 +8,8 @@ import CarvedDots from '../../icons/CarvedDots';
 
 
 
-const styles = require('./styles.module.scss')
+import styles from './styles.module.scss';
+// const styles = require('./styles.scss')
 
 const cx = classNames.bind(styles);
 
@@ -65,7 +66,7 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
     constructor(props: CarvedSelectorProperties) {
         super(props);
 
-        const { expand, expanded, selectors } = this.props;
+        const { expand, expanded } = this.props;
 
         const initialSelected = this.initialSelect()
 
@@ -149,7 +150,7 @@ class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorS
                         >
                             {currentSelection}
                             {selectors.map((selector, index) => {
-                                const { value, label } = selector;
+                                const { label } = selector;
 
                                 if (index === selected) {
                                     return null;

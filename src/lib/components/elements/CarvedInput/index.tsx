@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import classNames from 'classnames/bind';
 
-const styles = require('./styles.module.scss')
+
+import styles from './styles.module.css';
+// const styles = require('./styles.module.scss')
 
 const cx = classNames.bind(styles);
 

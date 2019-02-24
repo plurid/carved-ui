@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import classNames from 'classnames/bind';
 
-const styles = require('./styles.module.scss');
+import styles from './styles.module.scss';
+// const styles = require('./styles.scss');
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +25,7 @@ class CarvedDots extends Component<CarvedDotsProperties, CarvedDotsState> {
 
     render() {
         return (
-            <ul className={ cx(styles.carvedDots) }>
+            <ul className={cx(styles.carvedDots)}>
                 <li></li>
                 <li></li>
                 <li></li>

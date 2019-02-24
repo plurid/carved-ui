@@ -1,33 +1,5 @@
-// .carvedSelector {
-//     position: relative;
-//     flex-direction: column;
-//     padding: 0px 0;
-//     // width: auto;
-//     // width: auto;
-//     width: 100%;
-//     height: 100%;
-//     user-select: none;
-//     display: inline-flex;
-//     align-items: center;
-//     justify-content: center;
-//     text-align: left;
-//     cursor: pointer;
-//     // border-radius: 10px;
-
-//     // background-color: hsl(219, 20%, 14%);
-//     // background-color: hsla(0, 0%, 0%, 0.3);
-//     // box-shadow: inset 0 5px 5px -4px rgba(0, 0, 0, 0.7), inset 0 -5px  5px -4px rgba(0, 0, 0, 0.7);
-//     // background: radial-gradient(ellipse 200px 200px at 50% -10px, transparent 40px, yellow 20px);
-
-//     // box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
-//     // box-shadow: inset 0 15px 15px -10px rgba(0, 0, 0, 0.7);
-//     // background-color: blue;
-//     // box-shadow: -15px 0 15px -15px inset;
-// }
-
 .carvedSelectorCurrent {
     position: relative;
-    // border-radius: 10px;
     justify-content: space-between;
 }
 
@@ -38,45 +10,16 @@
     align-items: center;
 }
 
-// .carvedSelectorCurrent:after {
-//     position: absolute;
-//     content: "";
-//     top: 22.5px;
-//     right: 15px;
-//     width: 0;
-//     height: 0;
-//     border: 5px solid transparent;
-//     border-color: #fff transparent transparent transparent;
-//   }
-
 
 
 .carvedSelectorItems {
-    // background-color: hsl(219, 20%, 14%);
-    // box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
-    // border-radius: 10px;
-
-    // background-color: hsla(0, 0%, 0%, 0.3);
-    // box-shadow: inset -5px 0px 10px -5px rgba(0,0,0,0.9), inset 5px 0px 10px -5px rgba(0,0,0,0.9);
-    // background-color: blue;
-    // box-shadow: inset 0px -9px 15px 5px rgba(0, 0, 0, 0.7);
-    // box-shadow: inset 0 0px 10px 0 rgba(0, 0, 0, 0.7);
-    // box-shadow: inset 0 0px 10px 0 rgba(0, 0, 0, 0.7);
-    // box-shadow: inset 0px -10px 10px -10px rgba(0, 0, 0, 0.7);
     position: absolute;
     top: 0;
-    // top: -114px;
-    // width: 70px;
     width: 100%;
-    // height: 0;
 
     z-index: 999;
     display: flex;
-    // display: inline-flex;
     flex-direction: column;
-    // flex-direction: column-reverse;
-    // flex-direction: row;
-    // width: 100px;
 }
 
 
@@ -90,32 +33,11 @@
     background-color: black;
 }
 
-// .carvedSelectorItems .carvedSelectorItem:first-child {
-//     border-top-left-radius: 10px;
-//     border-top-right-radius: 10px;
-// }
-
-// .carvedSelectorItems .carvedSelectorItem:last-child {
-//     border-bottom-left-radius: 10px;
-//     border-bottom-right-radius: 10px;
-// }
-
 
 .carvedSelectorItem {
-    // min-width: 100px;
     padding: 10px 15px;
     font-size: 16px;
     height: 30px;
     display: flex;
     align-items: center;
-    // padding-left: 10px;
-    // display: flex;
-    // padding-top: 15px;
-    // align-items: center;
 }
-
-
-// .carvedSelectorItem:hover {
-//     background-color: hsla(0, 0%, 0%, 0.3);
-//     box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
-// }

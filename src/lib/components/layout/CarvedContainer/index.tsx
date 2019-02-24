@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component } from "react";
 import styled, { ThemeProvider } from 'styled-components';
 
 import { ThemeContext } from '../../app/CarvedApp';

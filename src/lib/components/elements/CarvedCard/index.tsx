@@ -44,7 +44,7 @@ class CarvedCard extends Component<Partial<CarvedCardProperties>, CarvedCardStat
 
     render() {
         const { text, children } = this.props;
-        const { depth, theme } = this.state;
+        const { depth } = this.state;
         const { currentTheme } = this.context;
         const themeDepthed = parseInt(depth) < 6 ? currentTheme[depth] : currentTheme['5'];
 
