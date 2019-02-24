@@ -33,6 +33,8 @@ interface CarvedStratumState {
 
 
 class CarvedStratum extends Component<CarvedStratumProperties, CarvedStratumState> {
+    public static displayName = "Carved.Stratum";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedStratumProperties) {

@@ -29,6 +29,8 @@ interface CarvedTileState {
 
 
 class CarvedTile extends Component<Partial<CarvedTileProperties>, CarvedTileState> {
+    public static displayName = "Carved.Tile";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedTileProperties) {

@@ -30,6 +30,8 @@ interface CarvedSectionState {
 
 
 class CarvedSection extends Component<Partial<CarvedSectionProperties>, CarvedSectionState> {
+    public static displayName = "Carved.Section";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedSectionProperties) {

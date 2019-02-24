@@ -29,6 +29,8 @@ interface CarvedCardState {
 
 
 class CarvedCard extends Component<Partial<CarvedCardProperties>, CarvedCardState> {
+    public static displayName = "Carved.Card";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedCardProperties) {

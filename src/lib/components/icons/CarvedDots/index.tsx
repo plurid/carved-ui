@@ -16,6 +16,8 @@ interface CarvedDotsState {
 
 
 class CarvedDots extends Component<CarvedDotsProperties, CarvedDotsState> {
+    public static displayName = "Carved.Dots";
+
     constructor(props: CarvedDotsProperties) {
         super(props);
 

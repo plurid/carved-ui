@@ -20,6 +20,8 @@ interface CarvedHRState {
 
 
 class CarvedHR extends Component<CarvedHRProperties, CarvedHRState> {
+    public static displayName = "Carved.HR";
+
     constructor(props: CarvedHRProperties) {
         super(props);
 

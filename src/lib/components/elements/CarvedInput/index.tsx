@@ -24,6 +24,8 @@ interface CarvedInputState {
 
 
 class CarvedInput extends Component<CarvedInputProperties, CarvedInputState> {
+    public static displayName = "Carved.Input";
+
     constructor(props: CarvedInputProperties) {
         super(props);
 

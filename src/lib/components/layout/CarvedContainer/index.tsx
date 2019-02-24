@@ -29,6 +29,8 @@ interface CarvedContainerState {
 
 
 class CarvedContainer extends Component<Partial<CarvedContainerProperties>, CarvedContainerState> {
+    public static displayName = "Carved.Container";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedContainerProperties) {

@@ -45,6 +45,8 @@ interface CarvedAppState {
 
 
 class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> {
+    public static displayName = "Carved.App";
+
     constructor(props: CarvedAppProperties) {
         super(props);
 
@@ -137,12 +139,14 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     setChildrenProps = (children: ReactNode, nestingLevel: string = this.state.depth) => {
         const { theme } = this.props;
         const { autoDepth } = this.state;
+        // console.log('nestingLevel', nestingLevel);
 
         const childrenWithProps = React.Children.map(children, (child: any) => {
             if (child.type) {
+                // console.log('CHILD NO PROPS', child);
                 let childWithProps = child;
-                const name = child.type.name;
-
+                const name = child.type.displayName;
+                // console.log('NAME', name);
                 if (name) {
                     const carvedRegex = /Carved/;
                     const carvedTest = carvedRegex.test(name);
@@ -150,9 +154,11 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                     if (carvedTest) {
                         if (autoDepth) {
                             if (!child.props.depth) {
+                                // console.log('childWithProps NESTING', childWithProps);
                                 childWithProps = React.cloneElement(childWithProps, {
                                     depthComputed: (parseInt(nestingLevel) + 1) + '',
                                 });
+                                // console.log('childWithProps NESTED', childWithProps);
                             }
                         }
 
@@ -181,9 +187,11 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
 
                 return childWithProps;
             }
+            // console.log('CHILDDDD', child);
 
             return child;
         });
+        // console.log('AAAAA', childrenWithProps);
 
         return childrenWithProps;
     }
@@ -193,7 +201,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
         const { children } = this.props;
         const childrenWithProps = this.setChildrenProps(children);
 
-        console.log(childrenWithProps);
+        // console.log('children', children);
+        // console.log(childrenWithProps);
 
         return (
             <ThemeContext.Provider value={this.state}>

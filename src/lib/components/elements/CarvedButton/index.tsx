@@ -78,6 +78,8 @@ interface CarvedButtonState {
 
 
 class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButtonState> {
+    public static displayName = "Carved.Button";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedButtonProperties) {

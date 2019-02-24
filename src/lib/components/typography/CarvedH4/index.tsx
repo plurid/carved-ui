@@ -49,6 +49,8 @@ interface CarvedH4State {
 
 
 class CarvedH4 extends Component<Partial<CarvedH4Properties>, CarvedH4State> {
+    public static displayName = "Carved.H4";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedH4Properties) {

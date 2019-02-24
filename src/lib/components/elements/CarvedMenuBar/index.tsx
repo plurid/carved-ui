@@ -38,12 +38,16 @@ interface CarvedMenuBarState {
 
 
 class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMenuBarState> {
+    public static displayName = "Carved.MenuBar";
     static contextType = ThemeContext;
 
     constructor(props: CarvedMenuBarProperties) {
         super(props);
 
         const { theme, depth, depthComputed, themeComputed } = this.props;
+        // console.log('depth', depth);
+        // console.log('depthComputed', depthComputed);
+
 
         this.state = {
             depth: depth || depthComputed || '0',
@@ -57,7 +61,8 @@ class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMe
         const context = { ...this.context };
         context.depth = depth;
 
-        console.log('context', context);
+        // console.log('depth RENDER', depth);
+        // console.log('context', context);
 
         return (
             <StyledCarvedMenuBar theme={context}>

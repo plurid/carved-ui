@@ -42,6 +42,8 @@ interface CarvedMenuListState {
 
 
 class CarvedMenuList extends Component<Partial<CarvedMenuListProperties>, CarvedMenuListState> {
+    public static displayName = "Carved.MenuList";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedMenuListProperties) {

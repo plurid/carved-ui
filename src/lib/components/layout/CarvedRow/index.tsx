@@ -32,6 +32,8 @@ interface CarvedRowState {
 
 
 class CarvedRow extends Component<Partial<CarvedRowProperties>, CarvedRowState> {
+    public static displayName = "Carved.Row";
+
     static contextType = ThemeContext;
 
     constructor(props: CarvedRowProperties) {

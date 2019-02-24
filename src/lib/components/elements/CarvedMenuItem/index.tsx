@@ -21,6 +21,8 @@ import { ThemeContext } from '../../app/CarvedApp';
 
 
 class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, CarvedMenuItemState> {
+    public static displayName = "Carved.MenuItem";
+
     public static defaultProps = {
         decarved: false,
         pill: false,

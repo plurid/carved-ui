@@ -63,6 +63,8 @@ interface CarvedSelectorState {
 
 
 class CarvedSelector extends Component<CarvedSelectorProperties, CarvedSelectorState> {
+    public static displayName = "Carved.Selector";
+
     constructor(props: CarvedSelectorProperties) {
         super(props);
 
