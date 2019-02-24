@@ -2257,10 +2257,10 @@ carved-html@^0.2.1:
   resolved "https://registry.yarnpkg.com/carved-html/-/carved-html-0.2.1.tgz#a394ec203cb8bb9bd54bfb25a4c1d045c93a6c26"
   integrity sha512-ptNM/om/Y1RpoPYRwNWLxldLoxl3jjcZE4Jn37A10VJTAhBnhIrJ/X5TM04ci7/oAwH1NbM6za30QK42M2WLGQ==
 
-carved-react@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/carved-react/-/carved-react-0.3.2.tgz#fbd88cfdc28bd97af4be3c0480e44ee3816edd8d"
-  integrity sha512-Jga21MUnFMnGTHSdiyt1KTzgEzMV2HFBTNe9fqTlgviKtUCMdEs7w2PTStnUGkawAp4RWjfVEjLZgmgQJMadOQ==
+carved-react@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/carved-react/-/carved-react-0.3.3.tgz#d4e973296d0b4f572375d92908c69d8ccecdcaea"
+  integrity sha512-m92egfYtCDRhxnHeqB4Vp6DuC168sbgkA4YfaPASh4m24ry268yip8HICA/lIPlnikqxuMJgIZx6cvsNQ5KCjQ==
 
 case-sensitive-paths-webpack-plugin@2.2.0:
   version "2.2.0"

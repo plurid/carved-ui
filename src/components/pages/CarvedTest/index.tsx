@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import MenuBar from '../../layout/MenuBar';
+// import MenuBar from '../../layout/MenuBar';
 
 import {
     CarvedApp,
@@ -53,7 +53,6 @@ class CarvedTest extends Component {
                 <CarvedApp
                     theme="hsl(220, 40%, 40%)"
                 >
-                    {/* <MenuBar /> */}
                     <CarvedMenuBar>
                         <div>
                             Carved

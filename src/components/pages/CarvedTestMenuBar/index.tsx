@@ -39,7 +39,7 @@ class CarvedTest extends Component {
                 theme="hsl(220, 40%, 40%)"
             >
                 <CarvedMenuBar>
-                    <CarvedH6 style={{ marginBottom: 0}}>
+                    <CarvedH6 style={{ marginBottom: 0 }}>
                         Carved
                     </CarvedH6>
                     <CarvedMenuItems>
