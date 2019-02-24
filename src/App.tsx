@@ -12,6 +12,7 @@ class App extends Component {
         return (
             <Router>
                 <Switch>
+                    <Route exact path="/" component={CarvedTestMenuBar} />
                     <Route exact path="/test" component={CarvedTest} />
                     <Route exact path="/test/menu-bar" component={CarvedTestMenuBar} />
                 </Switch>
