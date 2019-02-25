@@ -1,4 +1,4 @@
-export const DEFAULT_DEPTH = '0';
+export const DEFAULT_DEPTH = '3';
 export const DEFAULT_THEME = 'ponton';
 
 

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import MenuBarTest from './MenuBarTest';
+
 import './styles.scss';
 
 
@@ -38,27 +40,21 @@ import {
 } from '../lib';
 
 
-const Expansion = (
-    <CarvedMenuList>
-        <CarvedMenuItem
-            preIcon="http://s16574.pcdn.co/wp-content/uploads/2018/05/About-icon.png"
-            preIconStyle={{ filter: 'invert(1)' }}
-        >About</CarvedMenuItem>
-        <CarvedMenuItem
-            preIcon="https://image.flaticon.com/icons/svg/35/35920.svg"
-            preIconStyle={{ filter: 'invert(1)' }}
-            postIcon="https://static.thenounproject.com/png/10897-200.png"
-            postIconStyle={{ filter: 'invert(1)' }}
-        >Documentation</CarvedMenuItem>
-        <CarvedMenuItem>Support</CarvedMenuItem>
-    </CarvedMenuList>
-);
-
-
 
 class App extends Component {
     click = () => {
         console.log('clicked');
+    }
+
+    constructor(props: any) {
+        super(props);
+
+
+        this.state = {
+            config: {
+                theme: 'hsl(220, 40%, 40%)'
+            }
+        }
     }
 
     render() {
@@ -66,80 +62,44 @@ class App extends Component {
             <CarvedApp
                 theme="hsl(220, 40%, 40%)"
             >
-                <CarvedMenuBar>
-                    <CarvedH6 style={{ marginBottom: 0}}>
-                        Carved
-                    </CarvedH6>
+                {/* <CarvedMenuBar>
+                    <h2 style={{ marginBottom: 0 }}>Carved</h2>
+
                     <CarvedMenuItems>
-                        <CarvedMenuItem expand={Expansion}>
-                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem decarved expand={Expansion}>
-                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem pill expand={Expansion}>
-                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem pill decarved expand={Expansion}>
-                            <img style={{ filter: 'invert(1)' }} src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="User" height="20px" />
-                        </CarvedMenuItem>
-
                         <CarvedMenuItem
-                            tooltip="Notification"
-                        >
-                            <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem
-                            pill
-                            tooltip="Notification"
-                        >
-                            <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem
-                            pill
                             decarved
+                            pill
                             tooltip="Notification"
                         >
                             <img style={{ filter: 'invert(1)' }} src="https://pbs.twimg.com/media/DY6C2cQXUAAuiok.png" alt="Notification" height="20px" />
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem
-                            preIcon="http://s16574.pcdn.co/wp-content/uploads/2018/05/About-icon.png"
-                            preIconStyle={{ filter: 'invert(1)' }}
-                        >
-                            About
-                        </CarvedMenuItem>
-
-                        <CarvedMenuItem
-                            preIcon="https://image.flaticon.com/icons/svg/35/35920.svg"
-                            preIconStyle={{ filter: 'invert(1)' }}
-                            postIcon="https://static.thenounproject.com/png/10897-200.png"
-                            postIconStyle={{ filter: 'invert(1)' }}
-                            expand={Expansion}
-                        >
-                            Documentation
                         </CarvedMenuItem>
 
                         <CarvedMenuItem>
-                            <CarvedSelector
-                                selectors={
-                                [
-                                    {value: 'en', label: 'English'},
-                                    {value: 'ro', label: 'Română'},
-                                    {value: 'fr', label: 'Français'},
-                                ]
-                            } />
+                            <CarvedButton>
+                                Submit
+                            </CarvedButton>
                         </CarvedMenuItem>
-
-                        <CarvedMenuItem>Support</CarvedMenuItem>
                     </CarvedMenuItems>
-                </CarvedMenuBar>
+                </CarvedMenuBar> */}
+
+                <MenuBarTest>
+                </MenuBarTest>
             </CarvedApp>
+
+
+            // <CarvedMenu.Bar>
+            //     <CarvedMenu.Items>
+            //         <CarvedMenu.Item>
+
+            //         </CarvedMenu.Item>
+            //     </CarvedMenu.Items>
+            // </CarvedMenu.Bar>
+
+            // <CarvedApp config={config} theme="hsl(220, 40%, 40%)">
+            //     {(config) => (
+
+            //     )}
+            // </CarvedApp>
         );
     }
 }

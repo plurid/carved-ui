@@ -15,6 +15,7 @@ const H6 = styled.h6`
     background-clip: text;
     color: transparent;
     text-shadow: ${props =>  {
+                    console.log('props', props);
                     const { currentTheme, depth, decrementDepth } = props.theme;
                     return currentTheme[decrementDepth(depth)].textColorCarved;
                 }} 0px 2px 2px;
@@ -67,7 +68,7 @@ class CarvedH6 extends Component<Partial<CarvedH6Properties>, CarvedH6State> {
         const { theme, depth, depthComputed, themeComputed } = this.props;
 
         this.state = {
-            depth: depth || depthComputed || '0',
+            depth: depth || depthComputed || '2',
             theme: theme || themeComputed || 'ponton',
         };
     }
@@ -78,8 +79,11 @@ class CarvedH6 extends Component<Partial<CarvedH6Properties>, CarvedH6State> {
         // const { currentTheme } = this.context;
         // const themeDepthed = parseInt(depth) < 6 ? currentTheme[parseInt(depth) - 2 + ''] : currentTheme['5'];
 
+        console.log('BBB', depth);
         const context = { ...this.context };
         context.depth = depth;
+
+        // console.log('CONTEXT', context);
 
 
         return (

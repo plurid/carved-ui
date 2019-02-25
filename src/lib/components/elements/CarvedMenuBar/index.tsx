@@ -48,12 +48,17 @@ class CarvedMenuBar extends Component<Partial<CarvedMenuBarProperties>, CarvedMe
         // console.log('depth', depth);
         // console.log('depthComputed', depthComputed);
 
-
         this.state = {
-            depth: depth || depthComputed || '0',
+            depth: depth || depthComputed || '1',
             theme: theme || themeComputed || 'ponton',
         };
     }
+
+    componentDidMount() {
+        console.log(this.context.addToDepthTree('a'));
+        console.log(this.context);
+    }
+
 
     render() {
         const { children } = this.props;

@@ -94,6 +94,11 @@ class CarvedButton extends Component<Partial<CarvedButtonProperties>, CarvedButt
         };
     }
 
+    componentDidMount() {
+        console.log(this.context.addToDepthTree('C'));
+        console.log(this.context);
+    }
+
     render() {
         const { text, children, onClick, stratum } = this.props;
         const { depth, kind } = this.state;

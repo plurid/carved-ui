@@ -57,6 +57,11 @@ class CarvedMenuItem extends Component<Partial<CarvedMenuItemProperties>, Carved
         };
     }
 
+    componentDidMount() {
+        console.log(this.context.addToDepthTree('B'));
+        console.log(this.context);
+    }
+
     onMouseEnter = () => {
         const { tooltip } = this.props;
         if (tooltip) {

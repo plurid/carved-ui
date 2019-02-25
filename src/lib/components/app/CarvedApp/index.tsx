@@ -8,7 +8,10 @@ import { createDefaultThemes, getTheme, ThemeLevel, Themes, Theme } from '../../
 
 
 
-export const ThemeContext = React.createContext({});
+export const ThemeContext = React.createContext({
+    depthTree: {},
+    addToDepthTree: (value: any) => {},
+});
 
 const Div = styled.div`
 `;
@@ -27,12 +30,14 @@ interface CarvedAppProperties {
 }
 
 interface CarvedAppState {
+    addToDepthTree: (value: any) => void;
     autoDepth: boolean;
     currentTheme?: Theme;
     currentThemeLevel?: ThemeLevel;
     defaultThemes: Themes;
     depth: string;
     depthDifference: number;
+    depthTree: object;
     lightnessInversionLimit: number;
     lightnessInversionLow: number;
     lightnessInversionHigh: number;
@@ -58,6 +63,8 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
             ...defaultParameters,
             ...defaultFunctionality,
             ...currentTheme,
+            depthTree: {},
+            addToDepthTree: this.addToDepthTree,
         };
     }
 
@@ -139,14 +146,12 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
     setChildrenProps = (children: ReactNode, nestingLevel: string = this.state.depth) => {
         const { theme } = this.props;
         const { autoDepth } = this.state;
-        // console.log('nestingLevel', nestingLevel);
 
         const childrenWithProps = React.Children.map(children, (child: any) => {
+            // console.log(child);
             if (child.type) {
-                // console.log('CHILD NO PROPS', child);
                 let childWithProps = child;
                 const name = child.type.displayName;
-                // console.log('NAME', name);
                 if (name) {
                     const carvedRegex = /Carved/;
                     const carvedTest = carvedRegex.test(name);
@@ -154,11 +159,9 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
                     if (carvedTest) {
                         if (autoDepth) {
                             if (!child.props.depth) {
-                                // console.log('childWithProps NESTING', childWithProps);
                                 childWithProps = React.cloneElement(childWithProps, {
                                     depthComputed: (parseInt(nestingLevel) + 1) + '',
                                 });
-                                // console.log('childWithProps NESTED', childWithProps);
                             }
                         }
 
@@ -187,22 +190,28 @@ class CarvedApp extends Component<Partial<CarvedAppProperties>, CarvedAppState> 
 
                 return childWithProps;
             }
-            // console.log('CHILDDDD', child);
-
             return child;
         });
-        // console.log('AAAAA', childrenWithProps);
 
         return childrenWithProps;
+    }
+
+    addToDepthTree = (value: any) => {
+        const { depthTree } = this.state;
+
+        const newTree = {...depthTree};
+        console.log(value);
+
+        this.setState({
+            depthTree: newTree,
+        });
     }
 
     render() {
         const { currentThemeLevel } = this.state;
         const { children } = this.props;
         const childrenWithProps = this.setChildrenProps(children);
-
         // console.log('children', children);
-        // console.log(childrenWithProps);
 
         return (
             <ThemeContext.Provider value={this.state}>
