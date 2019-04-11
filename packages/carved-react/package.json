@@ -1,10 +1,10 @@
 {
-    "name": "carved-react",
+    "name": "@plurid/carved-react",
     "description": "Carved Design User Interface Components for React",
-    "version": "0.3.3",
+    "version": "0.0.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-react.git"
+        "url": "git+https://github.com/plurid/carved-ui.git"
     },
     "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
     "license": "MIT",

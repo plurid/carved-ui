@@ -1,10 +1,11 @@
 {
-    "name": "carved-design",
+    "name": "@plurid/carved-design",
+    "version": "0.0.0",
     "description": "Carved User Interface Design",
-    "version": "0.2.0",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-design.git"
+        "url": "git+https://github.com/plurid/carved-ui.git"
     },
     "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
     "license": "MIT",
