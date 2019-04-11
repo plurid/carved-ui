@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/images/identity/carved-logo.png" height="250px">
+    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/identity/carved-logo.png" height="250px">
     <br />
     <a target="_blank" href="https://github.com/plurid/carved-ui/blob/master/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-blue.svg?colorB=1380C3&style=for-the-badge" alt="License: MIT">

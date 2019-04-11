@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/images/identity/carved-logo.png" height="250px">
+    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/identity/carved-logo.png" height="250px">
     <br />
     <a target="_blank" href="https://www.npmjs.com/package/@plurid/carved-ui-html">
         <img src="https://img.shields.io/npm/v/@plurid/carved-ui-html.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Version">
