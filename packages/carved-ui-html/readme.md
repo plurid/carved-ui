@@ -1,10 +1,10 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/carved-html/master/docs/images/identity/carved-logo.png" height="250px">
+    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/images/identity/carved-logo.png" height="250px">
     <br />
-    <a target="_blank" href="https://www.npmjs.com/package/carved-html">
-        <img src="https://img.shields.io/npm/v/carved-html.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Version">
+    <a target="_blank" href="https://www.npmjs.com/package/@plurid/carved-ui-html">
+        <img src="https://img.shields.io/npm/v/@plurid/carved-ui-html.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Version">
     </a>
-    <a target="_blank" href="https://github.com/plurid/carved-html/blob/master/LICENSE">
+    <a target="_blank" href="https://github.com/plurid/carved-ui/blob/master/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-blue.svg?colorB=1380C3&style=for-the-badge" alt="License: MIT">
     </a>
 </p>

@@ -1,14 +1,27 @@
 {
-    "name": "@plurid/carved-design",
+    "name": "@plurid/carved-ui-design",
     "version": "0.0.0",
     "description": "Carved User Interface Design",
+    "keywords": [
+        "carved",
+        "user interface",
+        "design"
+    ],
+    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com)",
+    "license": "MIT",
     "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-ui.git"
+        "url": "https://github.com/plurid/carved-ui"
     },
-    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
-    "license": "MIT",
+    "bugs": {
+        "email": "feedback@plurid.com",
+        "url": "https://github.com/plurid/carved-ui/issues"
+    },
+    "homepage": "https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-design",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",

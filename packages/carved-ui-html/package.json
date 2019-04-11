@@ -1,21 +1,36 @@
 {
-    "name": "@plurid/carved-html",
+    "name": "@plurid/carved-ui-html",
     "version": "0.0.0",
-    "description": "HTML Custom Elements for Carved User Interface Design",
+    "description": "Carved Design User Interface Components for HTML Custom Elements",
+    "keywords": [
+        "carved",
+        "user interface",
+        "design",
+        "html custom elements"
+    ],
+    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com)",
+    "license": "MIT",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-ui.git"
+        "url": "https://github.com/plurid/carved-ui"
     },
-    "license": "MIT",
-    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
+    "bugs": {
+        "email": "feedback@plurid.com",
+        "url": "https://github.com/plurid/carved-ui/issues"
+    },
+    "homepage": "https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-html",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ],
     "module": "dist/esm/index.js",
     "main": "dist/index.js",
     "unpkg": "dist/carved-html.js",
     "types": "dist/types/components.d.ts",
     "collection": "dist/collection/collection-manifest.json",
-    "files": [
-        "dist/"
-    ],
     "scripts": {
         "build": "stencil build --docs",
         "serve": "stencil build --watch --serve",

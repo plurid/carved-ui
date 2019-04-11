@@ -1,20 +1,35 @@
 {
-    "name": "@plurid/carved-vue",
-    "description": "Carved Design User Interface Components for Vue",
+    "name": "@plurid/carved-ui-vue",
     "version": "0.0.0",
+    "description": "Carved Design User Interface Components for Vue",
+    "keywords": [
+        "carved",
+        "user interface",
+        "design",
+        "vue"
+    ],
+    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com)",
+    "license": "MIT",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-ui.git"
+        "url": "https://github.com/plurid/carved-ui"
     },
-    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
-    "license": "MIT",
+    "bugs": {
+        "email": "feedback@plurid.com",
+        "url": "https://github.com/plurid/carved-ui/issues"
+    },
+    "homepage": "https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-vue",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ],
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
     "types": "dist/index.d.ts",
-    "files": [
-        "dist"
-    ],
     "scripts": {
     },
     "dependencies": {},

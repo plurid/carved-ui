@@ -1,13 +1,31 @@
 {
-    "name": "@plurid/carved-react",
-    "description": "Carved Design User Interface Components for React",
+    "name": "@plurid/carved-ui-react",
     "version": "0.0.0",
+    "description": "Carved Design User Interface Components for React",
+    "keywords": [
+        "carved",
+        "user interface",
+        "design",
+        "react"
+    ],
+    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com)",
+    "license": "MIT",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/plurid/carved-ui.git"
+        "url": "https://github.com/plurid/carved-ui"
     },
-    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
-    "license": "MIT",
+    "bugs": {
+        "email": "feedback@plurid.com",
+        "url": "https://github.com/plurid/carved-ui/issues"
+    },
+    "homepage": "https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-react",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ],
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
@@ -16,9 +34,6 @@
         "node": ">=8",
         "npm": ">=5"
     },
-    "files": [
-        "dist"
-    ],
     "scripts": {
         "dist": "yarn dist.clear && yarn dist.rollup",
         "dist.rollup": "rollup -c",
