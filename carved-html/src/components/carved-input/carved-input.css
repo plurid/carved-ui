@@ -1,0 +1,58 @@
+.carvedInputContainer {
+    display: grid;
+    position: relative;
+    background-color: hsla(0, 0%, 0%, 0.3);
+    box-shadow: inset 0 5px 10px 0 rgba(0, 0, 0, 0.7);
+    height: 50px;
+    /* border-radius: 10px; */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    outline: none;
+    border: none;
+    overflow: hidden;
+}
+
+.carvedLabel {
+    user-select: none;
+    pointer-events: none;
+    position: absolute;
+    top: 16px;
+    left: 15px;
+    color: white;
+    transition: top 300ms linear;
+}
+
+.carvedInput {
+    background: transparent;
+    outline: none;
+    border: none;
+    width: calc(100% - 30px);
+    display: block;
+    height: 47px !important;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 1px;
+    color: white;
+    font-size: 1rem;
+    height: 28px;
+}
+
+.carvedInput::selection {
+    background-color: hsla(0, 0%, 80%, 0.3);
+}
+
+.carvedInput:focus {
+    border-bottom: 1px solid white;
+}
+
+.carvedInput::placeholder {
+    user-select: none;
+    color: hsla(0, 0%, 100%, 0.4);
+    text-align: right;
+}
+
+.carvedInputPlaceholder {
+    margin-left: 5px;
+    font-style: italic;
+    color: hsla(0, 0, 70%, 0.7);
+}

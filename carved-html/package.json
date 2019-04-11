@@ -1,0 +1,39 @@
+{
+    "name": "carved-html",
+    "version": "0.2.1",
+    "description": "HTML Custom Elements for Carved User Interface Design",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/plurid/carved-html.git"
+    },
+    "license": "MIT",
+    "author": "Jan Cavel <mail@caveljan.com> (https://caveljan.com/)",
+    "module": "dist/esm/index.js",
+    "main": "dist/index.js",
+    "unpkg": "dist/carved-html.js",
+    "types": "dist/types/components.d.ts",
+    "collection": "dist/collection/collection-manifest.json",
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "stencil build --docs",
+        "serve": "stencil build --watch --serve",
+        "start": "stencil build --dev --watch --serve",
+        "test": "stencil test --spec --e2e",
+        "test.watch": "stencil test --spec --e2e --watchAll"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@stencil/core": "~0.16.2",
+        "@stencil/postcss": "^0.1.0",
+        "@stencil/sass": "^0.1.1",
+        "@types/autoprefixer": "^9.1.1",
+        "@types/jest": "23.3.14",
+        "@types/puppeteer": "1.12.1",
+        "autoprefixer": "^9.4.7",
+        "jest": "23.6.0",
+        "jest-cli": "23.6.0",
+        "puppeteer": "1.8.0"
+    }
+}
