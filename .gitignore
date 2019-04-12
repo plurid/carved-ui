@@ -1,11 +1,12 @@
 # dependencies
 node_modules/
 
-
 # yarn
 yarn-debug.log*
 yarn-error.log*
 
-
 # macOS
 .DS_Store
+
+# lerna
+lerna-debug.log
