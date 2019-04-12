@@ -1,6 +1,6 @@
 {
     "name": "@plurid/carved-ui-html",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Carved Design User Interface Components for HTML Custom Elements",
     "keywords": [
         "carved",
@@ -38,7 +38,6 @@
         "test": "stencil test --spec --e2e",
         "test.watch": "stencil test --spec --e2e --watchAll"
     },
-    "dependencies": {},
     "devDependencies": {
         "@stencil/core": "~0.16.2",
         "@stencil/postcss": "^0.1.0",

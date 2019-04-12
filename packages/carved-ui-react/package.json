@@ -1,6 +1,6 @@
 {
     "name": "@plurid/carved-ui-react",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Carved Design User Interface Components for React",
     "keywords": [
         "carved",
@@ -45,7 +45,6 @@
         "test.update": "react-scripts test --updateSnapshot",
         "eject": "react-scripts eject"
     },
-    "dependencies": {},
     "devDependencies": {
         "@svgr/rollup": "^4.1.0",
         "@types/classnames": "^2.2.7",

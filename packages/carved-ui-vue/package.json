@@ -1,6 +1,6 @@
 {
     "name": "@plurid/carved-ui-vue",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Carved Design User Interface Components for Vue",
     "keywords": [
         "carved",
@@ -30,11 +30,5 @@
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
     "types": "dist/index.d.ts",
-    "scripts": {
-    },
-    "dependencies": {},
-    "devDependencies": {
-    },
-    "peerDependencies": {
-    }
+    "scripts": {}
 }
