@@ -8,14 +8,14 @@
         "design",
         "html custom elements"
     ],
-    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com)",
+    "author": "ly3xqhl8g9 <ly3xqhl8g9@plurid.com> (https://plurid.com)",
     "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/plurid/carved-ui"
     },
     "bugs": {
-        "email": "feedback@plurid.com",
+        "email": "source@plurid.com",
         "url": "https://github.com/plurid/carved-ui/issues"
     },
     "homepage": "https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-html",
