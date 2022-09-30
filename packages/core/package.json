@@ -1,0 +1,51 @@
+{
+  "name": "@plurid/carved-ui-core",
+  "version": "1.0.0-next.0",
+  "description": "The Carved material: design tokens and a contrast-solving theme engine",
+  "keywords": [
+    "carved",
+    "design-tokens",
+    "theme",
+    "oklch",
+    "contrast",
+    "css-variables"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plurid/carved-ui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://plurid.github.io/carved-ui/",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": {
+      "types": "./dist/styles.d.ts",
+      "default": "./dist/styles.css"
+    },
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/material.css"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
+  "scripts": {
+    "build": "node ../../tools/build/clean.mjs core && tsc -p tsconfig.json && node ../../tools/build/core.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "culori": "4.0.2"
+  }
+}

@@ -1,13 +1,12 @@
-# dependencies
 node_modules/
-node_modules
-
-# yarn
-yarn-debug.log*
-yarn-error.log*
-
-# macOS
+**/dist/
+**/coverage/
+**/.next/
+**/test-results/
+**/playwright-report/
 .DS_Store
+*.tsbuildinfo
+packages/core/src/generated/
+.impeccable/
 
-# lerna
-lerna-debug.log
+.pnpm-store/

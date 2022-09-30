@@ -1,0 +1,43 @@
+name: Verify
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      STORYBOOK_DISABLE_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install chromium firefox webkit
+      - run: pnpm check
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failures
+          path: |
+            tools/tests/test-results
+            tools/tests/playwright-report
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        with:
+          name: component-laboratory
+          path: apps/storybook/dist

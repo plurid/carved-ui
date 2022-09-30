@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/cli/changelog", null],
+  "commit": false,
+  "fixed": [["@plurid/carved-ui-core", "@plurid/carved-ui-react"]],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@carved/storybook"]
+}

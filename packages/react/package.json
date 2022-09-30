@@ -1,0 +1,220 @@
+{
+  "version": "1.0.0-next.0",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plurid/carved-ui"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "name": "@plurid/carved-ui-react",
+  "description": "Accessible React components in the Carved design language",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": {
+      "types": "./dist/styles.d.ts",
+      "default": "./dist/styles.css"
+    },
+    "./provider": {
+      "types": "./dist/provider.d.ts",
+      "import": "./dist/provider.js"
+    },
+    "./surface": {
+      "types": "./dist/provider.d.ts",
+      "import": "./dist/provider.js"
+    },
+    "./actions": {
+      "types": "./dist/actions.d.ts",
+      "import": "./dist/actions.js"
+    },
+    "./button": {
+      "types": "./dist/actions.d.ts",
+      "import": "./dist/actions.js"
+    },
+    "./icon-button": {
+      "types": "./dist/actions.d.ts",
+      "import": "./dist/actions.js"
+    },
+    "./link": {
+      "types": "./dist/actions.d.ts",
+      "import": "./dist/actions.js"
+    },
+    "./fields": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./form": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./text-field": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./input": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./textarea": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./checkbox": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./radio-group": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./switch": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./slider": {
+      "types": "./dist/fields.d.ts",
+      "import": "./dist/fields.js"
+    },
+    "./collections": {
+      "types": "./dist/collections.d.ts",
+      "import": "./dist/collections.js"
+    },
+    "./select": {
+      "types": "./dist/collections.d.ts",
+      "import": "./dist/collections.js"
+    },
+    "./combobox": {
+      "types": "./dist/collections.d.ts",
+      "import": "./dist/collections.js"
+    },
+    "./menu": {
+      "types": "./dist/collections.d.ts",
+      "import": "./dist/collections.js"
+    },
+    "./overlays": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./dialog": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./alert-dialog": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./drawer": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./popover": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./tooltip": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation.d.ts",
+      "import": "./dist/navigation.js"
+    },
+    "./tabs": {
+      "types": "./dist/navigation.d.ts",
+      "import": "./dist/navigation.js"
+    },
+    "./accordion": {
+      "types": "./dist/navigation.d.ts",
+      "import": "./dist/navigation.js"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/navigation.d.ts",
+      "import": "./dist/navigation.js"
+    },
+    "./content": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./card": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./heading": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./separator": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./badge": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./table": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./pagination": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./alert": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./skeleton": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./empty-state": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    },
+    "./feedback": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    },
+    "./progress": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    },
+    "./spinner": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    },
+    "./toast": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    },
+    "./avatar": {
+      "types": "./dist/avatar.d.ts",
+      "import": "./dist/avatar.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ../../tools/build/styles.mjs && node ../../tools/build/license.mjs react",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@plurid/carved-ui-core": "workspace:^",
+    "react-aria-components": "1.21.1"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "carved-next-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build --webpack",
+    "start": "next start"
+  }
+}

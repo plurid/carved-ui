@@ -1,0 +1,32 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Start/Guide" />
+
+# Carved UI
+
+React 19 controls with an inset surface language. Start with **Start / Carved** for the interactive overview. The toolbar changes all seven presets and text direction across every component story.
+
+```tsx
+import { CarvedProvider, Button } from '@plurid/carved-ui-react';
+import '@plurid/carved-ui-react/styles.css';
+
+<CarvedProvider theme="ponton">
+  <Button onPress={() => console.log('Save')}>Save changes</Button>
+</CarvedProvider>;
+```
+
+## Compose the structure
+
+Use labels and descriptions alongside controls. For overlays, compose a trigger, content, dialog, title and footer. React Aria supplies keyboard navigation, focus containment and restoration. Native tables and links keep browser semantics.
+
+## Change the theme
+
+`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune` and `furor` are generated from the same token source as runtime custom themes. Import `createTheme` from `@plurid/carved-ui-core` to use an opaque custom CSS color. Override semantic `--carved-*` properties on a provider or surface. Dialogs and popovers inherit their owning scope.
+
+## Make patterns yours
+
+**Recipes / Editable patterns** executes the examples in `docs/examples`. Copy them into your application, replace sample actions with your API calls, and own their validation and domain behavior. The packaged core remains focused on stable controls.
+
+## Verify the states
+
+Stories cover controlled values, refs, validation, reset, keyboard input, disabled controls, asynchronous errors and portal themes. Browser tests add RTL, forced colors, reduced motion, mobile layout and Chromium, Firefox and WebKit coverage. Automated checks complement the manual screen reader and zoom checklist in `docs/accessibility.md`.

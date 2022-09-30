@@ -1,0 +1,118 @@
+/*
+ * The Carved material.
+ *
+ * Every shadow follows one light: --carved-light-x/y is the direction light travels, and
+ * --carved-shadow-distance is how far a resting carve's shadow falls. Components compose
+ * these primitives; they never invent their own shadows.
+ */
+
+/* A recess cut into the surface. Touch cuts deeper: hover doubles the shadow, press doubles
+ * it again. A component can steer a nested carve by setting --carved-carve-k on an ancestor. */
+.carved-carve {
+  --_d: calc(var(--carved-shadow-distance) * var(--carved-carve-scale, 1));
+  --_k: calc(var(--_d) * var(--carved-carve-k, 1));
+
+  box-shadow:
+    inset calc(var(--carved-light-x) * var(--_k)) calc(var(--carved-light-y) * var(--_k))
+      calc(var(--_k) + var(--_d)) var(--carved-carve-shade, var(--carved-shade)),
+    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
+  transition: box-shadow var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-carve:where([data-hovered]) {
+  --carved-carve-k: 2;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+.carved-carve:where([data-pressed]) {
+  --carved-carve-k: 4;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+/* Meaning set into the cut: a tone's fill and the text that sits on it. */
+.carved-inlay {
+  background-color: var(--carved-tone, var(--carved-accent));
+  color: var(--carved-on-tone, var(--carved-on-accent));
+}
+
+:where([data-tone='accent']) {
+  --carved-tone: var(--carved-accent);
+  --carved-on-tone: var(--carved-on-accent);
+  --carved-tone-ink: var(--carved-accent-ink);
+}
+
+:where([data-tone='success']) {
+  --carved-tone: var(--carved-success);
+  --carved-on-tone: var(--carved-on-success);
+  --carved-tone-ink: var(--carved-success-ink);
+}
+
+:where([data-tone='warning']) {
+  --carved-tone: var(--carved-warning);
+  --carved-on-tone: var(--carved-on-warning);
+  --carved-tone-ink: var(--carved-warning-ink);
+}
+
+:where([data-tone='danger']) {
+  --carved-tone: var(--carved-danger);
+  --carved-on-tone: var(--carved-on-danger);
+  --carved-tone-ink: var(--carved-danger-ink);
+}
+
+:where([data-tone='neutral']) {
+  --carved-tone: var(--carved-cut);
+  --carved-on-tone: var(--carved-cut-fg);
+  --carved-tone-ink: var(--carved-fg);
+}
+
+/* A loose piece standing proud of the cut: knobs and thumbs. Its lit edge catches the light. */
+.carved-raise {
+  --_d: calc(var(--carved-shadow-distance) * var(--carved-raise-scale, 0.5));
+
+  box-shadow:
+    calc(var(--carved-light-x) * var(--_d)) calc(var(--carved-light-y) * var(--_d))
+      calc(var(--_d) * 2) var(--carved-cast),
+    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
+}
+
+/* A plate laid on top of the material: popovers, menus, dialogs, toasts. */
+.carved-float {
+  box-shadow:
+    0 0 0 1px var(--carved-hairline),
+    calc(var(--carved-light-x) * 2px) calc(var(--carved-light-y) * 2px) 6px -1px var(--carved-cast),
+    calc(var(--carved-light-x) * 16px) calc(var(--carved-light-y) * 16px) 40px -12px
+      var(--carved-cast),
+    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
+}
+
+/* Letters cut into the surface: shadow on the wall facing away from the light, a lip on the
+ * wall facing it. The ink keeps full text contrast. */
+.carved-engrave {
+  color: var(--carved-muted);
+  text-shadow:
+    calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-shade),
+    calc(var(--carved-light-x) * 1px) calc(var(--carved-light-y) * 1px) 0 var(--carved-lip);
+}
+
+/* A channel dividing two regions, after the original 15px rule. */
+.carved-trench {
+  --carved-carve-scale: 0.8;
+
+  background-color: var(--carved-cut);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carved-carve {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .carved-carve,
+  .carved-raise,
+  .carved-float,
+  .carved-engrave {
+    box-shadow: none;
+    text-shadow: none;
+  }
+}

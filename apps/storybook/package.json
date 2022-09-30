@@ -1,0 +1,18 @@
+{
+  "name": "@carved/storybook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "storybook dev -p 6006 --no-open",
+    "build": "storybook build -o dist",
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@plurid/carved-ui-core": "workspace:*",
+    "@plurid/carved-ui-react": "workspace:*"
+  },
+  "devDependencies": {
+    "react-aria-components": "1.21.1"
+  }
+}

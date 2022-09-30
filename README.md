@@ -1,29 +1,66 @@
-<p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/carved-ui/master/about/identity/carved-logo.png" height="250px">
-    <br />
-    <a target="_blank" href="https://github.com/plurid/carved-ui/blob/master/LICENSE">
-        <img src="https://img.shields.io/badge/license-MIT-blue.svg?colorB=1380C3&style=for-the-badge" alt="License: MIT">
-    </a>
-</p>
+# Carved UI
 
+A React component library with recessed surfaces, semantic themes, and accessible interaction.
 
+This is the **v1 preview**: a deliberate breaking redesign of the original library. React is the active implementation. The old HTML, Vue, and design applications are archived in [`legacy/`](legacy/README.md).
 
-# Carved User Interface
+## Use
 
-Documentation for [Carved Design][carved-design] User Interface Components.
+Requires React 19 and an ESM-capable build tool. These preview packages are prepared in this checkout; the installation command applies after their first publication.
 
-[carved-design]: https://carved.design
+```sh
+pnpm add @plurid/carved-ui-react@next @plurid/carved-ui-core@next
+```
 
+```tsx
+import { CarvedProvider, Button } from '@plurid/carved-ui-react';
+import '@plurid/carved-ui-react/styles.css';
 
+export function App() {
+  return (
+    <CarvedProvider theme="ponton">
+      <Button onPress={() => console.log('Save')}>Save changes</Button>
+    </CarvedProvider>
+  );
+}
+```
 
-## Implementations
+Use `night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, or `furor`, or generate a custom theme with `createTheme({ color: '#284c42' })` from the core package. Components work with the default CSS theme without a provider; use a provider for scoped themes and locale.
 
-+ <a target="_blank" href="https://www.npmjs.com/package/@plurid/carved-ui-html"><img src="https://img.shields.io/npm/v/@plurid/carved-ui-html.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Carved HTML Version"></a> [carved-html][carved-html] HTML Custom Elements
+## Develop
 
-+ <a target="_blank" href="https://www.npmjs.com/package/@plurid/carved-ui-react"><img src="https://img.shields.io/npm/v/@plurid/carved-ui-react.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Carved React Version"></a> [carved-react][carved-react] React Components
+Use Node **24 LTS** and pnpm **11.3.0** (the version in `packageManager`).
 
-+ <a target="_blank" href="https://www.npmjs.com/package/@plurid/carved-ui-vue"><img src="https://img.shields.io/npm/v/@plurid/carved-ui-vue.svg?logo=npm&colorB=1380C3&style=for-the-badge" alt="Carved Vue Version"></a> [carved-vue][carved-vue] Vue Components
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium firefox webkit
+pnpm dev
+```
 
-[carved-html]: https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-html
-[carved-react]: https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-react
-[carved-vue]: https://github.com/plurid/carved-ui/tree/master/packages/carved-ui-vue
+Open [localhost:6006](http://localhost:6006) for the component laboratory. Theme and direction controls apply to every story. Package source edits reload immediately; token edits regenerate the theme CSS.
+
+```sh
+pnpm check           # builds, lint, types, behavior, accessibility, packages, browsers
+pnpm build           # ESM packages and static Storybook
+pnpm test:stories    # executable stories in Chromium
+pnpm test:visual     # browser regressions against the built Storybook
+```
+
+`pnpm verify:packages` installs packed tarballs into temporary Vite and Next.js consumers, checks declarations and exports, and tests production rendering and hydration. Browser tests need permission to start local servers. Visual baselines use macOS; see [verification](docs/verification.md).
+
+## Repository
+
+| Directory        | Responsibility                                                     |
+| ---------------- | ------------------------------------------------------------------ |
+| `packages/core`  | DTCG tokens, pure theme generation, generated theme CSS            |
+| `packages/react` | React Aria controls, native content components, scoped CSS         |
+| `apps/storybook` | Component states, executable stories, and examples                 |
+| `tools`          | Shared configuration, builds, consumer fixtures, and browser tests |
+| `docs`           | Architecture, migration, accessibility, and editable recipes       |
+| `legacy`         | Preserved inactive implementations, outside the workspace          |
+
+The root retains six required files. Build and test configuration lives with its owner or under `tools/config`.
+
+Read the [architecture](docs/architecture.md), [component catalog](docs/catalog.md), [migration guide](docs/migration.md), and [contributing and release guide](docs/contributing.md). Complex patterns in [`docs/examples`](docs/examples/README.md) are application-owned source; a registry can be introduced when there is enough demand to justify it.
+
+MIT licensed.

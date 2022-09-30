@@ -1,0 +1,9 @@
+packages:
+  - packages/core
+  - packages/react
+  - apps/storybook
+
+minimumReleaseAge: 1440
+
+allowBuilds:
+  esbuild: true
