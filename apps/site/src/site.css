@@ -266,6 +266,7 @@ body {
 }
 
 /* Code */
+
 .code-block {
   --carved-carve-scale: 0.6;
 
@@ -277,8 +278,14 @@ body {
 
 .code-scroll {
   overflow-x: auto;
+  border-radius: inherit;
   scrollbar-width: thin;
   scrollbar-color: var(--carved-edge) transparent;
+}
+
+.code-scroll:focus-visible {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: -2px;
 }
 
 .code-block pre {
@@ -294,14 +301,6 @@ body {
   inset-block-start: var(--carved-space-2);
   inset-inline-end: var(--carved-space-2);
   z-index: 1;
-}
-
-.code-label {
-  position: absolute;
-  inset-block-start: var(--carved-space-3);
-  inset-inline-start: var(--carved-space-5);
-  font-size: var(--carved-text-xs);
-  color: var(--carved-cut-muted);
 }
 
 .shiki {
@@ -333,9 +332,8 @@ body {
 }
 
 .command-text {
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
 }
 
 .command-prompt {

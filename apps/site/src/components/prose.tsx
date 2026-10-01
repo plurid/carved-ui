@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { Heading, Link, Separator, Table } from '@plurid/carved-ui-react';
+import { CodeScroll } from './code-block';
 import { CopyButton } from './copy-button';
 
 function Pre(props: ComponentProps<'pre'>) {
@@ -9,9 +10,9 @@ function Pre(props: ComponentProps<'pre'>) {
   return (
     <div className="code-block carved-carve">
       <CopyButton text={() => pre.current?.textContent ?? ''} />
-      <div className="code-scroll">
+      <CodeScroll>
         <pre {...props} ref={pre} />
-      </div>
+      </CodeScroll>
     </div>
   );
 }

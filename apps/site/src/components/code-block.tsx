@@ -1,25 +1,39 @@
+import type { ReactNode } from 'react';
 import { CopyButton } from './copy-button';
 
-/** Highlighted code in a carved well, with a copy button. */
-export function CodeBlock({
-  html,
-  source,
-  label,
-}: {
-  html: string;
-  source: string;
-  label?: string;
-}) {
-  return (
-    <div className="code-block carved-carve">
-      {label && <span className="code-label">{label}</span>}
-      <CopyButton text={source} />
-      <div className="code-scroll" dangerouslySetInnerHTML={{ __html: html }} />
+/**
+ * A code well that scrolls sideways when its lines are long. It is focusable, so keyboard
+ * users can scroll it too.
+ */
+export function CodeScroll(props: { children?: ReactNode; html?: string }) {
+  return props.html !== undefined ? (
+    <div className="code-scroll" tabIndex={0} dangerouslySetInnerHTML={{ __html: props.html }} />
+  ) : (
+    <div className="code-scroll" tabIndex={0}>
+      {props.children}
     </div>
   );
 }
 
-/** A one-line shell command. */
+/** Code in a carved well, with a copy button: highlighted HTML, or plain text. */
+export function CodeBlock({ html, source }: { html?: string; source: string }) {
+  return (
+    <div className="code-block carved-carve">
+      <CopyButton text={source} />
+      {html !== undefined ? (
+        <CodeScroll html={html} />
+      ) : (
+        <CodeScroll>
+          <pre>
+            <code>{source}</code>
+          </pre>
+        </CodeScroll>
+      )}
+    </div>
+  );
+}
+
+/** A one-line shell command. Long commands wrap rather than scroll. */
 export function Command({ children }: { children: string }) {
   return (
     <div className="command carved-carve">

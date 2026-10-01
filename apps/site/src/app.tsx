@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useHref, useNavigate } from 'react-router';
 import type { NavigateOptions } from 'react-router';
 import { RouterProvider } from 'react-aria-components';
@@ -57,6 +57,10 @@ export const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 export function App() {
   const navigate = useNavigate();
   const theme = useSiteTheme();
+  // Marks the moment the prerendered page becomes interactive; the browser tests wait for it.
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = '';
+  }, []);
   return (
     <RouterProvider navigate={navigate} useHref={useHref}>
       <CarvedProvider theme={theme} locale="en-US" className="site">

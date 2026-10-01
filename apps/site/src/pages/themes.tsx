@@ -28,7 +28,7 @@ import {
   TableRow,
   TextField,
 } from '@plurid/carved-ui-react';
-import { CopyButton } from '../components/copy-button';
+import { CodeBlock } from '../components/code-block';
 
 type Tones = 'preset' | 'standard' | 'themed';
 
@@ -271,27 +271,13 @@ export function ThemeLab() {
           Use it
         </Heading>
         <p>Generate the theme at runtime and pass it to a provider:</p>
-        <div className="code-block carved-carve">
-          <CopyButton text={call} />
-          <div className="code-scroll">
-            <pre>
-              <code>{call}</code>
-            </pre>
-          </div>
-        </div>
+        <CodeBlock source={call} />
         <Disclosure title="Or ship it as CSS">
           <p>
             <code>themeToCss</code> writes the same theme as one rule. Put it in your stylesheet and
             add <code>data-carved-theme</code> and the class to the element it should theme.
           </p>
-          <div className="code-block carved-carve">
-            <CopyButton text={css} />
-            <div className="code-scroll">
-              <pre>
-                <code>{css}</code>
-              </pre>
-            </div>
-          </div>
+          <CodeBlock source={css} />
         </Disclosure>
       </section>
     </div>
