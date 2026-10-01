@@ -14,7 +14,7 @@
     "lint": "eslint --config tools/config/eslint.config.mjs packages apps tools docs && stylelint --config tools/config/stylelint.config.mjs \"packages/*/src/**/*.css\" \"apps/*/src/**/*.css\" \"apps/storybook/.storybook/*.css\" \"docs/examples/*.css\"",
     "format": "prettier --write --ignore-path .gitignore --ignore-path tools/config/prettier-ignore .",
     "format:check": "prettier --check --ignore-path .gitignore --ignore-path tools/config/prettier-ignore .",
-    "typecheck": "pnpm -r typecheck && tsc -p tools/config/tsconfig.tests.json",
+    "typecheck": "pnpm --filter @plurid/carved-ui-core build && pnpm -r typecheck && tsc -p tools/config/tsconfig.tests.json",
     "test": "vitest run --config tools/config/vitest.config.ts",
     "test:stories": "pnpm --filter @carved/storybook test",
     "test:browser": "playwright test --config tools/config/playwright.config.ts --grep-invert @visual",
