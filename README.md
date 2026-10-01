@@ -1,63 +1,148 @@
 <p align="center">
-  <img src="docs/assets/carved.png" alt="Carved UI: an engraved wordmark above a form, a stack of nested surfaces and a tabbed panel, all cut into a slate material" width="880" />
+  <img src="docs/assets/logo.svg" alt="" width="96" height="96" />
 </p>
 
-# Carved UI
+<h1 align="center">Carved</h1>
 
-Accessible React components cut into one material and lit by one light.
+<p align="center">
+  Accessible React components cut into one material and lit by one light.
+</p>
 
-Every surface in Carved is a recess, one level darker than the surface around it, down to six levels deep. One light angle places every shadow, so the whole interface agrees. Touch cuts a control deeper; colour is inlaid into the cut. Themes come from a single colour, and a contrast-solving engine keeps every depth readable.
+<p align="center">
+  <a href="https://github.com/plurid/carved-ui/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/plurid/carved-ui/ci.yml?branch=master&label=verify&style=for-the-badge&color=1380C3" alt="Verify status" /></a>
+  <a href="https://www.npmjs.com/package/@plurid/carved-ui-react"><img src="https://img.shields.io/badge/npm-%40next-1380C3?style=for-the-badge&logo=npm" alt="npm: @next" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1380C3?style=for-the-badge" alt="License: MIT" /></a>
+</p>
 
-**[Documentation](https://plurid.github.io/carved-ui/)** · **[Theme lab](https://plurid.github.io/carved-ui/themes)** · **[Laboratory](https://plurid.github.io/carved-ui/lab/)**
+<p align="center">
+  <a href="https://plurid.github.io/carved-ui/"><b>Documentation</b></a> ·
+  <a href="https://plurid.github.io/carved-ui/themes">Theme lab</a> ·
+  <a href="https://plurid.github.io/carved-ui/lab/">Laboratory</a> ·
+  <a href="docs/migration.md">Migrating from 0.x</a>
+</p>
 
-## Use it
+<br />
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/carved-light.png" />
+  <img src="docs/assets/carved.png" alt="The Carved documentation site: an engraved wordmark above a project form, a stack of nested surfaces and a tabbed usage panel, all cut into one material" />
+</picture>
+
+## The material
+
+Carved has one idea: every surface is a recess cut into a single material, lit by a single light. Four rules follow from it, and every component keeps them.
+
+- **Depth is shade.** Each nested surface is cut one level deeper and darker than its parent, down to six levels.
+- **One light.** A single angle places every shadow, lit edge and engraving, so the whole interface agrees. Change it and everything is relit together.
+- **Touch cuts deeper.** Hovering deepens a control's cut; pressing deepens it again, so a button gives way like a key.
+- **Meaning is inlaid.** Accent, success, warning and danger are set into the cut rather than glowing above it. Only moving pieces rise: a switch's knob, a slider's thumb.
+
+## Quick start
 
 ```sh
 pnpm add @plurid/carved-ui-react@next
 ```
 
+Import the stylesheet once, wrap your app in a provider, and build:
+
 ```tsx
-import { Button, CarvedProvider, TextField } from '@plurid/carved-ui-react';
+import {
+  Button,
+  CarvedProvider,
+  Form,
+  Select,
+  SelectItem,
+  TextField,
+} from '@plurid/carved-ui-react';
 import '@plurid/carved-ui-react/styles.css';
 
-export function App() {
+export function NewProject() {
   return (
     <CarvedProvider theme="ponton">
-      <TextField label="Project name" description="Shown to your whole team." />
-      <Button onPress={() => console.log('Created')}>Create project</Button>
+      <Form onSubmit={(event) => event.preventDefault()}>
+        <TextField label="Project name" isRequired description="Shown to your whole team." />
+        <Select label="Region" placeholder="Choose a region">
+          <SelectItem id="fra">Frankfurt</SelectItem>
+          <SelectItem id="iad">Virginia</SelectItem>
+        </Select>
+        <Button type="submit">Create project</Button>
+      </Form>
     </CarvedProvider>
   );
 }
 ```
 
-Pick one of seven materials (`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`) or make your own with `createTheme({ color: '#284c42' })`. Version 1 is a preview and a rewrite: see [migrating from 0.x](docs/migration.md).
+Labels, descriptions, validation messages, keyboard behaviour and focus management come with every field. When a design needs a different arrangement, the parts of each composed component are exported too. Read the [getting started guide](docs/getting-started.md) for themes, depth, locales and server rendering.
 
-## What you get
+## Seven materials, or your own
 
-- **Components for real interfaces**: buttons, fields, checkboxes, radios, switches, sliders, selects, combo boxes, menus, dialogs, drawers, popovers, tooltips, tabs, disclosures, breadcrumbs, alerts, toasts, progress, cards, tables and more. Composed for the common case, with their parts exported for everything else.
-- **Accessibility you can rely on**: keyboard, focus and screen reader behaviour from [React Aria](https://react-spectrum.adobe.com/react-aria/), and [contrast guarantees](docs/accessibility.md) on every depth of every theme.
-- **Plain CSS**: one stylesheet in cascade layers, driven by `--carved-*` custom properties. No CSS-in-JS runtime, so components render on the server.
-- **Small, typed packages**: ESM with TypeScript declarations, tree-shakeable from a single entry point.
+<img src="docs/assets/materials.png" alt="The same field, buttons and badge in each of the seven presets: night, dusk, dawn, light, ponton, jaune and furor" />
+
+Each preset (`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`) is generated from one colour, and so is yours:
+
+```tsx
+import { createTheme } from '@plurid/carved-ui-core';
+
+const forest = createTheme({ color: '#284c42', shadowAngle: 120 });
+
+<CarvedProvider theme={forest}>…</CarvedProvider>;
+```
+
+The theme engine builds six depths in OKLCH, keeping the hue steady, then solves every colour on them for contrast. On every depth of every theme, text reaches 4.5:1, control edges 3:1, and the accent, success and danger inlays 3:1. Try it in the [theme lab](https://plurid.github.io/carved-ui/themes), which shows the contrast report as you go.
+
+## Components
+
+| Family      | Components                                                                                |
+| ----------- | ----------------------------------------------------------------------------------------- |
+| Foundations | `CarvedProvider`, `Surface`, `Card`                                                       |
+| Actions     | `Button`, `IconButton`, `Link`, `ToggleButton`, `ToggleButtonGroup`                       |
+| Fields      | `TextField`, `SearchField`, `Checkbox`, `CheckboxGroup`, `RadioGroup`, `Switch`, `Slider` |
+| Collections | `Select`, `ComboBox`, `ListBox`, `Menu`                                                   |
+| Overlays    | `Modal`, `Drawer`, `Dialog`, `AlertDialog`, `Popover`, `Tooltip`                          |
+| Navigation  | `Tabs`, `Accordion`, `Disclosure`, `Breadcrumbs`                                          |
+| Feedback    | `Alert`, `ToastRegion`, `ProgressBar`, `Spinner`, `Skeleton`                              |
+| Content     | `Heading`, `Separator`, `Badge`, `Avatar`, `Table`                                        |
+
+Interaction, focus and screen reader behaviour come from [React Aria](https://react-spectrum.adobe.com/react-aria/). Every component is documented on the [site](https://plurid.github.io/carved-ui/components) with live examples and its full API. Patterns that every app shapes differently, like settings forms, confirmations, searchable tables and page frames, are [recipes](docs/examples/README.md) to copy and make your own.
+
+## Packages
+
+| Package                                                                            | What it holds                                                                                                                  |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [`@plurid/carved-ui-react`](https://www.npmjs.com/package/@plurid/carved-ui-react) | The components and their stylesheet                                                                                            |
+| [`@plurid/carved-ui-core`](https://www.npmjs.com/package/@plurid/carved-ui-core)   | The material without React: tokens, the theme engine and its CSS, and the tokens as [DTCG](https://www.designtokens.org/) JSON |
+
+Both are ES modules with TypeScript declarations, and tree-shake from a single entry point. They need **React 19** and support **Chrome 120, Firefox 121 and Safari 17.2** or newer. The stylesheet is plain CSS in cascade layers with no runtime, so components render on the server, and any `--carved-*` custom property can be overridden.
+
+Version 1 is a preview, published under the `next` tag. It is a rewrite of the 2019 library: the [migration guide](docs/migration.md) maps every 0.x component to its replacement.
 
 ## Documentation
 
-- [Getting started](docs/getting-started.md)
-- [Accessibility](docs/accessibility.md)
-- [Migrating from 0.x](docs/migration.md)
-- [Architecture](docs/architecture.md)
-- [Recipes](docs/examples/README.md): editable patterns to copy into your app
-- [Contributing](docs/contributing.md)
+- [Getting started](docs/getting-started.md): install, theme, compose, override and render on the server
+- [Accessibility](docs/accessibility.md): what is guaranteed, what is tested, and what is yours to do
+- [Architecture](docs/architecture.md): how the packages, the theme engine and the material fit together
+- [Recipes](docs/examples/README.md): editable patterns built from the components
+- [Contributing](docs/contributing.md): development, checks and releases
 
-## Repository
+## Develop
+
+```sh
+pnpm install
+pnpm dev        # the laboratory: every component in every state, at localhost:6006
+pnpm dev:site   # the documentation site, at localhost:5173
+pnpm check      # lint, types, tests in three browsers, builds and packed-package checks
+```
 
 | Directory        | What lives there                                                 |
 | ---------------- | ---------------------------------------------------------------- |
 | `packages/core`  | Tokens, the theme engine and the material: no React              |
 | `packages/react` | The components and their stylesheet                              |
 | `apps/site`      | The documentation site, built with Carved                        |
-| `apps/storybook` | The laboratory: every component in every state, with tests       |
+| `apps/storybook` | The laboratory, whose stories are also the interaction tests     |
 | `docs`           | Guides, and recipes in `docs/examples`                           |
 | `tools`          | Build scripts, shared configuration and the browser test suites  |
 | `legacy`         | The original HTML, Vue and design implementations, for reference |
 
-MIT licensed.
+## License
+
+[MIT](LICENSE) © 2019 Plurid, Inc.
