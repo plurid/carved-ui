@@ -1,0 +1,16 @@
+{
+  "extends": "../../tools/config/tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declaration": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@plurid/carved-ui-core": ["../../packages/core/src/index.ts"],
+      "@plurid/carved-ui-react": ["../../packages/react/src/index.ts"]
+    }
+  },
+  "include": ["src", "vite", "scripts", "vite.config.ts", "../../docs/examples/**/*.tsx"]
+}

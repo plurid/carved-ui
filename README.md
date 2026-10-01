@@ -1,66 +1,63 @@
+<p align="center">
+  <img src="docs/assets/carved.png" alt="Carved UI: an engraved wordmark above a form, a stack of nested surfaces and a tabbed panel, all cut into a slate material" width="880" />
+</p>
+
 # Carved UI
 
-A React component library with recessed surfaces, semantic themes, and accessible interaction.
+Accessible React components cut into one material and lit by one light.
 
-This is the **v1 preview**: a deliberate breaking redesign of the original library. React is the active implementation. The old HTML, Vue, and design applications are archived in [`legacy/`](legacy/README.md).
+Every surface in Carved is a recess, one level darker than the surface around it, down to six levels deep. One light angle places every shadow, so the whole interface agrees. Touch cuts a control deeper; colour is inlaid into the cut. Themes come from a single colour, and a contrast-solving engine keeps every depth readable.
 
-## Use
+**[Documentation](https://plurid.github.io/carved-ui/)** · **[Theme lab](https://plurid.github.io/carved-ui/themes)** · **[Laboratory](https://plurid.github.io/carved-ui/lab/)**
 
-Requires React 19 and an ESM-capable build tool. These preview packages are prepared in this checkout; the installation command applies after their first publication.
+## Use it
 
 ```sh
-pnpm add @plurid/carved-ui-react@next @plurid/carved-ui-core@next
+pnpm add @plurid/carved-ui-react@next
 ```
 
 ```tsx
-import { CarvedProvider, Button } from '@plurid/carved-ui-react';
+import { Button, CarvedProvider, TextField } from '@plurid/carved-ui-react';
 import '@plurid/carved-ui-react/styles.css';
 
 export function App() {
   return (
     <CarvedProvider theme="ponton">
-      <Button onPress={() => console.log('Save')}>Save changes</Button>
+      <TextField label="Project name" description="Shown to your whole team." />
+      <Button onPress={() => console.log('Created')}>Create project</Button>
     </CarvedProvider>
   );
 }
 ```
 
-Use `night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, or `furor`, or generate a custom theme with `createTheme({ color: '#284c42' })` from the core package. Components work with the default CSS theme without a provider; use a provider for scoped themes and locale.
+Pick one of seven materials (`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`) or make your own with `createTheme({ color: '#284c42' })`. Version 1 is a preview and a rewrite: see [migrating from 0.x](docs/migration.md).
 
-## Develop
+## What you get
 
-Use Node **24 LTS** and pnpm **11.3.0** (the version in `packageManager`).
+- **Components for real interfaces**: buttons, fields, checkboxes, radios, switches, sliders, selects, combo boxes, menus, dialogs, drawers, popovers, tooltips, tabs, disclosures, breadcrumbs, alerts, toasts, progress, cards, tables and more. Composed for the common case, with their parts exported for everything else.
+- **Accessibility you can rely on**: keyboard, focus and screen reader behaviour from [React Aria](https://react-spectrum.adobe.com/react-aria/), and [contrast guarantees](docs/accessibility.md) on every depth of every theme.
+- **Plain CSS**: one stylesheet in cascade layers, driven by `--carved-*` custom properties. No CSS-in-JS runtime, so components render on the server.
+- **Small, typed packages**: ESM with TypeScript declarations, tree-shakeable from a single entry point.
 
-```sh
-pnpm install --frozen-lockfile
-pnpm exec playwright install chromium firefox webkit
-pnpm dev
-```
+## Documentation
 
-Open [localhost:6006](http://localhost:6006) for the component laboratory. Theme and direction controls apply to every story. Package source edits reload immediately; token edits regenerate the theme CSS.
-
-```sh
-pnpm check           # builds, lint, types, behavior, accessibility, packages, browsers
-pnpm build           # ESM packages and static Storybook
-pnpm test:stories    # executable stories in Chromium
-pnpm test:visual     # browser regressions against the built Storybook
-```
-
-`pnpm verify:packages` installs packed tarballs into temporary Vite and Next.js consumers, checks declarations and exports, and tests production rendering and hydration. Browser tests need permission to start local servers. Visual baselines use macOS; see [verification](docs/verification.md).
+- [Getting started](docs/getting-started.md)
+- [Accessibility](docs/accessibility.md)
+- [Migrating from 0.x](docs/migration.md)
+- [Architecture](docs/architecture.md)
+- [Recipes](docs/examples/README.md): editable patterns to copy into your app
+- [Contributing](docs/contributing.md)
 
 ## Repository
 
-| Directory        | Responsibility                                                     |
-| ---------------- | ------------------------------------------------------------------ |
-| `packages/core`  | DTCG tokens, pure theme generation, generated theme CSS            |
-| `packages/react` | React Aria controls, native content components, scoped CSS         |
-| `apps/storybook` | Component states, executable stories, and examples                 |
-| `tools`          | Shared configuration, builds, consumer fixtures, and browser tests |
-| `docs`           | Architecture, migration, accessibility, and editable recipes       |
-| `legacy`         | Preserved inactive implementations, outside the workspace          |
-
-The root retains six required files. Build and test configuration lives with its owner or under `tools/config`.
-
-Read the [architecture](docs/architecture.md), [component catalog](docs/catalog.md), [migration guide](docs/migration.md), and [contributing and release guide](docs/contributing.md). Complex patterns in [`docs/examples`](docs/examples/README.md) are application-owned source; a registry can be introduced when there is enough demand to justify it.
+| Directory        | What lives there                                                 |
+| ---------------- | ---------------------------------------------------------------- |
+| `packages/core`  | Tokens, the theme engine and the material: no React              |
+| `packages/react` | The components and their stylesheet                              |
+| `apps/site`      | The documentation site, built with Carved                        |
+| `apps/storybook` | The laboratory: every component in every state, with tests       |
+| `docs`           | Guides, and recipes in `docs/examples`                           |
+| `tools`          | Build scripts, shared configuration and the browser test suites  |
+| `legacy`         | The original HTML, Vue and design implementations, for reference |
 
 MIT licensed.

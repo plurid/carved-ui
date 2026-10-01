@@ -4,7 +4,7 @@
 
 ### Major Changes
 
-- Rebuild Carved as a React 19 component system with a shared DTCG token and theme package, compositional APIs, scoped CSS, React Aria behavior, an executable Storybook catalog, and verified ESM/RSC package consumers. This is a breaking redesign; see the migration guide.
+- Rebuild Carved for React 19. Every surface is cut into one material and lit by one light: hover and press deepen a control's carve, tones are inlaid, and only moving pieces rise. A new theme engine turns one colour into six OKLCH depths with guaranteed contrast for text, edges and inlays. Components are built on React Aria, composed for the common case with their parts exported, and styled with plain CSS in cascade layers. See the migration guide.
 
 ### Patch Changes
 

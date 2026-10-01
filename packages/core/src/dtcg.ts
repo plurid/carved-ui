@@ -1,6 +1,6 @@
 import { parse } from 'culori/fn';
-import { foundation } from './tokens.js';
-import { DEPTHS, createTheme, presetNames, presets, tones } from './theme.js';
+import { foundation, presetNames, presets, tones } from './tokens.js';
+import { DEPTHS, createTheme } from './theme.js';
 
 function color(hex: string) {
   const rgb = parse(hex);

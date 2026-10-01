@@ -10,3 +10,6 @@ packages/core/src/generated/
 .impeccable/
 
 .pnpm-store/
+
+tools/vite/generated/
+**/dist-server/

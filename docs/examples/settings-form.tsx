@@ -1,64 +1,64 @@
 'use client';
 import { useState } from 'react';
-import {
-  Form,
-  TextField,
-  Label,
-  Input,
-  FieldDescription,
-  FieldError,
-  Switch,
-  Button,
-  Alert,
-  Spinner,
-} from '@plurid/carved-ui-react';
+import { Alert, Button, Form, Switch, TextField } from '@plurid/carved-ui-react';
 
-/** Application-owned: replace save with your API call and domain validation. */
-export function SettingsForm({
-  save,
-}: {
-  save: (values: { name: string; notifications: boolean }) => Promise<void>;
-}) {
+export interface Settings {
+  name: string;
+  notifications: boolean;
+}
+
+/** Settings with native validation, a pending save and a retryable error. Replace `save`. */
+export function SettingsForm({ save }: { save: (settings: Settings) => Promise<void> }) {
   const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   return (
     <Form
-      className="lab-stack lab-field"
+      className="recipe-form"
       onSubmit={async (event) => {
         event.preventDefault();
-        if (pending) return;
         const values = new FormData(event.currentTarget);
         setPending(true);
-        setMessage('');
+        setStatus('');
         setError('');
         try {
           await save({
             name: String(values.get('name')),
             notifications: values.has('notifications'),
           });
-          setMessage('Settings saved.');
+          setStatus('Settings saved.');
         } catch {
-          setError('Settings could not be saved. Try again.');
+          setError('Settings could not be saved. Check your connection and try again.');
         } finally {
           setPending(false);
         }
       }}
     >
-      <TextField name="name" isRequired isDisabled={pending} defaultValue="Carved UI">
-        <Label>Project name</Label>
-        <Input />
-        <FieldDescription>Use a name your team will recognize.</FieldDescription>
-        <FieldError />
-      </TextField>
+      <TextField
+        name="name"
+        label="Project name"
+        description="Use a name your team will recognise."
+        defaultValue="Quarry"
+        isRequired
+        isDisabled={pending}
+      />
       <Switch name="notifications" defaultSelected isDisabled={pending}>
         Email notifications
       </Switch>
-      <Button type="submit" isPending={pending}>
-        {pending && <Spinner aria-label="Saving" />}Save settings
-      </Button>
-      {message && <p role="status">{message}</p>}
-      {error && <Alert tone="danger">{error}</Alert>}
+      {error && (
+        <Alert tone="danger" live="assertive" title="Not saved">
+          {error}
+        </Alert>
+      )}
+      <div className="recipe-actions">
+        <Button type="submit" isPending={pending}>
+          Save settings
+        </Button>
+        {/* Mounted before it changes, so screen readers announce each new status. */}
+        <p role="status" className="recipe-status">
+          {status}
+        </p>
+      </div>
     </Form>
   );
 }

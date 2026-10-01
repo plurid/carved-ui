@@ -1,6 +1,6 @@
-export { createTheme, contrast, presets, presetNames, tones, DEPTHS } from './theme.js';
-export type { Theme, ThemeOptions, ThemePreset, ThemeReport, ThemeVariables, Tone } from './theme.js';
+export { createTheme, contrast, DEPTHS } from './theme.js';
+export type { Theme, ThemeOptions, ThemeReport, ThemeVariables } from './theme.js';
 export { themeToCss, foundationVariables, depthCss, tokensCss, coreStylesheet } from './css.js';
 export { toDtcg } from './dtcg.js';
-export { foundation, standardTones, themeDefaults } from './tokens.js';
-export type { ToneSeeds, FoundationToken } from './tokens.js';
+export { foundation, presets, presetNames, standardTones, themeDefaults, tones } from './tokens.js';
+export type { FoundationToken, ThemePreset, Tone, ToneSeeds } from './tokens.js';

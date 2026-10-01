@@ -1,57 +1,50 @@
 # Architecture
 
-Carved v1 separates the design language from React behavior and from application patterns. It preserves the recessed surface identity while replacing the original React 16/Lerna/Rollup/CRA toolchain and constructor-driven theme propagation.
+Carved is two packages and two applications around one idea: every surface is cut into a single material, lit by a single light.
 
 ```mermaid
-flowchart TD
-  Tokens[DTCG tokens in core] --> Generation[Style Dictionary + Culori]
-  Generation --> CSS[Semantic CSS variables and presets]
-  Generation --> Runtime[Pure runtime theme generator]
-  Aria[React Aria accessibility and interaction] --> React[Carved React controls]
-  CSS --> React
-  Runtime --> React
-  React --> Recipes[Editable application patterns]
-  Recipes --> Application[Domain components]
+flowchart LR
+  Tokens[tokens.ts] --> Engine[createTheme]
+  Engine --> CSS[Theme and depth CSS]
+  Material[material.css] --> Stylesheet
+  CSS --> Stylesheet[core styles.css]
+  Stylesheet --> React[React styles.css]
+  Aria[React Aria] --> Components[React components]
+  React --> Components
+  Components --> Site[Documentation site]
+  Components --> Lab[Storybook laboratory]
 ```
 
-## Package boundaries
+## The core package
 
-**Core** owns values and transformations shared by future frameworks: token JSON, the six-depth color ramp, contrast selection, shadow geometry and immutable theme data. It imports neither React nor DOM APIs. Build-time CSS presets call exactly the same function as runtime themes. Generated files are outputs, never a second source of truth.
+`@plurid/carved-ui-core` has no React and no DOM code. It holds:
 
-**React** owns native markup, visual composition and React Aria adapters. React Aria is a direct dependency rather than a separately published primitives package. Splitting the same React-specific behavior into another package would add versioning and API obligations without a second consumer. Add a framework-neutral common utility to core only after its contract is real; do not put JSX, hooks or arbitrary application helpers there.
+- **Tokens** (`src/tokens.ts`): space, radius, type, motion and layering, written in the Design Tokens Community Group format, plus the seven preset themes. This file is the single source of truth; `tokens.json` is generated from it.
+- **The theme engine** (`src/theme.ts`): `createTheme` turns one colour into a theme. It builds six depths in OKLCH, keeping hue steady and the whole ramp on one side of mid-grey, then solves text, muted text, edges and four inlays so their contrast holds on every depth. It also places the light. It is pure and deterministic, so the same function makes the preset CSS at build time and custom themes at runtime.
+- **The material** (`src/material.css`): the primitives every component composes (`carved-carve`, `carved-inlay`, `carved-raise`, `carved-engrave`, `carved-trench`). Each reads the light from custom properties, so a theme relights everything at once.
+- **CSS output** (`src/css.ts`): `themeToCss`, the depth rules that map `[data-carved-depth]` to a level's colours, and the assembled stylesheet.
 
-**Patterns** are editable source in `docs/examples`, executed in Storybook. Settings submission, confirmation, search and layout naturally change in each application. They own domain state and async work. A registry is deferred until there is a stable set of source assets and an actual distribution need. Data grids, complex date selection, uploads and command palettes are future patterns, outside the production core scope.
+## The React package
 
-There is no icons package yet: the few internal SVGs live together, decorative icons are hidden from assistive technology, and consumers can compose their chosen icon set. No generic Box/CSS-prop abstraction is added.
+`@plurid/carved-ui-react` wraps React Aria components in the material.
 
-## Public API
+- **Composed and parts.** `TextField`, `Select`, `Slider` and the rest lay out their own parts from props. Their roots (`TextFieldRoot`, `SelectRoot`, `SliderRoot`, …) and parts (`Label`, `Description`, `FieldError`, `ListBox`, `Popover`, …) are exported for other arrangements.
+- **Depth is context.** `Surface` reads the depth of its nearest ancestor surface and adds one. Overlays take the depth of the surface that opened them.
+- **Overlays render inside their provider.** `CarvedProvider` renders a host element and points React Aria's portal provider at it, so popovers and dialogs inherit the provider's theme, overrides, language and direction through the DOM. A nested provider's host moves into the root host, beyond any scrolling or clipping container.
+- **Server components.** Static content lives in `content.tsx`, which has no hooks and never imports React Aria. Every other module is a client module.
+- **One stylesheet.** `src/styles/*.css`, one file per family, bundled with the core stylesheet into `styles.css` in three cascade layers: `carved.tokens`, `carved.material`, `carved.components`. Application CSS outside a layer always wins.
 
-Small semantic variants (`primary`, `secondary`, `ghost`, `danger`) and sizes (`sm`, `md`, `lg`) are complemented by composition. Dialogs, cards, fields, collections and navigation expose named parts. Native HTML props and React Aria state contracts remain visible; native buttons, links, labels, fieldsets and tables retain their behavior.
+## The applications
 
-The package uses plain named exports rather than compound properties on function objects. This keeps individual parts directly importable, typed and tree-shakable. Component subpaths resolve to the same cohesive implementation modules, avoiding dozens of shallow index files. Consumers may use `ComponentProps<typeof Button>` and the explicitly exported foundational prop types.
+- **The documentation site** (`apps/site`) is built with Carved: Vite, React Router and MDX. The guides are this folder's Markdown, so GitHub and the site show the same text. Each example file is rendered live and shown as code. API tables are generated from the components' types and JSDoc. Every route is prerendered.
+- **The laboratory** (`apps/storybook`) shows every component in every state, and its stories are the interaction tests.
 
-Refs use the React 19 prop convention. Controlled and uncontrolled state belong to React Aria. Native content components use native attributes. State is exposed through React Aria data attributes and small Carved variant/depth attributes. Table is a styled native table; it does not promise a data grid.
+Both develop against package source through a shared Vite plugin (`tools/vite/carved.ts`). It aliases the packages to `src`, and regenerates the core stylesheet from the theme engine when a token changes.
 
-## Themes and depth
+## Decisions
 
-`packages/core/tokens/tokens.json` uses DTCG `$type` and `$value` objects. Style Dictionary emits foundation variables; Culori generates concrete OKLCH surfaces, readable foregrounds and borders. Current CSS targets Chrome 120+, Firefox 121+ and Safari 17.2+; the stylesheet build keeps syntax compatible with those targets.
-
-`CarvedProvider` renders a scoped div and an I18nProvider. Independent providers can coexist. `Surface` increments context depth across arbitrary wrappers, supports an explicit 0–5 override, and saturates at 5. React context replaces display-name inspection and recursive child cloning.
-
-CSS uses namespaced selectors and cascade layers, with semantic `--carved-*` variables as the public styling boundary. There is no document mutation during render, global reset, injected stylesheet or CSS-in-JS runtime. Application overrides follow normal CSS inheritance. A custom theme accepts concrete opaque colors; applications that override generated colors own contrast validation of their overrides.
-
-React Aria portals leave the provider DOM subtree. The overlay adapter snapshots the owning provider/surface's computed token variables and direction, then observes style, class, direction and theme attribute changes on its ancestors. It also responds to color-scheme changes. This preserves scoped theme, depth and CSS overrides during an open overlay. Custom media-query overrides for viewport size should instead update provider state/style; arbitrary stylesheet replacement is not observed.
-
-## Build and distribution
-
-pnpm links only the two packages and Storybook. Archived HTML/Vue/demo sources are excluded explicitly. TypeScript emits ESM JavaScript, declarations and maps; there is no library bundler to flatten React client directives. Lightning CSS bundles/minifies the opt-in stylesheet. Style Dictionary builds token outputs. Vite powers Storybook and a consumer fixture, not the published JavaScript.
-
-React is a peer dependency. CSS is marked as a side effect and has import declarations. Export maps expose only supported entry points. Package checks validate tarball contents, client directives, declarations, licenses, CSS, tree shaking, server rendering and hydration in isolated installed Vite/Next consumers. Changesets versions both public packages; releases use the `next` channel until a deliberate stable promotion.
-
-## Why these choices
-
-React Aria was chosen for integrated field validation, collections, overlays, internationalization, and keyboard/focus behavior across this catalog. Radix would also be viable, but mixing both expands dependency and interaction contracts. Tailwind is unnecessary for the library styling boundary; apps can use it alongside scoped CSS. DTCG tokens provide a portable source format without introducing a Figma/native build before a consumer exists.
-
-The core remains small enough to review. Framework-specific behavior stays together, and application patterns stay editable. The old package identity is retained while its API changes explicitly for v1.
-
-Primary references: [DTCG format](https://www.designtokens.org/tr/2025.10/format/), [React Aria](https://react-spectrum.adobe.com/react-aria/), [React 19 ref props](https://react.dev/reference/react/forwardRef), [ARIA authoring patterns](https://www.w3.org/WAI/ARIA/apg/), [Storybook testing](https://storybook.js.org/docs/writing-tests).
+- **React Aria** provides keyboard interaction, focus management, collections, overlays and internationalisation that would otherwise take years to get right. Carved adds the material on top and keeps React Aria's props visible.
+- **Plain CSS and custom properties** rather than CSS-in-JS: no runtime, server rendering for free, and overrides with ordinary CSS.
+- **OKLCH, solved per theme**, rather than hand-picked colours: any base colour gets the same structure and the same contrast guarantees.
+- **Recipes stay editable.** Patterns that every application shapes differently (settings forms, confirmations, searchable tables, page frames) live in `docs/examples` as source to copy, not as packaged components.
+- **What is not here yet**: data grids, date pickers, file uploads and command palettes. They can start as recipes and move into the packages once their shape settles.

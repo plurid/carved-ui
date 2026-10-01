@@ -1,181 +1,180 @@
 'use client';
 import { Form as AriaForm } from 'react-aria-components/Form';
-import {
-  TextField as AriaTextField,
-  Input as AriaInput,
-  TextArea as AriaTextArea,
-  Label as AriaLabel,
-  FieldError as AriaFieldError,
-  Text,
-} from 'react-aria-components/TextField';
-import { Checkbox as AriaCheckbox } from 'react-aria-components/Checkbox';
-import { RadioGroup as AriaRadioGroup, Radio as AriaRadio } from 'react-aria-components/RadioGroup';
-import { Switch as AriaSwitch } from 'react-aria-components/Switch';
-import {
-  Slider as AriaSlider,
-  SliderTrack as AriaSliderTrack,
-  SliderThumb as AriaSliderThumb,
-  SliderOutput as AriaSliderOutput,
-} from 'react-aria-components/Slider';
-import type { ComponentProps } from 'react';
-import { cx } from './internal/utils.js';
-import { Check } from './internal/icons.js';
+import type { FormProps as AriaFormProps } from 'react-aria-components/Form';
+import { FieldError as AriaFieldError, FieldErrorContext } from 'react-aria-components/FieldError';
+import type {
+  FieldErrorProps as AriaFieldErrorProps,
+  ValidationResult,
+} from 'react-aria-components/FieldError';
+import { Label as AriaLabel } from 'react-aria-components/Label';
+import type { LabelProps as AriaLabelProps } from 'react-aria-components/Label';
+import { Text } from 'react-aria-components/Text';
+import type { TextProps } from 'react-aria-components/Text';
+import { Input as AriaInput } from 'react-aria-components/Input';
+import type { InputProps as AriaInputProps } from 'react-aria-components/Input';
+import { TextArea as AriaTextArea } from 'react-aria-components/TextArea';
+import type { TextAreaProps as AriaTextAreaProps } from 'react-aria-components/TextArea';
+import { Group } from 'react-aria-components/Group';
+import type { GroupProps } from 'react-aria-components/Group';
+import { TextField as AriaTextField } from 'react-aria-components/TextField';
+import type { TextFieldProps as AriaTextFieldProps } from 'react-aria-components/TextField';
+import { SearchField as AriaSearchField } from 'react-aria-components/SearchField';
+import type { SearchFieldProps as AriaSearchFieldProps } from 'react-aria-components/SearchField';
+import { useContext } from 'react';
+import type { ReactNode, Ref } from 'react';
+import { Button } from './actions.js';
+import type { ButtonProps } from './actions.js';
+import { cx, withClass } from './internal/class-names.js';
+import { useHeldDuringPress } from './internal/hold.js';
+import { Close, Search } from './internal/icons.js';
 
-export function Form({ className, ...props }: ComponentProps<typeof AriaForm>) {
+/** Props shared by every composed field. */
+export interface FieldProps {
+  /** The visible label. */
+  label?: ReactNode;
+  /** Help text shown below the field and announced with it. */
+  description?: ReactNode;
+  /**
+   * Shown when the field is invalid. Defaults to the browser's validation message; a function
+   * receives the validation state.
+   */
+  errorMessage?: ReactNode | ((validation: ValidationResult) => ReactNode);
+}
+
+export function Form({ className, ...props }: AriaFormProps & { ref?: Ref<HTMLFormElement> }) {
   return <AriaForm {...props} className={cx('carved-form', className)} />;
 }
-export function TextField({ className, ...props }: ComponentProps<typeof AriaTextField>) {
+
+export function Label({ className, ...props }: AriaLabelProps & { ref?: Ref<HTMLLabelElement> }) {
+  return <AriaLabel {...props} className={cx('carved-label', className)} />;
+}
+
+/** Help text for the enclosing field, linked to it with `aria-describedby`. */
+export function Description({ className, ...props }: TextProps) {
+  return <Text {...props} slot="description" className={cx('carved-description', className)} />;
+}
+
+/**
+ * The enclosing field's validation message. It holds still while a pointer is pressed, so a
+ * field revalidating on blur never moves the button being clicked.
+ */
+export function FieldError({ className, ...props }: AriaFieldErrorProps) {
+  const validation = useHeldDuringPress(useContext(FieldErrorContext));
   return (
-    <AriaTextField
-      {...props}
-      className={(state) =>
-        cx('carved-field', typeof className === 'function' ? className(state) : className)
-      }
-    />
+    <FieldErrorContext value={validation}>
+      <AriaFieldError {...props} className={withClass('carved-field-error', className)} />
+    </FieldErrorContext>
   );
 }
-export function Input({ className, ...props }: ComponentProps<typeof AriaInput>) {
-  return (
-    <AriaInput
-      {...props}
-      className={(state) =>
-        cx('carved-input', typeof className === 'function' ? className(state) : className)
-      }
-    />
-  );
+
+/** A carved text well. Use inside a field root, or alone with an `aria-label`. */
+export function Input({ className, ...props }: AriaInputProps & { ref?: Ref<HTMLInputElement> }) {
+  return <AriaInput {...props} className={withClass('carved-input carved-carve', className)} />;
 }
-export function Textarea({ className, ...props }: ComponentProps<typeof AriaTextArea>) {
+
+export function TextArea({
+  className,
+  ...props
+}: AriaTextAreaProps & { ref?: Ref<HTMLTextAreaElement> }) {
   return (
     <AriaTextArea
       {...props}
-      className={(state) =>
-        cx(
-          'carved-input',
-          'carved-textarea',
-          typeof className === 'function' ? className(state) : className,
-        )
-      }
+      className={withClass('carved-input carved-textarea carved-carve', className)}
     />
   );
 }
-export function Label({ className, ...props }: ComponentProps<typeof AriaLabel>) {
-  return <AriaLabel {...props} className={cx('carved-label', className)} />;
+
+/** One carved well holding an input together with buttons or icons. */
+export function InputGroup({ className, ...props }: GroupProps & { ref?: Ref<HTMLDivElement> }) {
+  return <Group {...props} className={withClass('carved-input-group carved-carve', className)} />;
 }
-export function FieldDescription({ className, ...props }: ComponentProps<typeof Text>) {
-  return <Text {...props} slot="description" className={cx('carved-description', className)} />;
-}
-export function FieldError({ className, ...props }: ComponentProps<typeof AriaFieldError>) {
+
+/** A small icon button that lives inside an input group. */
+export function FieldButton({ className, ...props }: ButtonProps) {
   return (
-    <AriaFieldError
+    <Button
+      variant="ghost"
+      size="sm"
       {...props}
-      className={(state) =>
-        cx('carved-field-error', typeof className === 'function' ? className(state) : className)
-      }
+      className={withClass('carved-field-button', className)}
     />
   );
 }
-export function Checkbox({ children, className, ...props }: ComponentProps<typeof AriaCheckbox>) {
+
+function FieldFooter({ description, errorMessage }: FieldProps) {
   return (
-    <AriaCheckbox
-      {...props}
-      className={(state) =>
-        cx('carved-checkbox', typeof className === 'function' ? className(state) : className)
-      }
-    >
-      {(state) => (
-        <>
-          <span className="carved-checkbox-box">
-            <Check />
-          </span>
-          {typeof children === 'function' ? children(state) : children}
-        </>
+    <>
+      {description && <Description>{description}</Description>}
+      <FieldError>{errorMessage}</FieldError>
+    </>
+  );
+}
+
+export interface TextFieldRootProps extends AriaTextFieldProps {
+  ref?: Ref<HTMLDivElement>;
+}
+
+/** The bare text field, for arranging label, input and messages yourself. */
+export function TextFieldRoot({ className, ...props }: TextFieldRootProps) {
+  return <AriaTextField {...props} className={withClass('carved-field', className)} />;
+}
+
+export interface TextFieldProps extends Omit<TextFieldRootProps, 'children'>, FieldProps {
+  placeholder?: string;
+  /** Render a growing multi-line text area instead of an input. */
+  multiline?: boolean;
+  /** Visible lines of a multi-line field. @default 4 */
+  rows?: number;
+}
+
+/** A labelled text input with optional help text and validation. */
+export function TextField({
+  label,
+  description,
+  errorMessage,
+  placeholder,
+  multiline = false,
+  rows = 4,
+  ...props
+}: TextFieldProps) {
+  return (
+    <TextFieldRoot {...props}>
+      {label && <Label>{label}</Label>}
+      {multiline ? (
+        <TextArea placeholder={placeholder} rows={rows} />
+      ) : (
+        <Input placeholder={placeholder} />
       )}
-    </AriaCheckbox>
+      <FieldFooter description={description} errorMessage={errorMessage} />
+    </TextFieldRoot>
   );
 }
-export function RadioGroup({ className, ...props }: ComponentProps<typeof AriaRadioGroup>) {
-  return (
-    <AriaRadioGroup
-      {...props}
-      className={(state) =>
-        cx('carved-radio-group', typeof className === 'function' ? className(state) : className)
-      }
-    />
-  );
+
+export interface SearchFieldProps extends Omit<AriaSearchFieldProps, 'children'>, FieldProps {
+  placeholder?: string;
+  ref?: Ref<HTMLDivElement>;
 }
-export function Radio({ children, className, ...props }: ComponentProps<typeof AriaRadio>) {
+
+/** A text field for queries, with a search icon and a button to clear it. */
+export function SearchField({
+  label,
+  description,
+  errorMessage,
+  placeholder,
+  className,
+  ...props
+}: SearchFieldProps) {
   return (
-    <AriaRadio
-      {...props}
-      className={(state) =>
-        cx('carved-radio', typeof className === 'function' ? className(state) : className)
-      }
-    >
-      {(state) => (
-        <>
-          <span className="carved-radio-dot" />
-          {typeof children === 'function' ? children(state) : children}
-        </>
-      )}
-    </AriaRadio>
-  );
-}
-export function Switch({ children, className, ...props }: ComponentProps<typeof AriaSwitch>) {
-  return (
-    <AriaSwitch
-      {...props}
-      className={(state) =>
-        cx('carved-switch', typeof className === 'function' ? className(state) : className)
-      }
-    >
-      {(state) => (
-        <>
-          <span className="carved-switch-track">
-            <span />
-          </span>
-          {typeof children === 'function' ? children(state) : children}
-        </>
-      )}
-    </AriaSwitch>
-  );
-}
-export function Slider({ className, ...props }: ComponentProps<typeof AriaSlider>) {
-  return (
-    <AriaSlider
-      {...props}
-      className={(state) =>
-        cx('carved-slider', typeof className === 'function' ? className(state) : className)
-      }
-    />
-  );
-}
-export function SliderTrack({ className, ...props }: ComponentProps<typeof AriaSliderTrack>) {
-  return (
-    <AriaSliderTrack
-      {...props}
-      className={(state) =>
-        cx('carved-slider-track', typeof className === 'function' ? className(state) : className)
-      }
-    />
-  );
-}
-export function SliderThumb({ className, ...props }: ComponentProps<typeof AriaSliderThumb>) {
-  return (
-    <AriaSliderThumb
-      {...props}
-      className={(state) =>
-        cx('carved-slider-thumb', typeof className === 'function' ? className(state) : className)
-      }
-    />
-  );
-}
-export function SliderOutput({ className, ...props }: ComponentProps<typeof AriaSliderOutput>) {
-  return (
-    <AriaSliderOutput
-      {...props}
-      className={(state) =>
-        cx('carved-slider-output', typeof className === 'function' ? className(state) : className)
-      }
-    />
+    <AriaSearchField {...props} className={withClass('carved-field carved-search', className)}>
+      {label && <Label>{label}</Label>}
+      <InputGroup>
+        <Search className="carved-search-icon" />
+        <AriaInput placeholder={placeholder} className="carved-group-input" />
+        <FieldButton className="carved-search-clear">
+          <Close />
+        </FieldButton>
+      </InputGroup>
+      <FieldFooter description={description} errorMessage={errorMessage} />
+    </AriaSearchField>
   );
 }

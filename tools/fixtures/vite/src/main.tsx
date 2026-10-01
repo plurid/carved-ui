@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
-import { CarvedProvider } from '@plurid/carved-ui-react/provider';
-import { Button } from '@plurid/carved-ui-react/button';
+import { Button, CarvedProvider } from '@plurid/carved-ui-react';
 import { createTheme } from '@plurid/carved-ui-core';
 import '@plurid/carved-ui-react/styles.css';
+
+// Imports only a button from the package root: everything else must tree-shake away.
 function App() {
   const [count, setCount] = useState(0);
   return (

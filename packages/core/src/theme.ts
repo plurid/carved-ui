@@ -24,8 +24,8 @@ import {
   wcagLuminance,
 } from 'culori/fn';
 import type { Oklch } from 'culori/fn';
-import { presetOptions, standardTones, themeDefaults } from './tokens.js';
-import type { ToneSeeds } from './tokens.js';
+import { standardTones, themeDefaults, tones } from './tokens.js';
+import type { Tone, ToneSeeds } from './tokens.js';
 
 // Register only the colour spaces CSS can express, keeping browser bundles small.
 for (const mode of [
@@ -49,8 +49,6 @@ for (const mode of [
 const toOklch = useMode(modeOklch);
 const toOklab = converter('oklab');
 
-export type Tone = keyof ToneSeeds;
-export const tones = Object.freeze(['accent', 'success', 'warning', 'danger'] as const);
 export type ThemeVariables = Record<`--carved-${string}`, string>;
 
 export interface ThemeOptions {
@@ -90,12 +88,6 @@ export interface Theme {
   readonly variables: Readonly<ThemeVariables>;
   readonly report: ThemeReport;
 }
-
-export const presets = Object.freeze(presetOptions) as Readonly<
-  Record<keyof typeof presetOptions, ThemeOptions>
->;
-export type ThemePreset = keyof typeof presetOptions;
-export const presetNames = Object.freeze(Object.keys(presetOptions) as ThemePreset[]);
 
 export const DEPTHS = 6;
 const ZONES = { dark: { low: 0.11, high: 0.48 }, light: { low: 0.6, high: 1 } } as const;
@@ -248,12 +240,17 @@ export function createTheme(options: ThemeOptions): Theme {
   const inkChroma = Math.min(base.c, 0.015);
   surfaces.forEach((surface, depth) => {
     const ink = oklch(polarity === 'dark' ? 0.97 : 0.2, inkChroma, hue);
+    // Prefer 7:1; where the surface cannot reach it, use the strongest ink there is.
     const fg =
       solve(ink, (color) => contrast(color, surface) >= 7) ??
-      solve(ink, (color) => contrast(color, surface) >= 4.5)!;
+      hex(polarity === 'dark' ? 1 : 0, 0, undefined);
     variables[`--carved-surface-${depth}`] = surface;
     variables[`--carved-fg-${depth}`] = fg;
-    variables[`--carved-muted-${depth}`] = mixUntil(surface, fg, (c) => contrast(c, surface) >= 4.6);
+    variables[`--carved-muted-${depth}`] = mixUntil(
+      surface,
+      fg,
+      (c) => contrast(c, surface) >= 4.6,
+    );
     variables[`--carved-edge-${depth}`] = mixUntil(surface, fg, (c) => contrast(c, surface) >= 3.1);
     variables[`--carved-hairline-${depth}`] = mixUntil(
       surface,
@@ -274,10 +271,13 @@ export function createTheme(options: ThemeOptions): Theme {
       hex(0.985, Math.min(seed.c, 0.012), seed.h),
       hex(0.18, Math.min(seed.c, 0.03), seed.h),
     ].sort((a, b) => contrast(b, fill) - contrast(a, fill));
-    const on = contrast(onCandidates[0]!, fill) >= 4.5 ? onCandidates[0]! : solve(
-      oklch(luminance(fill) > 0.18 ? 0 : 1, 0, undefined),
-      (c) => contrast(c, fill) >= 4.5,
-    )!;
+    const on =
+      contrast(onCandidates[0]!, fill) >= 4.5
+        ? onCandidates[0]!
+        : solve(
+            oklch(luminance(fill) > 0.18 ? 0 : 1, 0, undefined),
+            (c) => contrast(c, fill) >= 4.5,
+          )!;
     const ink = solve(
       seed,
       (c) => lowest(c, surfaces) >= 4.5,
@@ -312,7 +312,7 @@ export function createTheme(options: ThemeOptions): Theme {
     '--carved-lip': translucent(1, 0, undefined, dark ? 0.07 : 0.7),
     '--carved-cast': translucent(0.1, shadowChroma, shadowHue, dark ? 0.55 : 0.2),
     '--carved-scrim': translucent(0.12, shadowChroma, shadowHue, dark ? 0.6 : 0.42),
-    '--carved-focus': variables['--carved-accent-ink']!,
+    '--carved-focus': variables['--carved-accent']!,
     '--carved-color-scheme': polarity,
   } satisfies ThemeVariables);
 

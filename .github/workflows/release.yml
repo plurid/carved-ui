@@ -4,7 +4,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: release-preview
+  group: release
   cancel-in-progress: false
 jobs:
   verify:
@@ -14,6 +14,10 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: npm
+    permissions:
+      contents: read
+      # npm trusted publishing and provenance use the workflow's OIDC identity.
+      id-token: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -24,11 +28,17 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: node tools/build/release-gate.mjs
       - run: pnpm build:packages
-      - name: Require preview versions and npm credentials
+      # Pack once, verify those tarballs in real consumers, then publish exactly them.
+      - run: pnpm verify:packages
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: node tools/build/release-gate.mjs
-      - run: pnpm exec changeset publish
+          CARVED_PACK_DIR: ${{ runner.temp }}/packages
+      - name: Publish core, then react
+        run: |
+          npm publish "$RUNNER_TEMP"/packages/plurid-carved-ui-core-*.tgz --tag next --provenance --access public
+          npm publish "$RUNNER_TEMP"/packages/plurid-carved-ui-react-*.tgz --tag next --provenance --access public
         env:
+          # Only needed until trusted publishing is configured for both packages on npm.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

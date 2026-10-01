@@ -1,174 +1,207 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, waitFor, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import {
+  AlertDialog,
   Button,
   CarvedProvider,
-  DialogTrigger,
-  DialogContent,
   Dialog,
-  AlertDialog,
-  DialogTitle,
-  DialogDescription,
   DialogFooter,
+  DialogTrigger,
   Drawer,
-  TooltipTrigger,
-  Tooltip,
+  IconButton,
+  Modal,
   Popover,
-  TextField,
-  Label,
-  Input,
   Surface,
+  TextField,
+  Tooltip,
+  TooltipTrigger,
 } from '@plurid/carved-ui-react';
-const meta = { title: 'Overlays/Dialog', tags: ['autodocs'] } satisfies Meta;
+
+const meta = {
+  title: 'Overlays/Dialog',
+  component: Dialog,
+  tags: ['autodocs'],
+  parameters: { layout: 'padded' },
+} satisfies Meta<typeof Dialog>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Modal: Story = {
+
+const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.body);
+
+export const InModal: Story = {
   render: () => (
     <DialogTrigger>
-      <Button>Edit project</Button>
-      <DialogContent isDismissable>
-        <Dialog>
-          <DialogTitle>Edit project</DialogTitle>
-          <DialogDescription>Change the name used throughout your workspace.</DialogDescription>
-          <TextField autoFocus defaultValue="Carved UI">
-            <Label>Project name</Label>
-            <Input />
-          </TextField>
-          <DialogFooter>
-            <Button slot="close" variant="secondary">
-              Cancel
-            </Button>
-            <Button slot="close">Save changes</Button>
-          </DialogFooter>
+      <Button>Rename project</Button>
+      <Modal>
+        <Dialog title="Rename project" description="The new name appears everywhere at once.">
+          {({ close }) => (
+            <>
+              <TextField label="Name" defaultValue="Quarry" autoFocus />
+              <DialogFooter>
+                <Button variant="ghost" onPress={close}>
+                  Cancel
+                </Button>
+                <Button onPress={close}>Rename</Button>
+              </DialogFooter>
+            </>
+          )}
         </Dialog>
-      </DialogContent>
+      </Modal>
     </DialogTrigger>
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const trigger = canvas.getByRole('button', { name: 'Edit project' });
+    const trigger = within(canvasElement).getByRole('button', { name: 'Rename project' });
     await userEvent.click(trigger);
-    const page = within(canvasElement.ownerDocument.body);
-    const dialog = await page.findByRole('dialog', { name: 'Edit project' });
-    await expect(within(dialog).getByRole('textbox')).toHaveFocus();
-    await expect(dialog).toHaveAccessibleDescription(
-      'Change the name used throughout your workspace.',
-    );
+    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Rename project' });
+    await expect(dialog).toHaveAccessibleDescription('The new name appears everywhere at once.');
+    await expect(body(canvasElement).getByRole('textbox', { name: 'Name' })).toHaveFocus();
+    // Overlays render inside the provider, so they inherit its theme.
+    await expect(dialog.closest('[data-carved-theme]')).not.toBeNull();
     await userEvent.keyboard('{Escape}');
-    await expect(page.queryByRole('dialog')).not.toBeInTheDocument();
     await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
+
 export const Confirmation: Story = {
-  render: () => (
-    <DialogTrigger>
-      <Button variant="danger">Delete project</Button>
-      <DialogContent>
-        <AlertDialog>
-          <DialogTitle>Delete this project?</DialogTitle>
-          <DialogDescription>This removes the project from your workspace.</DialogDescription>
-          <DialogFooter>
-            <Button slot="close" autoFocus variant="secondary">
-              Cancel
-            </Button>
-            <Button slot="close" variant="danger">
-              Delete project
-            </Button>
-          </DialogFooter>
-        </AlertDialog>
-      </DialogContent>
-    </DialogTrigger>
-  ),
-};
-export const DrawerControl: Story = {
-  render: () => (
-    <DialogTrigger>
-      <Button variant="secondary">Open settings</Button>
-      <Drawer isDismissable>
-        <Dialog>
-          <DialogTitle>Project settings</DialogTitle>
-          <DialogDescription>Configure how your team uses this project.</DialogDescription>
-          <DialogFooter>
-            <Button slot="close">Done</Button>
-          </DialogFooter>
-        </Dialog>
-      </Drawer>
-    </DialogTrigger>
-  ),
-};
-export const TooltipControl: Story = {
-  render: () => (
-    <TooltipTrigger delay={0}>
-      <Button variant="secondary">Archive</Button>
-      <Tooltip>Move the project out of your active workspace.</Tooltip>
-    </TooltipTrigger>
-  ),
+  render: () => {
+    const [deleted, setDeleted] = useState(false);
+    return (
+      <div className="lab-row">
+        <DialogTrigger>
+          <Button variant="danger">Delete project</Button>
+          <Modal size="sm">
+            <AlertDialog
+              title="Delete Quarry?"
+              actionLabel="Delete project"
+              onAction={() =>
+                new Promise<void>((resolve) =>
+                  setTimeout(() => {
+                    setDeleted(true);
+                    resolve();
+                  }, 400),
+                )
+              }
+            >
+              Its deploys and history are removed. This cannot be undone.
+            </AlertDialog>
+          </Modal>
+        </DialogTrigger>
+        <output aria-label="Status">{deleted ? 'Deleted' : 'Active'}</output>
+      </div>
+    );
+  },
   play: async ({ canvasElement }) => {
-    await userEvent.tab();
-    await expect(
-      await within(canvasElement.ownerDocument.body).findByRole('tooltip'),
-    ).toBeVisible();
-    await userEvent.keyboard('{Escape}');
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Delete project' }));
+    const dialog = await body(canvasElement).findByRole('alertdialog');
+    await expect(within(dialog).getByRole('button', { name: 'Delete project' })).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() =>
+      expect(within(canvasElement).getByLabelText('Status')).toHaveTextContent('Deleted'),
+    );
   },
 };
-export const PopoverControl: Story = {
+
+export const Drawers: Story = {
+  render: () => (
+    <div className="lab-row">
+      {(['start', 'end', 'bottom'] as const).map((placement) => (
+        <DialogTrigger key={placement}>
+          <Button variant="secondary">Open {placement}</Button>
+          <Drawer placement={placement} isDismissable>
+            <Dialog title="Filters" description="Narrow the list of projects.">
+              <TextField label="Owner" />
+            </Dialog>
+          </Drawer>
+        </DialogTrigger>
+      ))}
+    </div>
+  ),
+};
+
+export const PopoverDialog: Story = {
   render: () => (
     <DialogTrigger>
-      <Button variant="secondary">Project information</Button>
-      <Popover>
-        <Dialog>
-          <DialogTitle>About this project</DialogTitle>
-          <p>This example uses editable application content.</p>
-          <Button slot="close">Close</Button>
-        </Dialog>
+      <Button variant="secondary">Details</Button>
+      <Popover showArrow placement="bottom start">
+        <Dialog title="Quarry" description="Deployed four minutes ago from main." />
       </Popover>
     </DialogTrigger>
   ),
 };
-function ControlledDialog() {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Button onPress={() => setOpen(true)}>Open controlled dialog</Button>
-      <DialogContent isOpen={open} onOpenChange={setOpen} isDismissable>
-        <Dialog>
-          <DialogTitle>Controlled dialog</DialogTitle>
-          <Button onPress={() => setOpen(false)}>Close controlled dialog</Button>
-        </Dialog>
-      </DialogContent>
-    </>
-  );
-}
-export const Controlled: Story = {
-  render: () => <ControlledDialog />,
+
+const Info = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5M12 7.5v.01" strokeLinecap="round" />
+  </svg>
+);
+
+export const Tooltips: Story = {
+  render: () => (
+    <div className="lab-row" style={{ paddingBlock: '3rem' }}>
+      <TooltipTrigger delay={0}>
+        <IconButton aria-label="About deploys" variant="secondary">
+          <Info />
+        </IconButton>
+        <Tooltip showArrow>Deploys run on every push to main.</Tooltip>
+      </TooltipTrigger>
+    </div>
+  ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
-    await userEvent.click(canvas.getByRole('button', { name: 'Open controlled dialog' }));
-    await expect(await page.findByRole('dialog', { name: 'Controlled dialog' })).toBeVisible();
-    await userEvent.click(page.getByRole('button', { name: 'Close controlled dialog' }));
-    await expect(page.queryByRole('dialog')).not.toBeInTheDocument();
+    await userEvent.tab();
+    await waitFor(() => expect(body(canvasElement).getByRole('tooltip')).toBeVisible());
   },
 };
-function ScopedPortal() {
-  const [light, setLight] = useState(true);
-  return (
-    <CarvedProvider theme={light ? 'light' : 'night'} style={{ '--carved-accent': '#92cab7' }}>
-      <Surface depth={3} className="lab-surface">
-        <Button onPress={() => setLight((value) => !value)}>Toggle local theme</Button>
-        <DialogTrigger>
-          <Button variant="secondary">Open themed dialog</Button>
-          <DialogContent isDismissable>
-            <Dialog>
-              <DialogTitle>Local theme</DialogTitle>
-              <Button onPress={() => setLight((value) => !value)}>Change theme while open</Button>
-              <Button slot="close">Done</Button>
-            </Dialog>
-          </DialogContent>
-        </DialogTrigger>
-      </Surface>
-    </CarvedProvider>
-  );
-}
-export const ScopedPortalTheme: Story = { render: () => <ScopedPortal /> };
+
+export const OpenOnFirstRender: Story = {
+  render: () => (
+    <DialogTrigger defaultOpen>
+      <Button>Show welcome</Button>
+      <Modal>
+        <Dialog title="Welcome to Quarry">Every project starts here.</Dialog>
+      </Modal>
+    </DialogTrigger>
+  ),
+  play: async ({ canvasElement }) => {
+    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Welcome to Quarry' });
+    await waitFor(() => expect(dialog.closest('.carved-portal-host')).not.toBeNull());
+  },
+};
+
+/** A nested provider themes its own overlays, wherever they render. */
+export const ScopedTheme: Story = {
+  render: () => (
+    <div className="lab-row">
+      <CarvedProvider theme="furor">
+        <Surface className="lab-pad">
+          <DialogTrigger>
+            <Button>Open in furor</Button>
+            <Modal>
+              <Dialog title="Scoped theme">
+                This dialog keeps the furor theme of its provider.
+              </Dialog>
+            </Modal>
+          </DialogTrigger>
+        </Surface>
+      </CarvedProvider>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Open in furor' }));
+    const dialog = await body(canvasElement).findByRole('dialog');
+    await expect(dialog.closest('[data-carved-theme]')).toHaveAttribute(
+      'data-carved-theme',
+      'furor',
+    );
+    await userEvent.keyboard('{Escape}');
+  },
+};

@@ -1,128 +1,160 @@
 'use client';
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { ComponentPropsWithRef, CSSProperties, RefObject } from 'react';
-import { I18nProvider } from 'react-aria-components';
-import { presets } from '@plurid/carved-ui-core';
+import { createContext, useContext, useState } from 'react';
+import type { ComponentPropsWithRef, CSSProperties, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { I18nProvider, useLocale } from 'react-aria-components/I18nProvider';
+import { UNSAFE_PortalProvider } from 'react-aria/PortalProvider';
+import { useIsSSR } from 'react-aria/SSRProvider';
 import type { Theme, ThemePreset, ThemeVariables } from '@plurid/carved-ui-core';
-import { cx } from './internal/utils.js';
+import { cx } from './internal/class-names.js';
 
+/** Inline styles that may also set Carved's `--carved-*` custom properties. */
 export type CarvedStyle = CSSProperties & Partial<ThemeVariables>;
-export interface CarvedProviderProps extends Omit<ComponentPropsWithRef<'div'>, 'style'> {
+export type Depth = 0 | 1 | 2 | 3 | 4 | 5;
+
+const DepthContext = createContext<Depth>(0);
+const HostContext = createContext<HTMLElement | null>(null);
+
+/** The depth of the nearest surface: 0 on the page, 1–5 inside nested surfaces. */
+export function useDepth(): Depth {
+  return useContext(DepthContext);
+}
+
+/** Sets the depth for content rendered away from its surface, such as an overlay's. */
+export function DepthScope({ depth, children }: { depth: Depth; children: ReactNode }) {
+  return <DepthContext value={depth}>{children}</DepthContext>;
+}
+
+/** The depth an overlay opened from here is cut at: one level below the opener. */
+export function useOverlayDepth(): Depth {
+  return Math.min(useDepth() + 1, 5) as Depth;
+}
+
+export interface CarvedProviderProps extends Omit<ComponentPropsWithRef<'div'>, 'style' | 'dir'> {
+  /**
+   * A preset name, or a theme from `createTheme`. Presets are applied by the stylesheet;
+   * generated themes are applied inline.
+   * @default 'ponton'
+   */
   theme?: ThemePreset | Theme;
+  /**
+   * A BCP 47 locale for formatting and text direction. Inherited from an enclosing provider
+   * when omitted.
+   */
   locale?: string;
   style?: CarvedStyle;
 }
-interface ThemeScope {
-  theme: Theme;
-  scope: RefObject<HTMLDivElement | null> | null;
-}
-const ThemeContext = createContext<ThemeScope>({ theme: presets.ponton, scope: null });
-const DepthContext = createContext(0);
-export type Depth = 0 | 1 | 2 | 3 | 4 | 5;
 
-export function CarvedProvider({
-  theme = 'ponton',
-  locale = 'en-US',
-  className,
-  style,
-  children,
-  ref,
-  ...props
-}: CarvedProviderProps) {
-  const resolved = typeof theme === 'string' ? presets[theme] : theme;
-  if (!resolved?.variables) throw new TypeError('CarvedProvider requires a valid theme');
-  const scope = useRef<HTMLDivElement>(null);
-  const context = useMemo(() => ({ theme: resolved, scope }), [resolved]);
+/**
+ * A themed scope. Everything inside, including popovers and dialogs, uses its theme,
+ * locale and text direction. Providers can nest to theme part of a page differently.
+ */
+export function CarvedProvider({ locale, ...props }: CarvedProviderProps) {
+  if (!locale) return <Scope {...props} />;
   return (
     <I18nProvider locale={locale}>
-      <ThemeContext value={context}>
-        <DepthContext value={0}>
-          <div
-            {...props}
-            ref={(node) => {
-              scope.current = node;
-              if (typeof ref === 'function') return ref(node);
-              if (ref) ref.current = node;
-            }}
-            className={cx('carved-provider', className)}
-            data-carved-theme={typeof theme === 'string' ? theme : 'custom'}
-            style={{ ...resolved.variables, ...style }}
-          >
-            {children}
-          </div>
-        </DepthContext>
-      </ThemeContext>
+      <Scope {...props} localized />
     </I18nProvider>
   );
 }
-export interface SurfaceProps extends Omit<ComponentPropsWithRef<'div'>, 'style'> {
-  depth?: Depth;
-  style?: CarvedStyle;
-}
-export function Surface({ depth, className, style, children, ref, ...props }: SurfaceProps) {
-  const { theme } = useContext(ThemeContext);
-  const scope = useRef<HTMLDivElement>(null);
-  const context = useMemo(() => ({ theme, scope }), [theme]);
-  const parent = useContext(DepthContext);
-  if (depth !== undefined && (!Number.isInteger(depth) || depth < 0 || depth > 5))
-    throw new RangeError('Surface depth must be an integer from zero through five');
-  const level = depth ?? Math.min(parent + 1, 5);
-  const tokens: CarvedStyle = {
-    '--carved-bg': `var(--carved-surface-${level})`,
-    '--carved-fg': `var(--carved-fg-${level})`,
-    '--carved-muted': `var(--carved-muted-${level})`,
-    '--carved-border': `var(--carved-border-${level})`,
-    '--carved-focus': `var(--carved-fg-${level})`,
+
+function Scope({
+  theme = 'ponton',
+  localized = false,
+  className,
+  style,
+  children,
+  ...props
+}: Omit<CarvedProviderProps, 'locale'> & { localized?: boolean }) {
+  if (typeof theme === 'object' && !theme?.variables)
+    throw new TypeError('CarvedProvider expects a preset name or a theme from createTheme');
+  const { locale, direction } = useLocale();
+  const parentHost = useContext(HostContext);
+  const [host, setHost] = useState<HTMLElement | null>(null);
+  const hydrating = useIsSSR();
+
+  const variables = typeof theme === 'object' ? theme.variables : undefined;
+  // Direction and language are set only by an explicit locale; otherwise they are inherited,
+  // so a browser's default language never flips an application's layout.
+  const scope = {
+    'data-carved-theme': typeof theme === 'object' ? 'custom' : theme,
+    'data-carved-depth': 0,
+    ...(localized ? { dir: direction, lang: locale } : {}),
   };
+  // Overlays render into this host so they inherit the scope through the DOM. A nested
+  // provider's host moves into the root host, beyond any scrolling or clipping container.
+  const portalHost = (
+    <div
+      {...scope}
+      ref={setHost}
+      className="carved-portal-host"
+      style={{ ...variables, ...customProperties(style) }}
+    />
+  );
   return (
-    <ThemeContext value={context}>
-      <DepthContext value={level}>
-        <div
-          {...props}
-          ref={(node) => {
-            scope.current = node;
-            if (typeof ref === 'function') return ref(node);
-            if (ref) ref.current = node;
-          }}
-          className={cx('carved-surface', className)}
-          data-carved-depth={level}
-          style={{ ...tokens, ...style }}
-        >
-          {children}
-        </div>
-      </DepthContext>
-    </ThemeContext>
+    <div
+      {...props}
+      {...scope}
+      className={cx('carved-provider', className)}
+      style={{ ...variables, ...style }}
+    >
+      <HostContext value={host}>
+        <DepthContext value={0}>
+          <UNSAFE_PortalProvider getContainer={host ? () => host : undefined}>
+            {children}
+          </UNSAFE_PortalProvider>
+        </DepthContext>
+      </HostContext>
+      {parentHost && !hydrating ? createPortal(portalHost, parentHost) : portalHost}
+    </div>
   );
 }
 
-/** Capture the owning CSS scope, including application overrides, across React Aria portals. */
-export function useOverlayStyle(): CarvedStyle {
-  const { theme, scope } = useContext(ThemeContext);
-  const [overrides, setOverrides] = useState<CarvedStyle>({});
-  useEffect(() => {
-    const element = scope?.current;
-    if (!element) return;
-    const update = () => {
-      const computed = getComputedStyle(element);
-      const variables: ThemeVariables = {};
-      for (const property of Array.from(computed))
-        if (property.startsWith('--carved-'))
-          variables[property as keyof ThemeVariables] = computed.getPropertyValue(property).trim();
-      setOverrides({ ...variables, direction: computed.direction as CSSProperties['direction'] });
-    };
-    update();
-    const observer = new MutationObserver(update);
-    for (let ancestor: Element | null = element; ancestor; ancestor = ancestor.parentElement)
-      observer.observe(ancestor, {
-        attributes: true,
-        attributeFilter: ['class', 'style', 'dir', 'data-carved-theme'],
-      });
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    media.addEventListener('change', update);
-    return () => {
-      observer.disconnect();
-      media.removeEventListener('change', update);
-    };
-  }, [theme, scope]);
-  return { ...theme.variables, ...overrides };
+function customProperties(style: CarvedStyle | undefined) {
+  if (!style) return undefined;
+  return Object.fromEntries(Object.entries(style).filter(([key]) => key.startsWith('--')));
+}
+
+type SurfaceElement =
+  'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main' | 'nav';
+
+export interface SurfaceProps extends Omit<ComponentPropsWithRef<'div'>, 'style'> {
+  /**
+   * How deep this surface is cut. Defaults to one level below the enclosing surface;
+   * levels saturate at 5.
+   */
+  depth?: Depth;
+  /** The element to render, for landmark and sectioning semantics. @default 'div' */
+  as?: SurfaceElement;
+  style?: CarvedStyle;
+}
+
+/** A recess cut into the material. Each nested surface sits one level deeper and darker. */
+export function Surface({
+  depth,
+  as: Element = 'div',
+  className,
+  children,
+  ...props
+}: SurfaceProps) {
+  const parent = useDepth();
+  if (depth !== undefined && !(Number.isInteger(depth) && depth >= 0 && depth <= 5))
+    throw new RangeError('Surface depth must be an integer from 0 through 5');
+  const level = depth ?? (Math.min(parent + 1, 5) as Depth);
+  return (
+    <DepthContext value={level}>
+      <Element
+        {...props}
+        className={cx('carved-surface carved-carve', className)}
+        data-carved-depth={level}
+      >
+        {children}
+      </Element>
+    </DepthContext>
+  );
+}
+
+/** A padded surface for grouping related content. Compose with the `Card*` parts. */
+export function Card({ className, ...props }: SurfaceProps) {
+  return <Surface {...props} className={cx('carved-card', className)} />;
 }

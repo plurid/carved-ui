@@ -7,15 +7,29 @@
  */
 
 /* A recess cut into the surface. Touch cuts deeper: hover doubles the shadow, press doubles
- * it again. A component can steer a nested carve by setting --carved-carve-k on an ancestor. */
+ * it again. Components tune a carve through its knobs, which every carve resets so nested
+ * carves never inherit them:
+ *   --carved-carve-scale  shadow length relative to the theme distance
+ *   --carved-carve-k      depth multiplier for interaction states
+ *   --carved-carve-shade  colour of the shadow
+ *   --carved-carve-lip    colour of the lit edge, and --carved-carve-lip-width its width
+ *   --carved-carve-ring   an extra shadow layer, such as a boundary */
 .carved-carve {
-  --_d: calc(var(--carved-shadow-distance) * var(--carved-carve-scale, 1));
-  --_k: calc(var(--_d) * var(--carved-carve-k, 1));
+  --carved-carve-scale: 1;
+  --carved-carve-k: 1;
+  --carved-carve-shade: var(--carved-shade);
+  --carved-carve-lip: var(--carved-lip);
+  --carved-carve-lip-width: 1px;
+  --carved-carve-ring: 0 0 #0000;
+  --_d: calc(var(--carved-shadow-distance) * var(--carved-carve-scale));
+  --_k: calc(var(--_d) * var(--carved-carve-k));
 
   box-shadow:
     inset calc(var(--carved-light-x) * var(--_k)) calc(var(--carved-light-y) * var(--_k))
-      calc(var(--_k) + var(--_d)) var(--carved-carve-shade, var(--carved-shade)),
-    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
+      calc(var(--_k) + var(--_d)) var(--carved-carve-shade),
+    inset calc(var(--carved-light-x) * var(--carved-carve-lip-width) * -1)
+      calc(var(--carved-light-y) * var(--carved-carve-lip-width) * -1) 0 var(--carved-carve-lip),
+    var(--carved-carve-ring);
   transition: box-shadow var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
@@ -65,33 +79,25 @@
   --carved-tone-ink: var(--carved-fg);
 }
 
-/* A loose piece standing proud of the cut: knobs and thumbs. Its lit edge catches the light. */
+/* The only thing that rises: a moving piece standing proud of its track, such as a switch
+ * knob or a slider thumb. Its lit edge catches the light. */
 .carved-raise {
-  --_d: calc(var(--carved-shadow-distance) * var(--carved-raise-scale, 0.5));
+  --_d: calc(var(--carved-shadow-distance) * 0.5);
 
   box-shadow:
     calc(var(--carved-light-x) * var(--_d)) calc(var(--carved-light-y) * var(--_d))
       calc(var(--_d) * 2) var(--carved-cast),
-    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
+    inset calc(var(--carved-light-x) * 1px) calc(var(--carved-light-y) * 1px) 0 var(--carved-lip);
 }
 
-/* A plate laid on top of the material: popovers, menus, dialogs, toasts. */
-.carved-float {
-  box-shadow:
-    0 0 0 1px var(--carved-hairline),
-    calc(var(--carved-light-x) * 2px) calc(var(--carved-light-y) * 2px) 6px -1px var(--carved-cast),
-    calc(var(--carved-light-x) * 16px) calc(var(--carved-light-y) * 16px) 40px -12px
-      var(--carved-cast),
-    inset calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-lip);
-}
-
-/* Letters cut into the surface: shadow on the wall facing away from the light, a lip on the
- * wall facing it. The ink keeps full text contrast. */
+/* Letters cut into the surface: shade on the wall facing away from the light, a lip on the
+ * wall facing it. The chisel scales with the type; the ink keeps full text contrast. */
 .carved-engrave {
   color: var(--carved-muted);
   text-shadow:
-    calc(var(--carved-light-x) * -1px) calc(var(--carved-light-y) * -1px) 0 var(--carved-shade),
-    calc(var(--carved-light-x) * 1px) calc(var(--carved-light-y) * 1px) 0 var(--carved-lip);
+    calc(var(--carved-light-x) * -0.035em) calc(var(--carved-light-y) * -0.035em) 0
+      var(--carved-shade-deep),
+    calc(var(--carved-light-x) * 0.02em) calc(var(--carved-light-y) * 0.02em) 0 var(--carved-lip);
 }
 
 /* A channel dividing two regions, after the original 15px rule. */
@@ -110,7 +116,6 @@
 @media (forced-colors: active) {
   .carved-carve,
   .carved-raise,
-  .carved-float,
   .carved-engrave {
     box-shadow: none;
     text-shadow: none;

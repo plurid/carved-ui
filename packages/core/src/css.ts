@@ -1,6 +1,7 @@
 import { foundation } from './tokens.js';
 import type { FoundationToken } from './tokens.js';
-import { DEPTHS, createTheme, presetNames, presets } from './theme.js';
+import { DEPTHS, createTheme } from './theme.js';
+import { presetNames, presets } from './tokens.js';
 import type { Theme } from './theme.js';
 
 function cssValue(token: FoundationToken): string {

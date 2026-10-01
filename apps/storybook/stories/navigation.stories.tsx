@@ -1,36 +1,42 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
   Accordion,
-  AccordionItem,
-  AccordionPanel,
-  Button,
-  Breadcrumbs,
   Breadcrumb,
-  Link,
-  Pagination,
-  PaginationLink,
+  Breadcrumbs,
+  Disclosure,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from '@plurid/carved-ui-react';
-const meta = { title: 'Navigation/Controls', tags: ['autodocs'] } satisfies Meta;
+
+const meta = {
+  title: 'Navigation/Tabs',
+  component: Tabs,
+  tags: ['autodocs'],
+  parameters: { layout: 'padded' },
+} satisfies Meta<typeof Tabs>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const TabControl: Story = {
+
+export const Default: Story = {
   render: () => (
     <Tabs>
       <TabList aria-label="Project">
         <Tab id="overview">Overview</Tab>
         <Tab id="activity">Activity</Tab>
-        <Tab id="settings" isDisabled>
-          Settings
+        <Tab id="settings">Settings</Tab>
+        <Tab id="billing" isDisabled>
+          Billing
         </Tab>
       </TabList>
-      <TabPanel id="overview">Project overview content.</TabPanel>
-      <TabPanel id="activity">Recent project activity.</TabPanel>
-      <TabPanel id="settings">Project settings.</TabPanel>
+      <TabPanels>
+        <TabPanel id="overview">Quarry was created in March and deploys from main.</TabPanel>
+        <TabPanel id="activity">Twelve deploys this week, none failed.</TabPanel>
+        <TabPanel id="settings">Settings live in the project&apos;s repository.</TabPanel>
+      </TabPanels>
     </Tabs>
   ),
   play: async ({ canvasElement }) => {
@@ -41,71 +47,65 @@ export const TabControl: Story = {
       'aria-selected',
       'true',
     );
-    await expect(canvas.getByRole('tabpanel')).toHaveTextContent('Recent project activity.');
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent('Twelve deploys');
   },
 };
-export const AccordionControl: Story = {
+
+export const Vertical: Story = {
   render: () => (
-    <Accordion className="lab-field">
-      <AccordionItem id="access">
-        <h3>
-          <Button slot="trigger" variant="ghost">
-            Who can access this project?
-          </Button>
-        </h3>
-        <AccordionPanel>Only the people you invite can access a private project.</AccordionPanel>
-      </AccordionItem>
-      <AccordionItem id="export">
-        <h3>
-          <Button slot="trigger" variant="ghost">
-            Can I export the project?
-          </Button>
-        </h3>
-        <AccordionPanel>You can export project data from settings.</AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+    <Tabs orientation="vertical">
+      <TabList aria-label="Settings">
+        <Tab id="general">General</Tab>
+        <Tab id="members">Members</Tab>
+        <Tab id="security">Security</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel id="general">Name, avatar and default branch.</TabPanel>
+        <TabPanel id="members">Invite people and set their roles.</TabPanel>
+        <TabPanel id="security">Keys, tokens and audit history.</TabPanel>
+      </TabPanels>
+    </Tabs>
+  ),
+};
+
+export const AccordionGroup: Story = {
+  render: () => (
+    <div className="lab-stack">
+      <Accordion defaultExpandedKeys={['shipping']}>
+        <Disclosure id="shipping" title="How are deploys triggered?">
+          <p>Every push to main deploys after the checks pass.</p>
+        </Disclosure>
+        <Disclosure id="rollback" title="Can I roll back?">
+          <p>Yes. Any previous deploy can be promoted again in one click.</p>
+        </Disclosure>
+        <Disclosure id="limits" title="Are there limits?" isDisabled>
+          <p>Not on the team plan.</p>
+        </Disclosure>
+      </Accordion>
+    </div>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const trigger = canvas.getByRole('button', { name: 'Who can access this project?' });
-    trigger.focus();
-    await userEvent.keyboard('{Enter}');
-    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    const rollback = canvas.getByRole('button', { name: 'Can I roll back?' });
+    await userEvent.click(rollback);
+    await expect(rollback).toHaveAttribute('aria-expanded', 'true');
     await expect(
-      canvas.getByText('Only the people you invite can access a private project.'),
-    ).toBeVisible();
+      canvas.getByRole('button', { name: 'How are deploys triggered?' }),
+    ).toHaveAttribute('aria-expanded', 'false');
   },
 };
-export const BreadcrumbControl: Story = {
+
+export const Trail: Story = {
   render: () => (
     <Breadcrumbs>
-      <Breadcrumb>
-        <Link href="#home">Home</Link>
-      </Breadcrumb>
-      <Breadcrumb>
-        <Link href="#projects">Projects</Link>
-      </Breadcrumb>
-      <Breadcrumb>
-        <Link>Carved UI</Link>
-      </Breadcrumb>
+      <Breadcrumb href="#workspace">Workspace</Breadcrumb>
+      <Breadcrumb href="#projects">Projects</Breadcrumb>
+      <Breadcrumb>Quarry</Breadcrumb>
     </Breadcrumbs>
   ),
-};
-export const PaginationControl: Story = {
-  render: () => (
-    <Pagination>
-      <PaginationLink href="?page=1" aria-label="Page 1">
-        1
-      </PaginationLink>
-      <PaginationLink href="?page=2" aria-label="Page 2" current>
-        2
-      </PaginationLink>
-      <PaginationLink href="?page=3" aria-label="Page 3">
-        3
-      </PaginationLink>
-      <PaginationLink href="?page=3" aria-label="Next page">
-        Next
-      </PaginationLink>
-    </Pagination>
-  ),
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByText('Quarry').closest('[aria-current]'),
+    ).toHaveAttribute('aria-current', 'page');
+  },
 };

@@ -1,0 +1,191 @@
+/* Tabs run in a carved channel with the chosen tab inlaid; disclosures fold under headings. */
+
+.carved-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+}
+
+.carved-tabs[data-orientation='vertical'] {
+  flex-direction: row;
+}
+
+.carved-tab-list {
+  --carved-carve-scale: 0.6;
+
+  display: flex;
+  gap: var(--carved-space-1);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding: var(--carved-space-1);
+  overflow-x: auto;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+  scrollbar-width: none;
+}
+
+.carved-tab-list[data-orientation='vertical'] {
+  flex-direction: column;
+  align-self: flex-start;
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-1));
+}
+
+.carved-tab {
+  position: relative;
+  isolation: isolate;
+  padding: 0.5rem 1rem;
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  color: var(--carved-cut-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: var(--carved-radius-pill);
+  outline: none;
+  transition: color var(--carved-motion-duration);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-tab-list[data-orientation='vertical'] .carved-tab {
+  border-radius: var(--carved-radius-control);
+}
+
+.carved-tab[data-hovered] {
+  color: var(--carved-cut-fg);
+}
+
+.carved-tab[data-selected] {
+  color: var(--carved-on-accent);
+}
+
+.carved-tab[data-disabled] {
+  color: var(--carved-cut-muted);
+  opacity: 0.55;
+}
+
+.carved-tab[data-focus-visible] {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: 2px;
+}
+
+.carved-tab-indicator {
+  --carved-carve-scale: 0.4;
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--carved-accent);
+  border-radius: inherit;
+  transition-timing-function: var(--carved-motion-easing);
+  transition-duration: calc(var(--carved-motion-duration) * 1.5);
+  transition-property: translate, inline-size, block-size;
+}
+
+.carved-tab-panels {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.carved-tab-panel {
+  border-radius: var(--carved-radius-surface);
+}
+
+/* Accordion and disclosure */
+.carved-accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.carved-disclosure {
+  border-block-end: 1px solid var(--carved-hairline);
+}
+
+.carved-accordion > .carved-disclosure:first-child {
+  border-block-start: 1px solid var(--carved-hairline);
+}
+
+.carved-disclosure-heading {
+  margin: 0;
+  font-size: inherit;
+}
+
+.carved-disclosure-trigger {
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  padding: 0.875rem 0.25rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--carved-fg);
+  text-align: start;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: calc(var(--carved-radius-control) - 4px);
+}
+
+.carved-disclosure-chevron {
+  flex: none;
+  color: var(--carved-muted);
+  transition: rotate var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-disclosure-trigger[data-hovered] .carved-disclosure-chevron {
+  color: var(--carved-fg);
+}
+
+.carved-disclosure[data-expanded] .carved-disclosure-chevron {
+  rotate: 180deg;
+}
+
+.carved-disclosure-panel {
+  color: var(--carved-muted);
+}
+
+.carved-disclosure-panel > :first-child {
+  padding: 0 0.25rem var(--carved-space-4);
+}
+
+.carved-disclosure[data-disabled] .carved-disclosure-trigger {
+  color: var(--carved-muted);
+  cursor: not-allowed;
+}
+
+/* Breadcrumbs */
+.carved-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-2);
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  list-style: none;
+}
+
+.carved-breadcrumb {
+  display: flex;
+  gap: var(--carved-space-2);
+  align-items: center;
+}
+
+.carved-breadcrumb-separator {
+  color: var(--carved-muted);
+}
+
+@media (forced-colors: active) {
+  .carved-tab-list {
+    border: 1px solid ButtonText;
+  }
+
+  .carved-tab[data-selected] {
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  .carved-tab-indicator {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+}

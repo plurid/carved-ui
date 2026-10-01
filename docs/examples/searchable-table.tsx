@@ -1,69 +1,70 @@
 'use client';
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import {
-  TextField,
-  Label,
-  Input,
-  FieldDescription,
-  Table,
-  TableCaption,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableHeader,
-  TableCell,
-  EmptyState,
   Badge,
+  SearchField,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@plurid/carved-ui-react';
-export interface ProjectRow {
+import { EmptyState } from './empty-state';
+
+export interface Project {
   id: string;
   name: string;
-  status: 'Active' | 'Archived';
+  owner: string;
+  status: 'Live' | 'Paused' | 'Failed';
 }
 
-/** A small native table. Pagination, sorting and server queries belong to the app. */
-export function SearchableTable({ rows }: { rows: ProjectRow[] }) {
+const tones = { Live: 'success', Paused: 'neutral', Failed: 'danger' } as const;
+
+/** A native table filtered by a search field. Sorting and server queries belong to the app. */
+export function SearchableTable({ projects }: { projects: Project[] }) {
   const [query, setQuery] = useState('');
-  const results = rows.filter((row) =>
-    row.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+  const needle = query.trim().toLocaleLowerCase();
+  const results = projects.filter((project) =>
+    `${project.name} ${project.owner}`.toLocaleLowerCase().includes(needle),
   );
-  const description = useId();
   return (
-    <div className="lab-stack">
-      <TextField value={query} onChange={setQuery} className="lab-field">
-        <Label>Search projects</Label>
-        <Input type="search" aria-describedby={description} />
-        <FieldDescription id={description}>Search by project name.</FieldDescription>
-      </TextField>
-      <p role="status">
-        {results.length} {results.length === 1 ? 'project' : 'projects'}
+    <div className="recipe-stack">
+      <SearchField
+        label="Search projects"
+        description="Matches project names and owners."
+        value={query}
+        onChange={setQuery}
+        className="recipe-search"
+      />
+      <p role="status" className="recipe-status">
+        {results.length} of {projects.length} projects
       </p>
-      {results.length ? (
-        <div className="lab-table-scroll">
-          <Table>
-            <TableCaption>Projects</TableCaption>
-            <TableHead>
-              <TableRow>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Status</TableHeader>
+      {results.length > 0 ? (
+        <Table>
+          <TableCaption>Projects</TableCaption>
+          <TableHead>
+            <TableRow>
+              <TableHeader>Name</TableHeader>
+              <TableHeader>Owner</TableHeader>
+              <TableHeader>Status</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {results.map((project) => (
+              <TableRow key={project.id}>
+                <TableHeader scope="row">{project.name}</TableHeader>
+                <TableCell>{project.owner}</TableCell>
+                <TableCell>
+                  <Badge tone={tones[project.status]}>{project.status}</Badge>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {results.map((row) => (
-                <TableRow key={row.id}>
-                  <TableHeader scope="row">{row.name}</TableHeader>
-                  <TableCell>
-                    <Badge>{row.status}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       ) : (
-        <EmptyState title="No matching projects">
-          <p>Try a different project name.</p>
-        </EmptyState>
+        <EmptyState title="No matching projects">Try a shorter or different search.</EmptyState>
       )}
     </div>
   );

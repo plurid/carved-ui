@@ -8,5 +8,6 @@ export default {
     'rule-empty-line-before': null,
     'at-rule-empty-line-before': null,
     'alpha-value-notation': 'number',
+    'import-notation': 'string',
   },
 };

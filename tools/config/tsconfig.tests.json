@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declaration": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
+    "paths": {
+      "@plurid/carved-ui-core": ["../../packages/core/src/index.ts"],
+      "@plurid/carved-ui-react": ["../../packages/react/src/index.ts"]
+    }
+  },
+  "include": ["../**/*.ts", "../../packages/*/src/**/*.test.ts"],
+  "exclude": ["../fixtures/**", "../vite/generated/**"]
+}

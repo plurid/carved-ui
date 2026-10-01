@@ -1,0 +1,76 @@
+/* Layout for the recipes. It belongs to your application: copy it, then make it yours. */
+.recipe-form,
+.recipe-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-5);
+  max-inline-size: 36rem;
+}
+
+.recipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-4);
+  align-items: center;
+}
+
+.recipe-status {
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.recipe-search {
+  max-inline-size: 22rem;
+}
+
+.recipe-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  align-items: center;
+  padding: var(--carved-space-7) var(--carved-space-5);
+  text-align: center;
+}
+
+.recipe-empty p {
+  margin: 0 0 var(--carved-space-2);
+  color: var(--carved-muted);
+}
+
+.recipe-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-1);
+  align-items: center;
+}
+
+.recipe-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-5);
+  max-inline-size: 64rem;
+}
+
+.recipe-shell-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recipe-brand {
+  font-size: 2rem;
+}
+
+.recipe-shell-nav {
+  display: flex;
+  gap: var(--carved-space-1);
+}
+
+.recipe-shell-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+}

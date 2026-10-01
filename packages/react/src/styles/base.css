@@ -1,0 +1,73 @@
+/* The themed scope, focus, selection and the behaviour shared by every component. */
+
+.carved-provider {
+  color: var(--carved-fg);
+  background-color: var(--carved-bg);
+  color-scheme: var(--carved-color-scheme);
+  accent-color: var(--carved-accent);
+  font-family: var(--carved-font-body);
+  font-size: var(--carved-text-md);
+  line-height: 1.5;
+  text-rendering: optimizelegibility;
+}
+
+.carved-portal-host {
+  display: contents;
+}
+
+:where(.carved-provider, .carved-portal-host) ::selection {
+  color: var(--carved-on-accent);
+  background-color: var(--carved-accent);
+}
+
+:where([class*='carved-'], [class*='carved-'] *),
+:where([class*='carved-'], [class*='carved-'] *)::before,
+:where([class*='carved-'], [class*='carved-'] *)::after {
+  box-sizing: border-box;
+}
+
+/* One focus ring for everything, drawn in the accent ink so it reads on every depth. */
+:where([class*='carved-'])[data-focus-visible],
+:where([class*='carved-']):where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: 2px;
+}
+
+:where([class*='carved-'])[data-disabled] {
+  cursor: not-allowed;
+}
+
+.carved-icon-flip:dir(rtl) {
+  transform: scaleX(-1);
+}
+
+/* A surface: a recess one level deeper than its parent. */
+.carved-surface {
+  color: var(--carved-fg);
+  background-color: var(--carved-bg);
+  border-radius: var(--carved-radius-surface);
+}
+
+.carved-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+  padding: var(--carved-space-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([class*='carved-']),
+  :where([class*='carved-'])::before,
+  :where([class*='carved-'])::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .carved-surface,
+  .carved-card {
+    border: 1px solid CanvasText;
+  }
+}

@@ -4,12 +4,18 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "declaration": false,
-    "noEmit": true
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@plurid/carved-ui-core": ["../../packages/core/src/index.ts"],
+      "@plurid/carved-ui-react": ["../../packages/react/src/index.ts"]
+    }
   },
   "include": [
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     "stories/**/*.tsx",
+    "stories/**/*.mdx",
     "vitest.config.ts",
     "../../docs/examples/**/*.tsx"
   ]

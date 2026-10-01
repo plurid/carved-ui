@@ -1,52 +1,61 @@
-# Migrate to v1
+# Migrating from 0.x
 
-Version 1 is a breaking redesign. The React package remains `@plurid/carved-ui-react`; shared tokens and theme generation move to `@plurid/carved-ui-core`. Use React 19, an ESM build, and import `@plurid/carved-ui-react/styles.css` once. Existing applications should migrate on a branch rather than updating the dependency without changing call sites.
+Version 1 is a rewrite. The material is the same idea, carved surfaces darkening with depth, but every component has a new API built on React 19 and React Aria. The package name stays `@plurid/carved-ui-react`; `styled-components` and `styled-theming` are gone.
 
-| Original pattern                           | v1 replacement                                                    |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| CarvedButton / CarvedClick (clickable div) | `Button onPress` or `Link href` with native semantics             |
-| CarvedInput with internal label props      | `TextField` + `Label` + `Input` + description/error parts         |
-| CarvedSelect                               | `Select` + `Label` + `Button`/`SelectValue` + `Popover`/`ListBox` |
-| CarvedToggle                               | `Switch` with `isSelected` / `defaultSelected`                    |
-| CarvedCheck / radio controls               | `Checkbox` / `RadioGroup` + `Radio`                               |
-| CarvedSlider                               | `Slider` + `Label` + `SliderOutput` + track/thumbs                |
-| CarvedMenu                                 | `MenuTrigger` + `Button` + `Popover` + `Menu`/`MenuItem`          |
-| Layers/strata/plates/tiles and aliases     | `Surface` or `Card`; context determines nested depth              |
-| CarvedH1–H6                                | `Heading level={1..6}` or native headings                         |
-| Component constructor theme props          | `CarvedProvider theme={presetOrTheme}`; semantic CSS variables    |
-| Runtime theme injected into document       | Pure `createTheme` map applied to a scoped provider               |
-| Lerna/Rollup/CRA scripts                   | Root pnpm commands and Storybook/Vite                             |
-
-Theme presets preserve the names, with updated OKLCH ramps and contrast-aware semantic variables. `createTheme` accepts `{ color, depthDifference?, shadowAngle?, shadowDistance? }`, validates tuning ranges and opaque colors, and returns immutable variables. No geological aliases, display-name coupling or legacy compatibility wrappers are retained.
+## Setup
 
 ```tsx
-import {
-  CarvedProvider,
-  TextField,
-  Label,
-  Input,
-  FieldDescription,
-  Button,
-} from '@plurid/carved-ui-react';
-import { createTheme } from '@plurid/carved-ui-core';
+// 0.x
+import { CarvedApp } from '@plurid/carved-ui-react';
+
+<CarvedApp theme="ponton" depthDifference="0.3">
+  …
+</CarvedApp>;
+
+// 1.0
+import { CarvedProvider } from '@plurid/carved-ui-react';
 import '@plurid/carved-ui-react/styles.css';
 
-const theme = createTheme({ color: '#284c42' });
-
-<CarvedProvider theme={theme}>
-  <TextField name="project" defaultValue="Carved UI">
-    <Label>Project name</Label>
-    <Input />
-    <FieldDescription>Shown to your team.</FieldDescription>
-  </TextField>
-  <Button variant="primary" onPress={() => {}}>
-    Save changes
-  </Button>
-</CarvedProvider>;
+<CarvedProvider theme="ponton">…</CarvedProvider>;
 ```
 
-Put field values and defaults on `TextField`, not its inner Input. Stateful React Aria controls use `isDisabled`, `isRequired`, `isReadOnly`, `selectedKey`, `isSelected` and their corresponding default/change props. Native static elements retain HTML attributes. Use React 19 `ref` props directly.
+- `CarvedApp` painted `html` and `body`. `CarvedProvider` themes only its own element, so providers can nest.
+- Theme options moved to `createTheme` in `@plurid/carved-ui-core`, and they are numbers now: `createTheme({ color, depthDifference: 0.06, shadowAngle: 90, shadowDistance: 5 })`. A color string passed as `theme` becomes `theme={createTheme({ color })}`.
+- `depthDifference` is now a step in OKLCH lightness (0–0.12) rather than a ratio, and `lightnessInversionLimit`, `lightnessInversionLow` and `lightnessInversionHigh` are gone: text colour is chosen for contrast automatically.
+- `autoDepth` is always on. Depth comes from React context rather than cloning children, so it passes through any wrapper.
 
-In Next.js, import CSS in the root layout. Components with interaction belong in a client module, while `Heading`, table parts and other static exports can render from a server component. Theme generation can run on the server and pass its serializable result to a provider.
+## Components
 
-The old HTML, Vue and CRA design app live under `legacy/` for reference only. Their manifests are excluded from the workspace and CI; they have no active release or support promise. The original React implementation remains available in Git history.
+| 0.x                                                                          | 1.0                                                                      |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `CarvedApp`                                                                  | `CarvedProvider`                                                         |
+| `CarvedStratum`                                                              | `Surface`, or the `carved-carve` class                                   |
+| `CarvedSection` (`CarvedKarst`), `CarvedTile` (`CarvedDoline`), `CarvedCard` | `Surface` or `Card`                                                      |
+| `CarvedContainer` (`CarvedPolje`), `CarvedRow` (`CarvedFjord`)               | Your own layout CSS                                                      |
+| `CarvedButton`                                                               | `Button`                                                                 |
+| `CarvedButton kind="accept"`                                                 | `Button` (the accent inlay)                                              |
+| `CarvedButton kind="hazard"`                                                 | `Button variant="danger"`                                                |
+| `CarvedButton kind="decline"`                                                | `Button variant="secondary"`                                             |
+| `CarvedButton kind="warning"`                                                | `Button`, with the warning stated in an `Alert tone="warning"`           |
+| `kind="…Themed"`                                                             | `createTheme({ color, tones: 'themed' })`                                |
+| `CarvedInput`                                                                | `TextField`                                                              |
+| `CarvedSelector`                                                             | `Select`                                                                 |
+| `CarvedHR`                                                                   | `Separator variant="trench"`                                             |
+| `CarvedH1` … `CarvedH6`                                                      | `Heading level={1…6}`; `variant="engraved"` for the carved display style |
+| `CarvedMenuBar`, `CarvedMenuItems`, `CarvedMenuList`                         | Your own navigation with `Link`, or `Tabs`                               |
+| `CarvedMenuItem` with `expand`                                               | `MenuTrigger` and `Menu`                                                 |
+| `CarvedMenuItem` with `tooltip`                                              | `TooltipTrigger` and `Tooltip`                                           |
+| `CarvedMenuItem decarved`                                                    | No equivalent: only moving pieces rise in 1.0                            |
+| `CarvedDots`                                                                 | `IconButton` with your own icon                                          |
+
+## Props
+
+- Event handlers follow React Aria: `onPress` instead of `onClick`, `onChange(value)` with the value instead of the event, `isDisabled` instead of `disabled`.
+- `text` props are gone: pass children. `CarvedButton text="Save"` becomes `<Button>Save</Button>`.
+- `stratum` (inline styles) becomes `style` or `className`.
+- `CarvedInput`'s `label` and `placeholder` keep their names on `TextField`.
+- `CarvedSelector`'s `selectors` become `SelectItem` children, `initial` becomes `defaultValue`, and the current value is read with `value` and `onChange`.
+
+## Styling
+
+Styles are plain CSS in cascade layers, driven by `--carved-*` custom properties. Override a token on any element, or write CSS outside a layer, which always wins. There is no CSS-in-JS runtime, so components render on the server.

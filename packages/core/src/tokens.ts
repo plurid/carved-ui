@@ -93,6 +93,9 @@ export const themeDefaults = {
   shadowDistance: 5,
 } as const;
 
+export type Tone = keyof ToneSeeds;
+export const tones = Object.freeze(['accent', 'success', 'warning', 'danger'] as const);
+
 /**
  * The seven original themes. Bases are the 2019 HSL values; accents are curated so each
  * inlay reads as part of its material.
@@ -106,3 +109,9 @@ export const presetOptions = {
   jaune: { color: 'hsl(35 90% 45%)', tones: { accent: 'hsl(225 70% 22%)' } },
   furor: { color: 'hsl(360 90% 30%)', tones: { accent: 'hsl(40 85% 72%)' } },
 } as const satisfies Record<string, { color: string; tones?: Partial<ToneSeeds> }>;
+
+export type ThemePreset = keyof typeof presetOptions;
+/** The preset themes' options, ready for `createTheme`. Import them without the colour engine. */
+export const presets: Readonly<Record<ThemePreset, { color: string; tones?: Partial<ToneSeeds> }>> =
+  Object.freeze(presetOptions);
+export const presetNames = Object.freeze(Object.keys(presetOptions) as ThemePreset[]);

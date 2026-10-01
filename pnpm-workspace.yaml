@@ -2,6 +2,7 @@ packages:
   - packages/core
   - packages/react
   - apps/storybook
+  - apps/site
 
 minimumReleaseAge: 1440
 

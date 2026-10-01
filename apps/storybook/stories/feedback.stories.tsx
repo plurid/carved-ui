@@ -1,105 +1,144 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import {
   Alert,
-  Progress,
-  Label,
-  Spinner,
-  Skeleton,
-  EmptyState,
   Button,
+  ProgressBar,
+  Skeleton,
+  Spinner,
   ToastQueue,
   ToastRegion,
-  Toast,
-  ToastContent,
-  Text,
 } from '@plurid/carved-ui-react';
-const meta = { title: 'Feedback/States', tags: ['autodocs'] } satisfies Meta;
+
+const meta = {
+  title: 'Feedback/Alert',
+  component: Alert,
+  tags: ['autodocs'],
+  parameters: { layout: 'padded' },
+} satisfies Meta<typeof Alert>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Alerts: Story = {
+
+export const Tones: Story = {
   render: () => (
-    <div className="lab-stack lab-field">
-      <Alert>Your project has been saved.</Alert>
-      <Alert tone="success">All changes are synced.</Alert>
-      <Alert tone="warning">Some changes have not synced yet.</Alert>
-      <Alert tone="danger">The project could not be saved. Try again.</Alert>
-    </div>
-  ),
-};
-export const ProgressControl: Story = {
-  render: () => (
-    <div className="lab-stack lab-field">
-      <Progress value={65}>
-        <Label>Upload progress</Label>
-      </Progress>
-      <Progress isIndeterminate aria-label="Preparing files" />
-      <Progress value={100} aria-label="Upload complete" />
-    </div>
-  ),
-};
-export const SpinnerControl: Story = {
-  render: () => (
-    <div className="lab-row">
-      <Spinner />
-      <span>Loading projects…</span>
-    </div>
-  ),
-};
-export const SkeletonControl: Story = {
-  render: () => (
-    <div className="lab-stack lab-field" role="status" aria-label="Loading project details">
-      <Skeleton style={{ width: '60%', height: '1.5rem' }} />
-      <Skeleton />
-      <Skeleton style={{ width: '80%' }} />
-    </div>
-  ),
-};
-export const EmptyStateControl: Story = {
-  render: () => (
-    <EmptyState title="No projects yet" action={<Button>Create a project</Button>}>
-      <p>Create your first project to start working with your team.</p>
-    </EmptyState>
-  ),
-};
-function ToastExample() {
-  const [queue] = useState(
-    () => new ToastQueue<{ title: string; description: string }>({ maxVisibleToasts: 3 }),
-  );
-  return (
-    <>
-      <Button
-        onPress={() =>
-          queue.add({ title: 'Changes saved', description: 'Your project is up to date.' })
+    <div className="lab-stack">
+      <Alert title="Heads up">Maintenance starts at 02:00 UTC.</Alert>
+      <Alert tone="accent" title="New">
+        Projects can now be grouped into folders.
+      </Alert>
+      <Alert tone="success" title="Deployed">
+        Version 1.4 is live in every region.
+      </Alert>
+      <Alert tone="warning" title="Quota at 80%">
+        Storage will fill in about nine days.
+      </Alert>
+      <Alert
+        tone="danger"
+        title="Deploy failed"
+        action={
+          <Button size="sm" variant="secondary">
+            Retry
+          </Button>
         }
       >
-        Save project
-      </Button>
-      <ToastRegion queue={queue}>
-        {({ toast }) => (
-          <Toast toast={toast}>
-            <ToastContent>
-              <Text slot="title">{toast.content.title}</Text>
-              <Text slot="description">{toast.content.description}</Text>
-            </ToastContent>
-            <Button slot="close" variant="ghost" aria-label="Dismiss notification">
-              Dismiss
-            </Button>
-          </Toast>
+        The build step exited with code 1.
+      </Alert>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // Alerts present on load are not live regions.
+    await expect(within(canvasElement).queryByRole('alert')).toBeNull();
+  },
+};
+
+export const Announced: Story = {
+  render: () => {
+    const [failed, setFailed] = useState(false);
+    return (
+      <div className="lab-stack">
+        <Button onPress={() => setFailed(true)}>Deploy</Button>
+        {failed && (
+          <Alert tone="danger" live="assertive" title="Deploy failed">
+            The build step exited with code 1.
+          </Alert>
         )}
-      </ToastRegion>
-    </>
-  );
-}
-export const ToastControl: Story = {
-  render: () => <ToastExample />,
+      </div>
+    );
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Deploy' }));
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Deploy failed');
+  },
+};
+
+export const Progress: Story = {
+  render: () => (
+    <div className="lab-stack lab-narrow">
+      <ProgressBar label="Uploading" value={64} />
+      <ProgressBar label="Preparing" />
+      <div className="lab-row">
+        <Spinner size="sm" />
+        <Spinner />
+        <Spinner size="lg" aria-label="Loading projects" />
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('progressbar', { name: 'Uploading' })).toHaveAttribute(
+      'aria-valuenow',
+      '64',
+    );
+    await expect(canvas.getByRole('progressbar', { name: 'Loading projects' })).toBeVisible();
+  },
+};
+
+export const Placeholders: Story = {
+  render: () => (
+    <div className="lab-stack lab-narrow">
+      <Skeleton style={{ blockSize: '1.5rem', inlineSize: '60%' }} />
+      <Skeleton />
+      <Skeleton style={{ inlineSize: '80%' }} />
+    </div>
+  ),
+};
+
+const toasts = new ToastQueue({ maxVisibleToasts: 3 });
+
+export const Toasts: Story = {
+  render: () => (
+    <div className="lab-row">
+      <Button
+        variant="secondary"
+        onPress={() => toasts.add({ title: 'Project saved', tone: 'success' }, { timeout: 5000 })}
+      >
+        Save
+      </Button>
+      <Button
+        variant="secondary"
+        onPress={() =>
+          toasts.add({
+            title: 'Project archived',
+            description: 'It is hidden from the list.',
+            action: {
+              label: 'Undo',
+              onAction: () => toasts.add({ title: 'Restored' }, { timeout: 3000 }),
+            },
+          })
+        }
+      >
+        Archive
+      </Button>
+      <ToastRegion queue={toasts} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Save' }));
     const page = within(canvasElement.ownerDocument.body);
-    await userEvent.click(canvas.getByRole('button', { name: 'Save project' }));
-    await expect(await page.findByText('Changes saved')).toBeVisible();
-    await userEvent.click(page.getByRole('button', { name: 'Dismiss notification' }));
-    await expect(page.queryByText('Changes saved')).not.toBeInTheDocument();
+    await waitFor(() => expect(page.getByText('Project saved')).toBeVisible());
+    await userEvent.click(page.getByRole('button', { name: 'Dismiss' }));
+    await waitFor(() => expect(page.queryByText('Project saved')).toBeNull());
   },
 };

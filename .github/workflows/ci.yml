@@ -7,16 +7,17 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: verify-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+env:
+  CI: 'true'
+  NEXT_TELEMETRY_DISABLED: '1'
+  STORYBOOK_DISABLE_TELEMETRY: '1'
 jobs:
-  check:
-    runs-on: macos-15
-    timeout-minutes: 25
-    env:
-      CI: 'true'
-      NEXT_TELEMETRY_DISABLED: '1'
-      STORYBOOK_DISABLE_TELEMETRY: '1'
+  verify:
+    name: Lint, types, tests and packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
@@ -27,8 +28,15 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install chromium firefox webkit
-      - run: pnpm check
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm test:stories
+      - run: pnpm test:browser
+      - run: pnpm verify:packages
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -37,7 +45,28 @@ jobs:
             tools/tests/test-results
             tools/tests/playwright-report
           if-no-files-found: ignore
-      - uses: actions/upload-artifact@v4
+
+  visual:
+    name: Visual snapshots
+    # Baselines are rendered on macOS; font rendering differs between platforms.
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
         with:
-          name: component-laboratory
-          path: apps/storybook/dist
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install chromium
+      - run: pnpm build:packages && pnpm --filter @carved/storybook build && pnpm --filter @carved/site build
+      - run: pnpm test:visual --project chromium
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-differences
+          path: tools/tests/test-results
+          if-no-files-found: ignore

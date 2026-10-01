@@ -1,0 +1,186 @@
+/* Lists of options and actions: list boxes, selects, combo boxes and menus. */
+
+.carved-listbox,
+.carved-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-block-size: inherit;
+  padding: var(--carved-space-1);
+  overflow: auto;
+  outline: none;
+  scrollbar-color: var(--carved-edge) transparent;
+}
+
+.carved-listbox[data-empty]::after {
+  display: block;
+  padding: var(--carved-space-3);
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+  content: 'No results';
+}
+
+.carved-item {
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  min-block-size: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--carved-fg);
+  cursor: default;
+  border-radius: calc(var(--carved-radius-control) - 3px);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-item-label {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.carved-item[data-focused] {
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+}
+
+.carved-item[data-pressed],
+.carved-item[data-open] {
+  color: var(--carved-on-accent);
+  background-color: var(--carved-accent);
+}
+
+.carved-item[data-focus-visible] {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: -2px;
+}
+
+.carved-item[data-disabled] {
+  color: var(--carved-muted);
+  opacity: 0.6;
+}
+
+.carved-item-check,
+.carved-item-indicator,
+.carved-item-chevron {
+  flex: none;
+  color: var(--carved-accent-ink);
+}
+
+.carved-item[data-pressed] :is(.carved-item-check, .carved-item-indicator, .carved-item-chevron) {
+  color: inherit;
+}
+
+.carved-item-indicator {
+  display: grid;
+  place-items: center;
+  inline-size: 1rem;
+}
+
+.carved-item-shortcut {
+  font-family: inherit;
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+  letter-spacing: 0.04em;
+}
+
+.carved-section:not(:first-child) {
+  padding-block-start: var(--carved-space-2);
+  margin-block-start: var(--carved-space-1);
+  border-block-start: 1px solid var(--carved-hairline);
+}
+
+.carved-section-title {
+  padding: var(--carved-space-2) 0.75rem var(--carved-space-1);
+  font-size: var(--carved-text-xs);
+  font-weight: 700;
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.carved-menu-separator {
+  block-size: 1px;
+  margin: var(--carved-space-1) var(--carved-space-2);
+  background-color: var(--carved-hairline);
+  border: 0;
+}
+
+/* Select: the trigger is a well like any other field. */
+.carved-select-trigger {
+  --carved-carve-scale: 0.7;
+  --carved-carve-lip: var(--carved-edge);
+
+  display: flex;
+  gap: var(--carved-space-2);
+  align-items: center;
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: 0.625rem 0.75rem 0.625rem 0.875rem;
+  font: inherit;
+  color: var(--carved-cut-fg);
+  text-align: start;
+  cursor: pointer;
+  background-color: var(--carved-cut);
+  border: 0;
+  border-radius: var(--carved-radius-control);
+  outline: none;
+}
+
+.carved-select-trigger[data-focus-visible],
+.carved-select[data-open] .carved-select-trigger {
+  --carved-carve-k: 1.5;
+  --carved-carve-lip: var(--carved-focus);
+  --carved-carve-lip-width: 2px;
+}
+
+.carved-select[data-invalid] .carved-select-trigger {
+  --carved-carve-lip: var(--carved-danger-ink);
+  --carved-carve-lip-width: 2px;
+}
+
+.carved-select[data-disabled] .carved-select-trigger {
+  opacity: 0.55;
+}
+
+.carved-select-value {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carved-select-value[data-placeholder] {
+  color: var(--carved-cut-muted);
+}
+
+.carved-select-chevron {
+  flex: none;
+  color: var(--carved-cut-muted);
+  transition: rotate var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-select[data-open] .carved-select-chevron {
+  rotate: 180deg;
+}
+
+.carved-popover.carved-listbox-popover {
+  inline-size: var(--trigger-width);
+  max-inline-size: none;
+}
+
+.carved-popover.carved-menu-popover {
+  min-inline-size: 12rem;
+}
+
+@media (forced-colors: active) {
+  .carved-item:is([data-focused], [data-pressed], [data-open]) {
+    color: HighlightText;
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .carved-select-trigger {
+    border: 1px solid ButtonText;
+  }
+}

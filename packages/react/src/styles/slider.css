@@ -1,0 +1,97 @@
+/* A carved groove, an inlaid fill, and raised thumbs. */
+
+.carved-slider {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: var(--carved-space-2);
+  align-items: baseline;
+  inline-size: 100%;
+}
+
+.carved-slider-output {
+  grid-column: 2;
+  font-size: var(--carved-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--carved-muted);
+}
+
+.carved-slider-track {
+  --carved-carve-scale: 0.3;
+  --carved-carve-ring: inset 0 0 0 1px var(--carved-edge);
+
+  position: relative;
+  grid-column: 1 / -1;
+  block-size: 0.5rem;
+  margin-block: 0.625rem;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-slider-fill {
+  position: absolute;
+  inset-block: 0;
+  background-color: var(--carved-accent);
+  border-radius: inherit;
+}
+
+.carved-slider-thumb {
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  inset-block-start: 50%;
+  background-color: var(--carved-fg);
+  border: 4px solid var(--carved-accent);
+  border-radius: 50%;
+  transition: scale var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-slider-thumb:is([data-hovered], [data-dragging]) {
+  scale: 1.1;
+}
+
+.carved-slider[data-orientation='vertical'] {
+  grid-template-columns: auto;
+  justify-items: center;
+  inline-size: auto;
+  block-size: 12rem;
+}
+
+.carved-slider[data-orientation='vertical'] .carved-slider-output {
+  grid-column: 1;
+}
+
+.carved-slider[data-orientation='vertical'] .carved-slider-track {
+  grid-column: 1;
+  inline-size: 0.5rem;
+  block-size: 100%;
+  margin: 0 0.625rem;
+}
+
+.carved-slider[data-orientation='vertical'] .carved-slider-fill {
+  inset-inline: 0;
+}
+
+.carved-slider[data-orientation='vertical'] .carved-slider-thumb {
+  /* React Aria centres thumbs with a physical translate, so position them physically too. */
+  left: 50%;
+}
+
+.carved-slider[data-disabled] .carved-slider-track {
+  opacity: 0.55;
+}
+
+@media (forced-colors: active) {
+  .carved-slider-track {
+    border: 1px solid ButtonText;
+  }
+
+  .carved-slider-fill {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .carved-slider-thumb {
+    background-color: ButtonText;
+    border-color: Highlight;
+    forced-color-adjust: none;
+  }
+}

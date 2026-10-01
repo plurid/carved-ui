@@ -1,11 +1,22 @@
-import { bundle } from 'lightningcss';
+// Bundle the React stylesheet, resolving the core stylesheet through its package export.
 import { writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-const result = bundle({
-  filename: fileURLToPath(new URL('../../packages/react/src/styles.css', import.meta.url)),
-  minify: true,
-  targets: { chrome: 120 << 16, firefox: 121 << 16, safari: (17 << 16) | (2 << 8) },
-});
-await writeFile(new URL('../../packages/react/dist/styles.css', import.meta.url), result.code);
+import { bundleAsync } from 'lightningcss';
+import { targets } from './targets.mjs';
 
-await writeFile(new URL('../../packages/react/dist/styles.d.ts', import.meta.url), 'export {};\n');
+const react = new URL('../../packages/react/', import.meta.url);
+const require = createRequire(new URL('package.json', react));
+const { code } = await bundleAsync({
+  filename: fileURLToPath(new URL('src/styles/index.css', react)),
+  minify: true,
+  targets,
+  resolver: {
+    resolve: (specifier, from) =>
+      specifier.startsWith('.')
+        ? fileURLToPath(new URL(specifier, `file://${from}`))
+        : require.resolve(specifier),
+  },
+});
+await writeFile(new URL('dist/styles.css', react), code);
+await writeFile(new URL('dist/styles.d.ts', react), 'export {};\n');

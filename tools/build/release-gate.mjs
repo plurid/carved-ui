@@ -1,15 +1,16 @@
+// Refuse to publish anything but a `next` prerelease from the preview workflow.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-for (const packageName of ['core', 'react']) {
+
+for (const name of ['core', 'react']) {
   const manifest = JSON.parse(
-    await readFile(new URL(`../../packages/${packageName}/package.json`, import.meta.url), 'utf8'),
+    await readFile(new URL(`../../packages/${name}/package.json`, import.meta.url), 'utf8'),
   );
   assert.match(
     manifest.version,
     /^1\.\d+\.\d+-next\.\d+$/,
-    'Preview workflow only publishes next prereleases',
+    `${manifest.name} must be a next prerelease`,
   );
-  assert.equal(manifest.publishConfig.tag, 'next');
+  assert.equal(manifest.publishConfig.tag, 'next', `${manifest.name} must publish to the next tag`);
 }
-assert(process.env.NODE_AUTH_TOKEN, 'Configure the npm environment NPM_TOKEN before publishing');
-console.log('Preview release gate passed');
+console.log('Release gate passed: both packages are next prereleases.');

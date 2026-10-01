@@ -1,0 +1,13 @@
+/* Carved for React: core tokens and material, then every component in its own layer. */
+@layer carved.tokens, carved.material, carved.components;
+@import '@plurid/carved-ui-core/styles.css';
+@import './base.css' layer(carved.components);
+@import './actions.css' layer(carved.components);
+@import './fields.css' layer(carved.components);
+@import './choice.css' layer(carved.components);
+@import './slider.css' layer(carved.components);
+@import './collections.css' layer(carved.components);
+@import './overlays.css' layer(carved.components);
+@import './navigation.css' layer(carved.components);
+@import './content.css' layer(carved.components);
+@import './feedback.css' layer(carved.components);

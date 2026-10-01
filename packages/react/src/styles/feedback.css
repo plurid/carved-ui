@@ -1,0 +1,147 @@
+/* Progress fills a carved groove; the spinner is an inlay turning in a carved ring. */
+
+.carved-progress {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: var(--carved-space-2);
+  align-items: baseline;
+}
+
+.carved-progress-value {
+  grid-column: 2;
+  font-size: var(--carved-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--carved-muted);
+}
+
+.carved-progress-track {
+  --carved-carve-scale: 0.3;
+  --carved-carve-ring: inset 0 0 0 1px var(--carved-edge);
+
+  position: relative;
+  grid-column: 1 / -1;
+  display: block;
+  block-size: 0.5rem;
+  overflow: hidden;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-progress-fill {
+  display: block;
+  block-size: 100%;
+  background-color: var(--carved-accent);
+  border-radius: inherit;
+  transition: inline-size var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-progress[data-indeterminate] .carved-progress-fill {
+  inline-size: 40%;
+  animation: carved-sweep 1.4s var(--carved-motion-easing) infinite;
+}
+
+.carved-progress[data-indeterminate] .carved-progress-fill:dir(rtl) {
+  animation-direction: reverse;
+}
+
+@keyframes carved-sweep {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 250% 0;
+  }
+}
+
+.carved-spinner {
+  --carved-carve-scale: 0.3;
+  --_size: 1.5rem;
+
+  display: inline-block;
+  flex: none;
+  inline-size: var(--_size);
+  block-size: var(--_size);
+  vertical-align: middle;
+  background:
+    conic-gradient(var(--carved-accent) 0 28%, transparent 0) border-box,
+    var(--carved-cut);
+  border-radius: 50%;
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--_size) / 5), #000 0);
+  animation: carved-spin 0.9s linear infinite;
+}
+
+.carved-spinner[data-size='sm'] {
+  --_size: 1rem;
+}
+
+.carved-spinner[data-size='lg'] {
+  --_size: 2.25rem;
+}
+
+/* Toasts are wells cut into the corner of the viewport, newest nearest the edge. */
+.carved-toast-region {
+  position: fixed;
+  inset-block-end: var(--carved-space-4);
+  inset-inline-end: var(--carved-space-4);
+  z-index: calc(var(--carved-z-overlay) + 1);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--carved-space-2);
+  inline-size: min(26rem, calc(100vw - 2 * var(--carved-space-4)));
+  outline: none;
+}
+
+.carved-toast {
+  --carved-carve-ring: 0 0 0 1px var(--carved-edge);
+  --carved-carve-scale: 0.6;
+
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  padding: var(--carved-space-3) var(--carved-space-3) var(--carved-space-3) var(--carved-space-4);
+  color: var(--carved-fg);
+  background-color: var(--carved-bg);
+  border-radius: var(--carved-radius-control);
+  outline: none;
+}
+
+.carved-toast[data-focus-visible] {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: 2px;
+}
+
+.carved-toast[data-entering] {
+  animation: carved-fade var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-toast-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.carved-toast-title {
+  font-weight: 650;
+}
+
+.carved-toast-description {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+@media (forced-colors: active) {
+  .carved-progress-track {
+    border: 1px solid CanvasText;
+  }
+
+  .carved-progress-fill {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .carved-toast {
+    border: 1px solid CanvasText;
+  }
+}

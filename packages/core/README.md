@@ -1,22 +1,23 @@
 # @plurid/carved-ui-core
 
-Framework-independent Carved design tokens and pure, deterministic theme generation. ESM with TypeScript declarations; no browser globals or React dependency.
+The Carved material without React: design tokens, a theme engine that turns one colour into a readable six-depth theme, and the CSS that every Carved component is built from.
 
-```ts
-import { createTheme, presets, presetNames } from '@plurid/carved-ui-core';
-const theme = createTheme({
-  color: '#284c42',
-  depthDifference: 0.045,
-  shadowAngle: 90,
-  shadowDistance: 3,
-});
-// theme.variables is a frozen map of semantic --carved-* CSS properties.
+```sh
+pnpm add @plurid/carved-ui-core@next
 ```
 
-`color` must be concrete and opaque. `depthDifference` accepts 0–0.12, `shadowAngle` 0–360, and `shadowDistance` 0–24. Invalid values throw. Zero is preserved. There are six depth levels, clamped at the darkest end of the generated OKLCH ramp. Foregrounds and muted text target at least 4.5:1; control borders target 3:1 against each generated surface.
+```ts
+import { createTheme, themeToCss } from '@plurid/carved-ui-core';
 
-Presets: `night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`.
+const forest = createTheme({ color: '#284c42', shadowAngle: 120 });
+forest.variables['--carved-surface-0']; // the page
+forest.report.contrast.accent; // the lowest contrast of each part of the accent inlay
+themeToCss(forest, '.forest'); // the same theme, as one CSS rule
+```
 
-Import `@plurid/carved-ui-core/styles.css` for foundation variables and preset selectors, or `@plurid/carved-ui-core/tokens.json` for the canonical DTCG-format tokens. The React stylesheet already includes the core stylesheet.
+- `createTheme({ color, depthDifference, shadowAngle, shadowDistance, tones })` accepts any opaque CSS colour and returns frozen `--carved-*` variables and a contrast report. Text reaches 4.5:1 on every depth, control edges 3:1, and the accent, success and danger inlays 3:1 against every depth.
+- `presets` and `presetNames` hold the seven original themes; they can be imported without loading the colour engine.
+- `@plurid/carved-ui-core/styles.css` contains the tokens, the presets, the depth rules and the material classes.
+- `@plurid/carved-ui-core/tokens.json` contains the tokens and every preset's colours in the Design Tokens Community Group format.
 
-See the repository docs for architecture and contributing. MIT licensed.
+The React components are in [`@plurid/carved-ui-react`](https://www.npmjs.com/package/@plurid/carved-ui-react), whose stylesheet already includes this one. Read more at [plurid.github.io/carved-ui](https://plurid.github.io/carved-ui/). MIT licensed.

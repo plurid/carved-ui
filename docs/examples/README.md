@@ -1,12 +1,14 @@
-# Editable patterns
+# Recipes
 
-Copy these files into your app and own their behavior. They import the published core components; the Storybook laboratory executes the same source in success, error and keyboard scenarios.
+Patterns built from Carved components that every application shapes differently. Copy a file into your project and make it yours: rename things, wire it to your API, change the layout in `recipes.css`.
 
-- `settings-form.tsx`: labelled native validation, async save, pending state, retryable errors and status.
-- `confirm-action.tsx`: focus-safe confirmation, async removal, prevention of dismissal while pending, retryable errors.
-- `searchable-table.tsx`: native table, filtering, result announcements and an empty state.
-- `app-shell.tsx`: native navigation, headings and a content region.
+| Recipe                                         | What it shows                                                                             |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [`settings-form.tsx`](settings-form.tsx)       | Native validation, a pending save, a retryable error and an announced status              |
+| [`confirm-action.tsx`](confirm-action.tsx)     | A destructive action confirmed in an `AlertDialog` that stays open while the request runs |
+| [`searchable-table.tsx`](searchable-table.tsx) | A native table filtered by a `SearchField`, with a result count and an empty state        |
+| [`empty-state.tsx`](empty-state.tsx)           | A quiet well that says what is missing and what to do                                     |
+| [`pagination.tsx`](pagination.tsx)             | Page links for server-rendered lists                                                      |
+| [`app-shell.tsx`](app-shell.tsx)               | A page frame: navigation, breadcrumbs and a heading                                       |
 
-The `lab-*` / `example-shell` classes illustrate application-owned layout in Storybook's `laboratory.css`. Replace these with your application's CSS; controls ship their own styles. Replace sample domain values, strings and actions. Server-query pagination, authorization and data persistence belong to the application.
-
-A source registry is deferred. These examples make the ownership boundary concrete without maintaining a second installation/release mechanism.
+Storybook runs every recipe under **Recipes**, including the failure paths, and the documentation site shows each one live.

@@ -1,0 +1,138 @@
+/* Fields are wells cut into the surface. The lit edge is drawn in the edge ink, marking the
+ * field's boundary at 3:1; focus and invalid states recolour it. */
+
+.carved-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-5);
+}
+
+.carved-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  min-inline-size: 0;
+}
+
+.carved-label {
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--carved-fg);
+}
+
+.carved-description {
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  line-height: 1.45;
+  color: var(--carved-muted);
+}
+
+.carved-field-error {
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--carved-danger-ink);
+}
+
+.carved-input,
+.carved-input-group {
+  --carved-carve-scale: 0.7;
+  --carved-carve-lip: var(--carved-edge);
+
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2.75rem;
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+  border: 0;
+  border-radius: var(--carved-radius-control);
+  outline: none;
+}
+
+.carved-input {
+  padding: 0.625rem 0.875rem;
+  font: inherit;
+  line-height: 1.5;
+  caret-color: var(--carved-accent-ink);
+}
+
+.carved-input::placeholder,
+.carved-group-input::placeholder {
+  color: var(--carved-cut-muted);
+  opacity: 1;
+}
+
+/* A well holding an input together with icons and buttons. */
+.carved-input-group {
+  display: flex;
+  gap: var(--carved-space-1);
+  align-items: center;
+  padding-inline: 0.875rem var(--carved-space-1);
+  cursor: text;
+}
+
+/* Focus cuts the well a little deeper and lights its edge in the accent, as the original
+ * input did. It replaces the ring that other controls use. */
+.carved-input[data-focused],
+.carved-input-group[data-focus-within] {
+  --carved-carve-k: 1.5;
+  --carved-carve-lip: var(--carved-focus);
+  --carved-carve-lip-width: 2px;
+}
+
+.carved-input[data-invalid],
+.carved-input-group[data-invalid],
+[data-invalid] > .carved-input-group {
+  --carved-carve-lip: var(--carved-danger-ink);
+  --carved-carve-lip-width: 2px;
+}
+
+.carved-input:is([data-disabled], :disabled),
+.carved-input-group[data-disabled] {
+  opacity: 0.55;
+}
+
+.carved-textarea {
+  min-block-size: 6.5rem;
+  resize: vertical;
+  field-sizing: content;
+}
+
+.carved-group-input {
+  flex: 1;
+  min-inline-size: 0;
+  padding-block: 0.625rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.carved-group-input::-webkit-search-cancel-button,
+.carved-group-input::-webkit-search-decoration {
+  appearance: none;
+}
+
+.carved-field-button {
+  inline-size: 2.25rem;
+  padding: 0;
+  color: var(--carved-cut-muted);
+}
+
+.carved-search-icon {
+  flex: none;
+  color: var(--carved-cut-muted);
+}
+
+.carved-search[data-empty] .carved-search-clear {
+  visibility: hidden;
+}
+
+@media (forced-colors: active) {
+  .carved-input,
+  .carved-input-group {
+    border: 1px solid FieldText;
+  }
+}

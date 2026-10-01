@@ -1,0 +1,306 @@
+/* Static content: type, dividers, badges, alerts, cards, tables and avatars. */
+
+.carved-heading {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--carved-fg);
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
+h1.carved-heading {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+h2.carved-heading {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+h3.carved-heading {
+  font-size: 1.25rem;
+}
+
+h4.carved-heading {
+  font-size: var(--carved-text-lg);
+}
+
+h5.carved-heading {
+  font-size: var(--carved-text-md);
+}
+
+h6.carved-heading {
+  font-size: var(--carved-text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.carved-heading:is([data-variant='display'], [data-variant='engraved']) {
+  font-family: var(--carved-font-display);
+  font-size: clamp(2.75rem, 1.25rem + 6vw, 6rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+/* Engraved letters are uppercase and set a little open, so the cut reads in every stroke. */
+.carved-heading[data-variant='engraved'] {
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+/* A line cut into the surface: shade on the far wall, light on the near one. */
+.carved-separator {
+  align-self: stretch;
+  block-size: 2px;
+  margin: var(--carved-space-4) 0;
+  background: linear-gradient(var(--carved-shade) 50%, var(--carved-lip) 50%);
+  border: 0;
+}
+
+.carved-separator[aria-orientation='vertical'] {
+  inline-size: 2px;
+  block-size: auto;
+  margin: 0 var(--carved-space-3);
+  background: linear-gradient(to right, var(--carved-shade) 50%, var(--carved-lip) 50%);
+}
+
+.carved-separator[data-variant='trench'] {
+  --carved-carve-scale: 0.4;
+
+  block-size: 0.75rem;
+  margin-block: var(--carved-space-6);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-separator[data-variant='trench'][aria-orientation='vertical'] {
+  inline-size: 0.875rem;
+  block-size: auto;
+  margin: 0 var(--carved-space-5);
+}
+
+.carved-badge {
+  --carved-carve-scale: 0.25;
+
+  display: inline-flex;
+  gap: var(--carved-space-1);
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  font-size: var(--carved-text-xs);
+  font-weight: 650;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-alert {
+  --carved-carve-scale: 0.6;
+
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: flex-start;
+  padding: var(--carved-space-4);
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-control);
+}
+
+/* The tone, inlaid: a round socket filled with the tone's colour, holding its icon. */
+.carved-tone-mark {
+  --carved-carve-scale: 0.3;
+
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: 50%;
+}
+
+.carved-tone-mark svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.carved-alert-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--carved-space-1);
+  min-inline-size: 0;
+  padding-block-start: 0.125rem;
+}
+
+.carved-alert-title {
+  margin: 0;
+  font-weight: 650;
+}
+
+.carved-alert-message {
+  color: var(--carved-cut-muted);
+}
+
+.carved-alert-message > :first-child {
+  margin-block-start: 0;
+}
+
+.carved-alert-message > :last-child {
+  margin-block-end: 0;
+}
+
+.carved-alert-action {
+  flex: none;
+  align-self: center;
+}
+
+.carved-skeleton {
+  --carved-carve-scale: 0.5;
+
+  min-block-size: 1rem;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-control);
+  animation: carved-breathe 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes carved-breathe {
+  to {
+    opacity: 0.55;
+  }
+}
+
+/* Card parts */
+.carved-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-1);
+}
+
+.carved-card-title {
+  margin: 0;
+  font-size: var(--carved-text-lg);
+  font-weight: 650;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.carved-card-description {
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.carved-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+}
+
+.carved-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-2);
+  align-items: center;
+  margin-block-start: auto;
+}
+
+/* Tables sit in their own well. */
+.carved-table-well {
+  --carved-carve-scale: 0.6;
+
+  max-inline-size: 100%;
+  overflow-x: auto;
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-surface);
+}
+
+.carved-table {
+  inline-size: 100%;
+  font-size: var(--carved-text-sm);
+  font-variant-numeric: tabular-nums;
+  border-collapse: collapse;
+}
+
+.carved-table-caption {
+  padding: var(--carved-space-4) var(--carved-space-4) var(--carved-space-2);
+  font-size: var(--carved-text-sm);
+  color: var(--carved-cut-muted);
+  text-align: start;
+}
+
+.carved-table :where(th, td) {
+  padding: 0.75rem var(--carved-space-4);
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--carved-hairline);
+}
+
+.carved-table thead th {
+  font-size: var(--carved-text-xs);
+  font-weight: 700;
+  color: var(--carved-cut-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.carved-table tbody tr:last-child > * {
+  border-block-end: 0;
+}
+
+/* Avatars are portraits set into round sockets. */
+.carved-avatar {
+  --carved-carve-scale: 0.4;
+
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  overflow: hidden;
+  font-size: var(--carved-text-sm);
+  font-weight: 650;
+  color: var(--carved-cut-fg);
+  vertical-align: middle;
+  background-color: var(--carved-cut);
+  border-radius: 50%;
+}
+
+.carved-avatar[data-size='sm'] {
+  inline-size: 2rem;
+  block-size: 2rem;
+  font-size: var(--carved-text-xs);
+}
+
+.carved-avatar[data-size='lg'] {
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  font-size: var(--carved-text-lg);
+}
+
+.carved-avatar img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+@media (forced-colors: active) {
+  .carved-separator {
+    background: CanvasText;
+  }
+
+  .carved-badge,
+  .carved-alert,
+  .carved-tone-mark,
+  .carved-table-well,
+  .carved-avatar {
+    border: 1px solid CanvasText;
+  }
+}

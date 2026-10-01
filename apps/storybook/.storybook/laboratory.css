@@ -1,123 +1,136 @@
+/* The laboratory: a provider filling the frame, and a few layout helpers for stories. */
 body {
   margin: 0;
 }
+
 .laboratory {
-  min-height: 100dvh;
-  padding: clamp(1.5rem, 4vw, 3rem);
+  --carved-font-body: 'Archivo Variable', system-ui, sans-serif;
+  --carved-font-display: 'Archivo Variable', system-ui, sans-serif;
+  --carved-font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  min-block-size: 100dvh;
+  padding: clamp(1.25rem, 4vw, 3rem);
 }
-.laboratory h1,
-.laboratory h2,
-.laboratory h3 {
-  text-wrap: balance;
+
+.laboratory[data-layout='fullscreen'] {
+  padding: 0;
 }
-.laboratory p {
-  max-width: 70ch;
-}
+
 .lab-stack {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  max-width: 40rem;
+  max-inline-size: 40rem;
 }
+
 .lab-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
 }
-.lab-field {
-  max-width: 24rem;
+
+.lab-narrow {
+  max-inline-size: 22rem;
 }
+
 .lab-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 1.5rem;
+}
+
+.lab-pad {
+  padding: 1.25rem;
+}
+
+.lab-caption {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.lab-swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+
+.lab-tall {
+  min-block-size: 14rem;
+}
+
+.lab-plate {
+  display: grid;
+  place-items: center;
+  inline-size: 7rem;
+  block-size: 4.5rem;
+  font-weight: 600;
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-control);
+}
+
+.showcase {
+  min-block-size: 100dvh;
+  padding: clamp(1.25rem, 5vw, 4.5rem);
+}
+
+.showcase-header {
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-block-end: 3rem;
 }
-.lab-surface {
-  padding: 1.5rem;
+
+.showcase-title {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-.lab-table-scroll {
-  overflow-x: auto;
-}
-.lab-muted {
+
+.showcase-lede {
+  max-inline-size: 46ch;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.55;
   color: var(--carved-muted);
 }
 
-.example-shell {
-  max-width: 64rem;
-}
-.example-shell header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-.example-shell nav {
-  display: flex;
-  gap: 1.5rem;
-}
-.showcase {
-  max-width: 76rem;
-  margin-inline: auto;
-  padding: clamp(1.25rem, 4vw, 4rem);
-}
-.showcase-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 2rem;
-  margin-block-end: 2rem;
-  flex-wrap: wrap;
-}
-.showcase-header h1 {
-  margin-block: 0;
-  font-size: clamp(2rem, 4.5vw, 4rem);
-  max-width: 16ch;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-}
-.showcase-kicker {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--carved-muted);
-  margin-block: 0 0.75rem;
-}
-.showcase-intro {
-  max-width: 42ch;
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--carved-muted);
-}
 .showcase-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem;
-  margin-block: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: 1.5rem;
+  align-items: start;
 }
-.showcase-footer {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  align-items: center;
-  gap: 3rem;
-  padding-block: 2rem;
+
+.showcase-depth {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
-.showcase-footer h2 {
-  font-size: 1.5rem;
-}
-.depth-demo {
-  padding: 1rem;
-}
-.depth-demo .carved-surface {
-  padding: 0.75rem;
+
+.showcase-depth > .showcase-depth {
   margin-block-start: 0.75rem;
 }
-@media (width < 44rem) {
-  .showcase-grid,
-  .showcase-footer {
-    grid-template-columns: 1fr;
-  }
-  .showcase-header {
-    gap: 1rem;
-  }
+
+.showcase-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-block-start: 1.25rem;
+}
+
+.showcase-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 3rem;
+  align-items: baseline;
+  justify-content: space-between;
 }

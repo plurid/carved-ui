@@ -2,41 +2,67 @@ import type { Preview } from '@storybook/react-vite';
 import { CarvedProvider } from '@plurid/carved-ui-react';
 import { presetNames } from '@plurid/carved-ui-core';
 import type { ThemePreset } from '@plurid/carved-ui-core';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/jetbrains-mono';
 import '@plurid/carved-ui-react/styles.css';
 import './laboratory.css';
-// Playwright runs its own axe scans. Avoid two scanners running in the same frame.
-const browserSuite =
-  typeof window !== 'undefined' &&
-  new URL(window.location.href).searchParams.has('carved-browser-test');
+
 const preview: Preview = {
   globalTypes: {
     theme: {
       description: 'Carved theme',
-      toolbar: { icon: 'paintbrush', items: [...presetNames] },
+      toolbar: { title: 'Theme', icon: 'paintbrush', items: [...presetNames], dynamicTitle: true },
     },
-    direction: { description: 'Text direction', toolbar: { icon: 'globe', items: ['ltr', 'rtl'] } },
+    locale: {
+      description: 'Locale and text direction',
+      toolbar: {
+        title: 'Locale',
+        icon: 'globe',
+        items: [
+          { value: 'en-US', title: 'English (left to right)' },
+          { value: 'ar-EG', title: 'Arabic (right to left)' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
-  initialGlobals: { theme: 'ponton', direction: 'ltr' },
+  initialGlobals: { theme: 'ponton', locale: 'en-US' },
   decorators: [
-    (Story, context) => (
+    (Story, { globals, parameters }) => (
       <CarvedProvider
-        theme={context.globals.theme as ThemePreset}
-        dir={context.globals.direction as 'ltr' | 'rtl'}
-        locale={context.globals.direction === 'rtl' ? 'ar' : 'en-US'}
+        theme={globals.theme as ThemePreset}
+        locale={globals.locale as string}
+        className="laboratory"
+        data-layout={parameters.layout === 'fullscreen' ? 'fullscreen' : 'padded'}
       >
-        <main className="laboratory">
-          <Story />
-        </main>
+        <Story />
       </CarvedProvider>
     ),
   ],
   parameters: {
     layout: 'fullscreen',
-    a11y: {
-      test: browserSuite ? 'off' : 'error',
-      context: '#storybook-root, [data-overlay-container]',
-    },
+    // Scan the whole document: overlays render inside the provider, beside the story.
+    // React Aria's live announcer is excluded; its nodes outlive the story that made them.
+    a11y: { test: 'error', context: { include: 'body', exclude: '[data-live-announcer]' } },
     controls: { expanded: true },
+    options: {
+      storySort: {
+        order: [
+          'Start',
+          'Material',
+          'Actions',
+          'Fields',
+          'Choice',
+          'Collections',
+          'Overlays',
+          'Navigation',
+          'Feedback',
+          'Content',
+          'Recipes',
+          'Testing',
+        ],
+      },
+    },
   },
 };
 export default preview;

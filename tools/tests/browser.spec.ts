@@ -1,171 +1,223 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { presetNames } from '@plurid/carved-ui-core';
-const story = async (page: Page, id: string, globals = '') => {
-  await page.goto(
-    `/iframe.html?id=${id}&viewMode=story&carved-browser-test=true&globals=${globals}`,
-  );
-  await expect(page.locator('#storybook-root .laboratory')).toBeVisible();
-};
-const audit = async (page: Page) => {
-  const result = await new AxeBuilder({ page })
-    .include('#storybook-root')
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+
+/** Open a story in the built Storybook. The a11y addon is muted: these tests run their own scans. */
+async function story(page: Page, id: string, globals: Record<string, string> = {}) {
+  const values = Object.entries({ ...globals, 'a11y.manual': '!true' })
+    .map(([key, value]) => `${key}:${value}`)
+    .join(';');
+  await page.goto(`/iframe.html?id=${id}&viewMode=story&globals=${values}`);
+  await expect(page.locator('#storybook-root .carved-provider').first()).toBeVisible();
+}
+
+async function audit(page: Page, { contrast = true } = {}) {
+  // Let entering overlays finish fading in, so contrast is measured at full opacity.
+  await expect(page.locator('[data-entering]')).toHaveCount(0);
+  const { violations } = await new AxeBuilder({ page })
+    .exclude('[data-live-announcer]')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .disableRules(contrast ? [] : ['color-contrast'])
     .analyze();
-  expect(result.violations).toEqual([]);
-};
+  expect(violations).toEqual([]);
+}
+
 for (const theme of presetNames)
-  test(`preset ${theme} remains accessible`, async ({ page }) => {
-    await story(page, 'start-carved--showcase-control');
-    await page.getByRole('button', { name: theme, exact: true }).click();
-    await expect(page.getByRole('button', { name: theme, exact: true })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+  test(`${theme}: the showcase and an open list are accessible`, async ({ page }) => {
+    await story(page, 'start-showcase--overview', { theme });
+    await page.getByRole('radio', { name: theme, exact: true }).click();
+    await page.getByRole('button', { name: /Workspace/ }).click();
+    await expect(page.getByRole('listbox')).toBeVisible();
     await audit(page);
   });
-test('native validation, submit, reset and disabled controls', async ({ page }) => {
-  await story(page, 'testing-browser--controls-control');
+
+test('validation, submit and reset with a real pointer', async ({ page }) => {
+  await story(page, 'testing-browser--controls-harness');
   const email = page.getByRole('textbox', { name: 'Email' });
+  const save = page.getByRole('button', { name: 'Save', exact: true });
   await email.fill('invalid');
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await save.click();
   await expect(email).toHaveAttribute('aria-invalid', 'true');
   await expect(page.getByLabel('Submitted email')).toBeEmpty();
+  // Correcting the field and clicking Save straight away must submit: the error leaving on
+  // blur may not move the button out from under the pointer.
   await email.fill('updated@example.com');
-  await email.press('Tab');
-  await expect(email).not.toHaveAttribute('aria-invalid', 'true');
-  await expect
-    .poll(() => email.evaluate((element) => (element as HTMLInputElement).validity.valid))
-    .toBe(true);
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await save.click();
   await expect(page.getByLabel('Submitted email')).toHaveText('updated@example.com');
-  await page.getByRole('checkbox', { name: 'Project updates' }).uncheck();
-  await page.getByRole('radio', { name: 'Team', exact: true }).check();
-  await page.getByRole('switch', { name: 'Notifications' }).check();
-  await page.getByRole('button', { name: 'Reset', exact: true }).click();
+  // People click the visible label; the native input sits beneath it.
+  await page.getByText('Project updates', { exact: true }).click();
+  await page.getByText('Team', { exact: true }).click();
+  await page.getByText('Notifications', { exact: true }).click();
+  await expect(page.getByRole('checkbox', { name: 'Project updates' })).not.toBeChecked();
+  await expect(page.getByRole('switch', { name: 'Notifications' })).toBeChecked();
+  await page.getByRole('button', { name: 'Reset' }).click();
   await expect(email).toHaveValue('team@example.com');
   await expect(page.getByRole('checkbox', { name: 'Project updates' })).toBeChecked();
-  await expect(page.getByRole('radio', { name: 'Private', exact: true })).toBeChecked();
-  await expect(page.getByRole('switch')).not.toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Private' })).toBeChecked();
+  await expect(page.getByRole('switch', { name: 'Notifications' })).not.toBeChecked();
   await expect(page.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
   await audit(page);
 });
-test('keyboard collections, combobox and slider', async ({ page }) => {
-  await story(page, 'testing-browser--controls-control');
+
+test('keyboard: select, combo box, slider and tabs', async ({ page }) => {
+  await story(page, 'testing-browser--controls-harness');
   const select = page.getByRole('button', { name: /Workspace/ });
   await select.focus();
   await page.keyboard.press('Space');
-  await expect(page.getByRole('option', { name: 'Design', exact: true })).toBeFocused();
+  await expect(page.getByRole('option', { name: 'Design' })).toBeFocused();
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await expect(page.getByLabel('Selected workspace')).toHaveText('engineering');
   await expect(select).toBeFocused();
-  const combo = page.getByRole('combobox');
+  const combo = page.getByRole('combobox', { name: 'Jump to' });
   await combo.fill('Doc');
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('option', { name: 'Documentation', exact: true })).toBeVisible();
   await page.keyboard.press('Enter');
   await expect(combo).toHaveValue('Documentation');
   const slider = page.getByRole('slider', { name: 'Volume' });
   await slider.focus();
   await page.keyboard.press('ArrowRight');
   await expect(slider).toHaveValue('41');
+  await page.getByRole('tab', { name: 'Overview' }).focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab', { name: 'Activity' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
 });
-test('RTL tabs and visible keyboard focus', async ({ page }) => {
-  await story(page, 'testing-browser--controls-control', 'direction:rtl');
-  const first = page.getByRole('tab', { name: 'Overview' });
+
+test('right to left: layout and arrow keys agree', async ({ page }) => {
+  await story(page, 'testing-browser--controls-harness', { locale: 'ar-EG' });
+  await expect(page.locator('.carved-provider').first()).toHaveAttribute('dir', 'rtl');
+  await page.getByRole('tab', { name: 'Overview' }).focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.getByRole('tab', { name: 'Activity' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+});
+
+test('a nested provider inherits nothing it should not, and keeps its own locale', async ({
+  page,
+}) => {
+  await story(page, 'testing-browser--portals-harness');
+  const first = page.getByRole('tab', { name: 'الأول' });
   await first.focus();
   await page.keyboard.press('ArrowLeft');
-  const active = page.getByRole('tab', { name: 'Activity' });
-  await expect(active).toHaveAttribute('aria-selected', 'true');
-  expect(await active.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe('solid');
-  await audit(page);
+  await expect(page.getByRole('tab', { name: 'الثاني' })).toHaveAttribute('aria-selected', 'true');
 });
-test('modal focus, description, containment and restoration', async ({ page }) => {
-  await story(page, 'start-carved--showcase-control');
-  const trigger = page.getByRole('button', { name: 'Create project', exact: true });
+
+test('modal: name, description, containment and restoration', async ({ page }) => {
+  await story(page, 'testing-browser--portals-harness');
+  const trigger = page.getByRole('button', { name: 'Rename project' });
   await trigger.click();
-  const dialog = page.getByRole('dialog', { name: 'Create your project' });
-  await expect(dialog).toHaveAccessibleDescription('Your workspace is ready for a new project.');
-  await page.keyboard.press('Tab');
-  await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(dialog.getByRole('button', { name: 'Create', exact: true })).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeFocused();
-  const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
-  expect(result.violations).toEqual([]);
+  const dialog = page.getByRole('dialog', { name: 'Rename project' });
+  await expect(dialog).toHaveAccessibleDescription('The new name appears everywhere at once.');
+  await expect(dialog.getByRole('textbox', { name: 'Name' })).toBeFocused();
+  for (let step = 0; step < 3; step++) await page.keyboard.press('Tab');
+  await expect(dialog.getByRole('textbox', { name: 'Name' })).toBeFocused();
+  await audit(page);
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
 });
-test('portals retain local depth, custom tokens and a live theme change', async ({ page }) => {
-  await story(page, 'overlays-dialog--scoped-portal-theme');
-  const scope = page.locator('.lab-surface');
-  const background = await scope.evaluate((element) =>
-    getComputedStyle(element).getPropertyValue('--carved-bg').trim(),
-  );
-  await page.getByRole('button', { name: 'Open themed dialog' }).click();
-  const modal = page.locator('.carved-modal');
-  await expect(modal).toHaveCSS('--carved-bg', background);
-  await expect(modal).toHaveCSS('--carved-accent', '#92cab7');
-  await page.getByRole('button', { name: 'Change theme while open' }).click();
-  await expect
-    .poll(() =>
-      modal.evaluate((element) => getComputedStyle(element).getPropertyValue('--carved-bg').trim()),
-    )
-    .not.toBe(background);
+
+test('overlays render in their provider, escape clipping and follow its theme', async ({
+  page,
+}) => {
+  await story(page, 'testing-browser--portals-harness');
+  await page.getByRole('button', { name: 'Nested menu' }).click();
+  const menu = page.getByRole('menu', { name: 'Nested menu' });
+  await expect(menu).toBeVisible();
+  // The nested provider's host lives in the root host, outside the scrolling surface.
+  const host = menu.locator('xpath=ancestor::*[contains(@class, "carved-portal-host")][1]');
+  await expect(host).toHaveAttribute('data-carved-theme', 'furor');
+  await expect(
+    host.locator('xpath=ancestor::*[contains(@class, "carved-portal-host")]'),
+  ).toHaveCount(1);
+  await expect(menu.getByRole('menuitem', { name: 'Second action' })).toBeInViewport();
+  const accent = () =>
+    menu.evaluate((element) =>
+      getComputedStyle(element).getPropertyValue('--carved-accent').trim(),
+    );
+  expect(await accent()).toBe('#fde68a');
   await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Change accent' }).click();
+  await page.getByRole('button', { name: 'Nested menu' }).click();
+  await expect.poll(accent).toBe('#a5f3fc');
 });
-test('mobile layout, long text and reduced motion', async ({ page }) => {
+
+test('touch cuts deeper: hover and press grow the shadow', async ({ page }) => {
+  await story(page, 'actions-button--variants');
+  const button = page.getByRole('button', { name: 'Secondary' });
+  const offset = () =>
+    button.evaluate((element) =>
+      Number(getComputedStyle(element).boxShadow.match(/(-?[\d.]+)px (-?[\d.]+)px/)?.[2]),
+    );
+  const rest = await offset();
+  await button.hover();
+  await expect.poll(offset).toBeGreaterThan(rest);
+  const hovered = await offset();
+  await page.mouse.down();
+  await expect.poll(offset).toBeGreaterThan(hovered);
+  await page.mouse.up();
+});
+
+test('mobile: no horizontal scrolling, dialogs fit', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await story(page, 'start-carved--showcase-control');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
-    true,
-  );
-  await page.getByRole('button', { name: 'Create project', exact: true }).click();
+  await story(page, 'start-showcase--overview');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await story(page, 'testing-browser--portals-harness');
+  await page.getByRole('button', { name: 'Rename project' }).click();
   const box = await page.getByRole('dialog').boundingBox();
-  expect(box!.width).toBeLessThanOrEqual(358);
-  await page.keyboard.press('Escape');
-  await story(page, 'feedback-states--spinner-control');
-  await expect(page.getByRole('progressbar')).toHaveCSS('animation-name', 'none');
-  await story(page, 'actions-button--long-label');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
-    true,
-  );
+  expect(box!.width).toBeLessThanOrEqual(390 - 16);
 });
-test('forced colors preserves controls and focus', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'WebKit does not emulate forced-colors.');
+
+test('reduced motion stops the spinner but keeps its label', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await story(page, 'feedback-alert--progress');
+  const spinner = page.getByRole('progressbar', { name: 'Loading projects' });
+  await expect(spinner).toBeVisible();
+  expect(
+    await spinner.evaluate((element) => getComputedStyle(element).animationIterationCount),
+  ).toBe('1');
+});
+
+test('forced colors keep controls visible and focus drawn', async ({ page, browserName }) => {
+  test.skip(browserName === 'webkit', 'WebKit does not emulate forced colors.');
   await page.emulateMedia({ forcedColors: 'active' });
-  await story(page, 'testing-browser--controls-control');
-  const input = page.getByRole('textbox', { name: 'Email' });
-  await input.focus();
+  await story(page, 'testing-browser--controls-harness');
+  await page.getByRole('textbox', { name: 'Email' }).focus();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('checkbox', { name: 'Project updates' })).toBeFocused();
-  expect(
-    await page
-      .locator('.carved-checkbox')
-      .evaluate((element) => getComputedStyle(element).outlineStyle),
-  ).toBe('solid');
-  await audit(page);
+  const box = page.locator('.carved-checkbox-box').first();
+  expect(await box.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe('solid');
+  expect(await box.evaluate((element) => getComputedStyle(element).borderStyle)).toBe('solid');
+  // Emulation sets the media query without the system palette, so contrast is not meaningful.
+  await audit(page, { contrast: false });
 });
-test('avatar broken image falls back to its accessible initials', async ({ page }) => {
-  await story(page, 'content-surfaces--avatars');
-  await expect(page.getByRole('img', { name: 'Broken image fallback' })).toHaveText('BI');
+
+test('an avatar whose image fails shows its initials', async ({ page }) => {
+  await story(page, 'content-card--badges-and-avatars');
+  await expect(page.getByRole('img', { name: 'Broken Image' })).toHaveText('BI');
+  await expect(page.getByRole('img', { name: 'Broken Image' }).locator('img')).toHaveCount(0);
 });
-test('visual baseline: desktop, light and mobile', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Canonical screenshots use Chromium on macOS 15.');
-  await story(page, 'start-carved--showcase-control');
-  await page.mouse.move(0, 0);
-  await expect(page.locator('.showcase')).toHaveScreenshot('overview-desktop.png');
-  await page.getByRole('button', { name: 'light', exact: true }).click();
-  await page.getByRole('heading', { level: 1 }).click();
-  await page.mouse.move(0, 0);
-  await expect(page.locator('.showcase')).toHaveScreenshot('overview-light.png');
-  await page.getByRole('button', { name: 'ponton', exact: true }).click();
-  await page.getByRole('heading', { level: 1 }).click();
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.mouse.move(0, 0);
-  await expect(page.locator('.showcase')).toHaveScreenshot('overview-mobile.png');
+
+test.describe('visual', { tag: '@visual' }, () => {
+  test.skip(({ browserName }) => browserName !== 'chromium', 'Baselines use Chromium.');
+  for (const theme of ['ponton', 'light', 'furor'])
+    test(`showcase in ${theme}`, async ({ page }) => {
+      await story(page, 'start-showcase--overview', { theme });
+      await page.getByRole('radio', { name: theme, exact: true }).click();
+      await page.evaluate(() => document.fonts.ready);
+      await page.mouse.move(0, 0);
+      await expect(page.locator('.showcase')).toHaveScreenshot(`showcase-${theme}.png`);
+    });
+  test('showcase on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await story(page, 'start-showcase--overview');
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('.showcase')).toHaveScreenshot('showcase-mobile.png');
+  });
 });

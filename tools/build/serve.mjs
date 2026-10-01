@@ -1,6 +1,9 @@
+// A small static server for built sites, behaving like GitHub Pages: directories serve their
+// index.html, and unknown paths get 404.html when there is one.
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { resolve, extname, sep } from 'node:path';
+import { readFile, stat } from 'node:fs/promises';
+import { extname, join, resolve, sep } from 'node:path';
+
 const directory = resolve(process.argv[2] ?? 'apps/storybook/dist');
 const port = Number(process.argv[3] ?? 6006);
 const types = {
@@ -13,22 +16,29 @@ const types = {
   '.png': 'image/png',
   '.woff2': 'font/woff2',
 };
+
+async function locate(pathname) {
+  const file = resolve(directory, `.${pathname}`);
+  if (file !== directory && !file.startsWith(directory + sep)) return null;
+  const found = await stat(file).catch(() => null);
+  if (found?.isFile()) return file;
+  if (found?.isDirectory())
+    return (await stat(join(file, 'index.html')).catch(() => null))
+      ? join(file, 'index.html')
+      : null;
+  return null;
+}
+
 createServer(async (request, response) => {
-  try {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-    const file = resolve(directory, `.${pathname === '/' ? '/index.html' : pathname}`);
-    if (!file.startsWith(directory + sep)) {
-      response.writeHead(403).end();
-      return;
-    }
-    const contents = await readFile(file);
-    response
-      .writeHead(200, {
-        'Content-Type': types[extname(file)] ?? 'application/octet-stream',
-        'Cache-Control': 'no-cache',
-      })
-      .end(contents);
-  } catch {
-    response.writeHead(404).end('Not found');
-  }
+  const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+  const file = await locate(pathname);
+  const missing = file ? null : await locate('/404.html');
+  const served = file ?? missing;
+  if (!served) return response.writeHead(404).end('Not found');
+  response
+    .writeHead(file ? 200 : 404, {
+      'Content-Type': types[extname(served)] ?? 'application/octet-stream',
+      'Cache-Control': 'no-cache',
+    })
+    .end(await readFile(served));
 }).listen(port, '127.0.0.1', () => console.log(`Serving ${directory} at http://127.0.0.1:${port}`));

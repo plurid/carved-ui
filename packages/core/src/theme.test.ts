@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { converter, differenceEuclidean, formatHex } from 'culori';
-import { DEPTHS, contrast, createTheme, presetNames, presets, tones } from './theme.js';
+import { DEPTHS, contrast, createTheme } from './theme.js';
+import { presetNames, presets, tones } from './tokens.js';
 import type { Theme } from './theme.js';
 import { coreStylesheet, depthCss, themeToCss, tokensCss } from './css.js';
 import { toDtcg } from './dtcg.js';
@@ -100,7 +101,13 @@ describe('createTheme', () => {
   });
 
   it('accepts any concrete CSS colour and is deterministic and frozen', () => {
-    for (const color of ['#fff', 'hsl(220 30% 40%)', 'rgb(100 150 200)', 'oklch(65% .2 140)', 'teal']) {
+    for (const color of [
+      '#fff',
+      'hsl(220 30% 40%)',
+      'rgb(100 150 200)',
+      'oklch(65% .2 140)',
+      'teal',
+    ]) {
       const theme = createTheme({ color });
       expect(theme).toEqual(createTheme({ color }));
       expect(Object.isFrozen(theme.variables)).toBe(true);

@@ -34,8 +34,7 @@
   },
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "src/material.css"
+    "dist"
   ],
   "publishConfig": {
     "access": "public",

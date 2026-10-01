@@ -1,0 +1,29 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Start/Introduction" />
+
+# Carved
+
+Surfaces cut into one material, lit by one light. This is the laboratory: every component in every state, in every preset and both text directions. Use the toolbar to change the theme and locale for all stories.
+
+```tsx
+import { CarvedProvider, Button } from '@plurid/carved-ui-react';
+import '@plurid/carved-ui-react/styles.css';
+
+export function App() {
+  return (
+    <CarvedProvider theme="ponton">
+      <Button onPress={() => alert('Saved')}>Save changes</Button>
+    </CarvedProvider>
+  );
+}
+```
+
+## Where to look
+
+- **Start / Showcase** puts the system together on one page.
+- **Material** shows the principles: depth, touch, inlays, raised pieces and engraving.
+- Each family (**Actions**, **Fields**, **Choice**, **Collections**, **Overlays**, **Navigation**, **Feedback**, **Content**) documents its components, with interaction tests that run in a real browser.
+- **Recipes** runs the editable patterns from `docs/examples`, failures included.
+
+The documentation site explains the ideas and the API; this laboratory is where they are checked.
