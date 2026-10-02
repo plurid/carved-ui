@@ -206,7 +206,7 @@ describe('server rendering of interactive components', () => {
       h(AvatarGroup, {
         'aria-label': 'Members',
         max: 2,
-        children: ['Ana Pop', 'Ioan Marin', 'Mara Ilie'].map((name) =>
+        children: ['Amara Okafor', 'Kenji Sato', 'Lena Fischer'].map((name) =>
           h(Avatar, { key: name, name }),
         ),
       }),

@@ -64,6 +64,8 @@ export const foundation = {
   },
   motion: {
     duration: { $type: 'duration', $value: { value: 160, unit: 'ms' } },
+    /** For entrances: overlays, panels and toasts arriving. */
+    emphasis: { $type: 'duration', $value: { value: 220, unit: 'ms' } },
     easing: { $type: 'cubicBezier', $value: [0.2, 0.7, 0.2, 1] },
   },
   z: {
@@ -79,12 +81,15 @@ export interface ToneSeeds {
   danger: string;
 }
 
-/** The original button kinds: accept, warning and hazard, plus a success green. */
+/**
+ * Mineral inlays: low-chroma stone and enamel rather than stock primaries. Hue and chroma are
+ * the seed's; the theme engine solves each lightness for contrast.
+ */
 export const standardTones: ToneSeeds = {
-  accent: 'hsl(220 60% 40%)',
-  success: 'hsl(150 55% 35%)',
-  warning: 'hsl(45 90% 50%)',
-  danger: 'hsl(355 60% 40%)',
+  accent: 'oklch(0.55 0.12 260)',
+  success: 'oklch(0.62 0.09 165)',
+  warning: 'oklch(0.78 0.12 75)',
+  danger: 'oklch(0.6 0.13 22)',
 };
 
 export const themeDefaults = {
@@ -97,17 +102,18 @@ export type Tone = keyof ToneSeeds;
 export const tones = Object.freeze(['accent', 'success', 'warning', 'danger'] as const);
 
 /**
- * The seven original themes. Bases are the 2019 HSL values; accents are curated so each
- * inlay reads as part of its material.
+ * The seven original themes. Bases are the 2019 HSL values; each accent is a mineral chosen
+ * for its material: silver on the neutral night and dusk, lapis on dawn and light, glacier on
+ * ponton, indigo on jaune and gold leaf on furor.
  */
 export const presetOptions = {
-  night: { color: 'hsl(210 0% 10%)', tones: { accent: 'hsl(215 80% 62%)' } },
-  dusk: { color: 'hsl(210 0% 20%)', tones: { accent: 'hsl(215 80% 62%)' } },
-  dawn: { color: 'hsl(210 0% 70%)', tones: { accent: 'hsl(220 60% 30%)' } },
-  light: { color: 'hsl(210 0% 100%)', tones: { accent: 'hsl(220 60% 40%)' } },
-  ponton: { color: 'hsl(210 25% 30%)', tones: { accent: 'hsl(188 45% 66%)' } },
-  jaune: { color: 'hsl(35 90% 45%)', tones: { accent: 'hsl(225 70% 22%)' } },
-  furor: { color: 'hsl(360 90% 30%)', tones: { accent: 'hsl(40 85% 72%)' } },
+  night: { color: 'hsl(210 0% 10%)', tones: { accent: 'oklch(0.84 0.025 240)' } },
+  dusk: { color: 'hsl(210 0% 20%)', tones: { accent: 'oklch(0.84 0.025 240)' } },
+  dawn: { color: 'hsl(210 0% 70%)', tones: { accent: 'oklch(0.4 0.12 265)' } },
+  light: { color: 'hsl(210 0% 100%)', tones: { accent: 'oklch(0.45 0.13 258)' } },
+  ponton: { color: 'hsl(210 25% 30%)', tones: { accent: 'oklch(0.8 0.07 205)' } },
+  jaune: { color: 'hsl(35 90% 45%)', tones: { accent: 'oklch(0.35 0.11 275)' } },
+  furor: { color: 'hsl(360 90% 30%)', tones: { accent: 'oklch(0.85 0.1 85)' } },
 } as const satisfies Record<string, { color: string; tones?: Partial<ToneSeeds> }>;
 
 export type ThemePreset = keyof typeof presetOptions;

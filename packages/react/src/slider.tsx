@@ -29,7 +29,7 @@ export function SliderRoot<T extends number | number[]>({
   return <AriaSlider {...props} className={withClass('carved-slider', className)} />;
 }
 
-/** The carved groove the thumbs travel along. */
+/** The rail the thumbs' centres travel along, inside the carved slot it draws. */
 export function SliderTrack({ className, ...props }: SliderTrackProps) {
   return (
     <AriaSliderTrack
@@ -39,12 +39,12 @@ export function SliderTrack({ className, ...props }: SliderTrackProps) {
   );
 }
 
-/** The inlaid stretch of the groove between the start (or the first thumb) and a thumb. */
+/** The inlaid fill, from the start (or the first thumb) to a thumb, wrapping each thumb. */
 export function SliderFill({ className, ...props }: SliderFillProps) {
   return <AriaSliderFill {...props} className={withClass('carved-slider-fill', className)} />;
 }
 
-/** A raised thumb. */
+/** A raised knob, sitting in the fill. */
 export function SliderThumb({ className, ...props }: SliderThumbProps) {
   return (
     <AriaSliderThumb
@@ -62,6 +62,7 @@ export interface SliderProps<T extends number | number[]> extends Omit<
   SliderRootProps<T>,
   'children'
 > {
+  /** The visible label. */
   label?: ReactNode;
   /** Show the formatted value beside the label. @default true */
   showOutput?: boolean;

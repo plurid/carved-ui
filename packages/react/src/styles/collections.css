@@ -12,14 +12,6 @@
   scrollbar-color: var(--carved-edge) transparent;
 }
 
-.carved-listbox[data-empty]::after {
-  display: block;
-  padding: var(--carved-space-3);
-  font-size: var(--carved-text-sm);
-  color: var(--carved-muted);
-  content: 'No results';
-}
-
 .carved-item {
   display: flex;
   gap: var(--carved-space-3);
@@ -38,6 +30,11 @@
   min-inline-size: 0;
 }
 
+/* React Aria hovers an item only when it can be chosen or acted on. */
+.carved-item[data-hovered] {
+  cursor: pointer;
+}
+
 .carved-item[data-focused] {
   color: var(--carved-cut-fg);
   background-color: var(--carved-cut);
@@ -45,13 +42,11 @@
 
 .carved-item[data-pressed],
 .carved-item[data-open] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
-}
-
-.carved-item[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: -2px;
+  background-image: var(--carved-sheen);
 }
 
 .carved-item[data-disabled] {
@@ -124,18 +119,14 @@
   border: 0;
   border-radius: var(--carved-radius-control);
   outline: none;
+  transition:
+    box-shadow var(--carved-motion-duration) var(--carved-motion-easing),
+    background-color var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
-.carved-select-trigger[data-focus-visible],
-.carved-select[data-open] .carved-select-trigger {
-  --carved-carve-k: 1.5;
-  --carved-carve-lip: var(--carved-focus);
-  --carved-carve-lip-width: 2px;
-}
-
-.carved-select[data-invalid] .carved-select-trigger {
-  --carved-carve-lip: var(--carved-danger-ink);
-  --carved-carve-lip-width: 2px;
+/* Focused or open, the trigger is lit like any field (see fields.css). */
+.carved-select-trigger[data-focus-visible] {
+  outline: none;
 }
 
 .carved-select[data-disabled] .carved-select-trigger {
@@ -200,7 +191,6 @@
   cursor: default;
   background-color: var(--carved-cut);
   border-radius: var(--carved-radius-pill);
-  outline-offset: 2px;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -213,9 +203,16 @@
   cursor: pointer;
 }
 
+.carved-tag[data-hovered] {
+  cursor: pointer;
+}
+
 .carved-tag[data-selected] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-tag[data-disabled] {

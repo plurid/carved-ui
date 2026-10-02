@@ -24,9 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const people = [
-  { id: 'ana', name: 'Ana Pop', role: 'Owner' },
-  { id: 'ioan', name: 'Ioan Marin', role: 'Editor' },
-  { id: 'mara', name: 'Mara Ilie', role: 'Viewer' },
+  { id: 'amara', name: 'Amara Okafor', role: 'Owner' },
+  { id: 'kenji', name: 'Kenji Sato', role: 'Editor' },
+  { id: 'lena', name: 'Lena Fischer', role: 'Viewer' },
 ];
 
 export const Members: Story = {
@@ -46,8 +46,8 @@ export const Members: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('checkbox', { name: /Ioan Marin/ }));
-    await expect(canvas.getByRole('row', { name: /Ioan Marin/ })).toHaveAttribute(
+    await userEvent.click(canvas.getByRole('checkbox', { name: /Kenji Sato/ }));
+    await expect(canvas.getByRole('row', { name: /Kenji Sato/ })).toHaveAttribute(
       'aria-selected',
       'true',
     );

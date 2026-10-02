@@ -7,6 +7,7 @@ import {
   DataTableBody,
   DataTableHeader,
   Row,
+  useLocale,
 } from '@plurid/carved-ui-react';
 import type { Selection, SortDescriptor } from '@plurid/carved-ui-react';
 
@@ -22,11 +23,14 @@ type Deploy = (typeof deploys)[number];
 export default function Example() {
   const [sort, setSort] = useState<SortDescriptor>({ column: 'seconds', direction: 'ascending' });
   const [selected, setSelected] = useState<Selection>(new Set(['9c02']));
+  const { locale } = useLocale();
   const sorted = useMemo(() => {
+    // Sort as people read: by the locale's alphabet, and numbers by their value.
+    const collator = new Intl.Collator(locale, { numeric: true });
     const key = sort.column as keyof Deploy;
-    const order = [...deploys].sort((a, b) => (a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0));
+    const order = [...deploys].sort((a, b) => collator.compare(String(a[key]), String(b[key])));
     return sort.direction === 'descending' ? order.reverse() : order;
-  }, [sort]);
+  }, [sort, locale]);
   return (
     <DataTable
       aria-label="Deploys"

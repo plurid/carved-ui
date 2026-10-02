@@ -111,3 +111,17 @@ export const Calendars: Story = {
     );
   },
 };
+
+export const RangeAcrossWeeks: Story = {
+  render: () => (
+    <RangeCalendar
+      aria-label="Holiday"
+      defaultValue={{ start: parseDate('2026-03-12'), end: parseDate('2026-03-24') }}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    // Days inside the range are a flat wash: no sheen of their own.
+    const middle = within(canvasElement).getByRole('button', { name: /March 18, 2026/ });
+    await expect(getComputedStyle(middle).backgroundImage).toBe('none');
+  },
+};

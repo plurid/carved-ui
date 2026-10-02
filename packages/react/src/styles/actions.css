@@ -14,6 +14,7 @@
   font-weight: 600;
   line-height: 1.2;
   color: var(--carved-cut-fg);
+  letter-spacing: -0.005em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -21,7 +22,6 @@
   background-color: var(--carved-cut);
   border: 0;
   border-radius: var(--carved-radius-pill);
-  outline-offset: 3px;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -30,13 +30,19 @@
 }
 
 .carved-button[data-variant='primary'] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-button[data-variant='danger'] {
+  --carved-focus-edge: var(--carved-on-danger);
+
   color: var(--carved-on-danger);
   background-color: var(--carved-danger);
+  background-image: var(--carved-sheen);
 }
 
 /* A ghost is flush with the surface until touched. */
@@ -78,6 +84,11 @@
   cursor: progress;
 }
 
+/* A button-styled link to the page you are on goes nowhere. */
+.carved-button[aria-current='page'] {
+  cursor: default;
+}
+
 .carved-button-spinner {
   inline-size: 1em;
   block-size: 1em;
@@ -100,34 +111,69 @@
   inline-size: 3.25rem;
 }
 
-/* Inline links are underlined in the accent ink; the underline thickens under the pointer. */
+/* Links run along an engraved groove: a shaded wall over a lit one, like a separator, so they
+ * are told apart by more than colour. Touch cuts the groove deeper and inlays it with the
+ * accent. The groove follows the text across line breaks. */
 .carved-link {
-  color: var(--carved-accent-ink);
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  --_wall: var(--carved-shade-deep);
+  --_lit: color-mix(in oklab, var(--carved-edge) 75%, transparent);
+
+  padding-block-end: 0.125em;
+  font-weight: 550;
+  color: var(--carved-fg);
+  text-decoration: none;
   cursor: pointer;
+  background-image:
+    linear-gradient(var(--_wall), var(--_wall)), linear-gradient(var(--_lit), var(--_lit));
+  background-repeat: no-repeat;
+  background-position:
+    0 calc(100% - 1px),
+    0 100%;
+  background-size:
+    100% 1px,
+    100% 1px;
   border-radius: 2px;
+  transition:
+    color var(--carved-motion-duration) var(--carved-motion-easing),
+    background-size var(--carved-motion-duration) var(--carved-motion-easing);
+  box-decoration-break: clone;
 }
 
-.carved-link[data-hovered] {
-  text-decoration-thickness: 2px;
+.carved-link:is([data-hovered], [data-focus-visible]) {
+  --_wall: var(--carved-accent);
+  --_lit: var(--carved-accent);
+
+  color: var(--carved-accent-ink);
+  background-size:
+    100% 2px,
+    100% 1px;
+}
+
+/* Focus is the inlaid groove and the ink, not an edge drawn over the words. */
+.carved-link[data-focus-visible] {
+  outline: none;
 }
 
 .carved-link[data-disabled] {
+  --_wall: transparent;
+  --_lit: transparent;
+
   color: var(--carved-muted);
 }
 
 .carved-link[data-current] {
   color: var(--carved-fg);
-  text-decoration: none;
   cursor: default;
+  background-image: none;
 }
 
 /* Toggles carve in when off and are inlaid with the accent when on. */
 .carved-toggle[data-selected] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 /* A channel cut once, holding flush toggles; the chosen one is inlaid. */
@@ -161,9 +207,11 @@
 
 .carved-toggle-group .carved-toggle[data-selected] {
   --carved-carve-scale: 0.4;
+  --carved-focus-edge: var(--carved-on-accent);
 
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   box-shadow: revert-layer;
 }
 
@@ -212,9 +260,11 @@
 
 .carved-toolbar .carved-toggle[data-selected] {
   --carved-carve-scale: 0.4;
+  --carved-focus-edge: var(--carved-on-accent);
 
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   box-shadow: revert-layer;
 }
 
@@ -227,6 +277,11 @@
 @media (forced-colors: active) {
   .carved-button {
     border: 1px solid ButtonText;
+  }
+
+  .carved-link {
+    text-decoration: underline;
+    background-image: none;
   }
 
   .carved-button[data-variant='ghost'] {

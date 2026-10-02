@@ -11,6 +11,7 @@ import {
   CardTitle,
   CarvedProvider,
   Checkbox,
+  ColorPicker,
   Disclosure,
   Heading,
   Radio,
@@ -207,12 +208,10 @@ export function ThemeLab() {
               errorMessage={error}
               description="Any CSS colour: hex, rgb, hsl, oklch or a name."
             />
-            <input
-              type="color"
+            <ColorPicker
               aria-label="Pick a colour"
-              className="color-well carved-carve"
               value={valid ?? lastValid}
-              onChange={(event) => setColor(event.target.value)}
+              onChange={(next) => setColor(next.toString('hex').toLowerCase())}
             />
           </div>
           <Slider

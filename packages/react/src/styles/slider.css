@@ -1,6 +1,14 @@
-/* A carved groove, an inlaid fill, and raised thumbs. */
+/* A carved slot holding an inlaid fill, and the fill holding the thumbs, as a switch's track
+ * holds its knob. The fill always wraps each thumb in a rounded end, so at any value, even
+ * the lowest, the thumb sits in an even ring of the accent.
+ *
+ * The track React Aria measures is the rail the thumbs' centres travel: it is inset from each
+ * end of the slot, so a thumb sits inside the slot even at the ends and lands exactly under
+ * the pointer. The slot itself is drawn around the rail. */
 
 .carved-slider {
+  --_reach: calc(var(--carved-slot-bead) / 2 + var(--carved-slot-gap));
+
   display: grid;
   grid-template-columns: 1fr auto;
   row-gap: var(--carved-space-2);
@@ -16,39 +24,92 @@
 }
 
 .carved-slider-track {
-  --carved-carve-scale: 0.3;
+  --carved-carve-scale: 0.45;
   --carved-carve-ring: inset 0 0 0 1px var(--carved-edge);
 
   position: relative;
+  cursor: pointer;
   grid-column: 1 / -1;
-  block-size: 0.5rem;
-  margin-block: 0.625rem;
+  block-size: var(--carved-slot);
+  margin: 0.25rem var(--_reach);
+  box-shadow: none;
+}
+
+/* The slot: the rail, reaching out to the slider's full width. */
+.carved-slider-track::before {
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(var(--_reach) * -1);
+  content: '';
   background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+  box-shadow: var(--carved-carve-shadow);
+  transition: box-shadow var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-slider-track[data-hovered] {
+  --carved-carve-k: 1.5;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+.carved-slider-track:has(> [data-dragging]) {
+  --carved-carve-k: 2;
+  --carved-carve-shade: var(--carved-shade-deep);
+
+  cursor: grabbing;
+}
+
+/* React Aria places the fill between the rail's start, or the first thumb, and the last thumb.
+ * Its inlay reaches half its height beyond both, so each thumb sits in a rounded end. */
+.carved-slider-fill::before {
+  position: absolute;
+  inset-block: var(--carved-slot-gap);
+  inset-inline: calc(var(--carved-slot-bead) / -2);
+  content: '';
+  background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   border-radius: var(--carved-radius-pill);
 }
 
-.carved-slider-fill {
-  position: absolute;
-  inset-block: 0;
-  background-color: var(--carved-accent);
-  border-radius: inherit;
-}
-
+/* The knob is raised from the fill, in the ink made to read on the accent. */
 .carved-slider-thumb {
-  inline-size: 1.375rem;
-  block-size: 1.375rem;
+  --carved-focus-edge: var(--carved-on-accent);
+
+  cursor: grab;
+
+  inline-size: var(--carved-slot-knob);
+  block-size: var(--carved-slot-knob);
   inset-block-start: 50%;
-  background-color: var(--carved-fg);
-  border: 4px solid var(--carved-accent);
+  background-color: var(--carved-on-accent);
+  background-image: var(--carved-sheen);
   border-radius: 50%;
   transition: scale var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+/* A larger target than the knob, filling its ring. */
+.carved-slider-thumb::before {
+  position: absolute;
+  inset: calc(var(--carved-slot-gap) * -1);
+  content: '';
+  border-radius: 50%;
 }
 
 .carved-slider-thumb:is([data-hovered], [data-dragging]) {
   scale: 1.1;
 }
 
+.carved-slider-thumb[data-dragging] {
+  cursor: grabbing;
+}
+
+/* Lit around the knob, inside its ring of the fill. */
+.carved-slider-thumb[data-focus-visible] {
+  outline-offset: 1px;
+}
+
+/* Vertical: the same slot, standing up. */
 .carved-slider[data-orientation='vertical'] {
+  grid-template-rows: auto auto minmax(0, 1fr);
   grid-template-columns: auto;
   justify-items: center;
   inline-size: auto;
@@ -60,14 +121,22 @@
 }
 
 .carved-slider[data-orientation='vertical'] .carved-slider-track {
+  grid-row: -2;
   grid-column: 1;
-  inline-size: 0.5rem;
-  block-size: 100%;
-  margin: 0 0.625rem;
+  inline-size: var(--carved-slot);
+  block-size: auto;
+  align-self: stretch;
+  margin: var(--_reach) 0.25rem;
 }
 
-.carved-slider[data-orientation='vertical'] .carved-slider-fill {
+.carved-slider[data-orientation='vertical'] .carved-slider-track::before {
+  inset-block: calc(var(--_reach) * -1);
   inset-inline: 0;
+}
+
+.carved-slider[data-orientation='vertical'] .carved-slider-fill::before {
+  inset-block: calc(var(--carved-slot-bead) / -2);
+  inset-inline: var(--carved-slot-gap);
 }
 
 .carved-slider[data-orientation='vertical'] .carved-slider-thumb {
@@ -80,18 +149,17 @@
 }
 
 @media (forced-colors: active) {
-  .carved-slider-track {
+  .carved-slider-track::before {
     border: 1px solid ButtonText;
   }
 
-  .carved-slider-fill {
+  .carved-slider-fill::before {
     background-color: Highlight;
     forced-color-adjust: none;
   }
 
   .carved-slider-thumb {
-    background-color: ButtonText;
-    border-color: Highlight;
+    background-color: HighlightText;
     forced-color-adjust: none;
   }
 }

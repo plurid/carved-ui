@@ -24,11 +24,6 @@
   outline: none;
 }
 
-.carved-data-table[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: -2px;
-}
-
 .carved-data-column {
   padding: 0.75rem var(--carved-space-4);
   font-size: var(--carved-text-xs);
@@ -53,8 +48,6 @@
 
 .carved-data-column[data-focus-visible],
 .carved-data-cell[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: -2px;
   border-radius: 4px;
 }
 
@@ -104,6 +97,10 @@
   border-radius: 1px;
 }
 
+.carved-column-resizer[data-focus-visible] {
+  outline: none;
+}
+
 .carved-column-resizer:is([data-hovered], [data-resizing], [data-focus-visible])::after {
   inline-size: 3px;
   background: var(--carved-accent);
@@ -126,6 +123,11 @@
 
 .carved-data-row > .carved-data-cell:dir(rtl) {
   box-shadow: -1px 0 0 var(--_row, transparent);
+}
+
+/* The last cell has no neighbour to reach into. */
+.carved-data-row > .carved-data-cell:last-child {
+  box-shadow: none;
 }
 
 .carved-data-row:last-child > .carved-data-cell {
@@ -160,12 +162,6 @@
   outline: none;
 }
 
-.carved-grid-list[data-focus-visible],
-.carved-tree[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
-}
-
 .carved-grid-list[data-empty],
 .carved-tree[data-empty] {
   padding: var(--carved-space-5);
@@ -175,7 +171,6 @@
 
 .carved-grid-item,
 .carved-tree-cell {
-  cursor: default;
   background-color: var(--_row, transparent);
   border-radius: calc(var(--carved-radius-control) - 3px);
   outline: none;
@@ -277,7 +272,6 @@
   block-size: 1.5rem;
   padding: 0;
   color: var(--_level-muted);
-  cursor: pointer;
   background: none;
   border: 0;
   border-radius: 50%;
@@ -304,10 +298,22 @@
   min-inline-size: 0;
 }
 
-:is(.carved-data-row, .carved-grid-item)[data-focus-visible],
+.carved-tree-item[data-focus-visible] {
+  outline: none;
+}
+
 .carved-tree-item[data-focus-visible] .carved-tree-cell {
-  outline: 2px solid var(--carved-focus);
+  outline: 2px solid var(--carved-focus-edge, var(--carved-focus));
   outline-offset: -2px;
+}
+
+button.carved-tree-chevron {
+  cursor: pointer;
+}
+
+/* React Aria hovers a row only when it can be chosen or acted on. */
+:is(.carved-data-row, .carved-grid-item, .carved-tree-item)[data-hovered] {
+  cursor: pointer;
 }
 
 /* Interaction, shared by the three: each sets its row's fill. */
@@ -317,12 +323,20 @@
 
 :is(.carved-data-row, .carved-grid-item)[data-selected] {
   --_row: var(--carved-accent);
+  --carved-focus-edge: var(--carved-on-accent);
 
   color: var(--carved-on-accent);
 }
 
+/* A grid item is one shape, so its inlay is polished; a table row is a run of cells, and stays
+ * flat so it never shows a sheen per cell. */
+.carved-grid-item[data-selected]:not(:has(.carved-checkbox)) {
+  background-image: var(--carved-sheen);
+}
+
 :is(.carved-data-row, .carved-grid-item)[data-selected]:has(.carved-checkbox) {
   --_row: var(--carved-cut);
+  --carved-focus-edge: var(--carved-focus);
 
   color: var(--carved-cut-fg);
 }
@@ -334,14 +348,18 @@
 
 .carved-tree-item[data-selected] .carved-tree-cell {
   --_row: var(--carved-accent);
+  --carved-focus-edge: var(--carved-on-accent);
 
   color: var(--carved-on-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-tree-item[data-selected]:has(.carved-checkbox) .carved-tree-cell {
   --_row: var(--_level-under);
+  --carved-focus-edge: var(--carved-focus);
 
   color: var(--_level-ink);
+  background-image: none;
 }
 
 :is(.carved-data-row, .carved-grid-item, .carved-tree-item)[data-selected]:not(

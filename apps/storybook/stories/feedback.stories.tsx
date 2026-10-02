@@ -79,6 +79,9 @@ export const Progress: Story = {
     <div className="lab-stack lab-narrow">
       <ProgressBar label="Uploading" value={64} />
       <ProgressBar label="Preparing" />
+      <ProgressBar label="Queued" value={0} />
+      <ProgressBar label="Starting" value={1} />
+      <ProgressBar label="Done" value={100} />
       <div className="lab-row">
         <Spinner size="sm" />
         <Spinner />

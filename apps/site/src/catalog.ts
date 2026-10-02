@@ -91,7 +91,7 @@ export const catalog: Entry[] = [
     title: 'Text field',
     group: 'Fields',
     summary:
-      'Wells for text. Focus deepens the cut and lights its edge; errors light it in the danger ink.',
+      'Wells for text. Focus lights the whole well, its floor and its rim; errors rim it in the danger tone.',
     components: ['TextField', 'SearchField', 'TextFieldRoot'],
     examples: [
       { title: 'Text and notes', file: 'text-field' },
@@ -138,7 +138,7 @@ export const catalog: Entry[] = [
     title: 'Calendar',
     group: 'Fields',
     summary:
-      'Days in round sockets: hovering cuts one, the chosen day is inlaid, today is marked, and a range cuts a band between its ends.',
+      'Days in round sockets: hovering cuts one, the chosen day is an inlaid bead, today is marked, and a range is a wash of the accent between two beads.',
     components: ['Calendar', 'RangeCalendar'],
     examples: [{ title: 'A day and a range', file: 'calendar' }],
   },
@@ -147,7 +147,7 @@ export const catalog: Entry[] = [
     title: 'Checkbox, radio and switch',
     group: 'Fields',
     summary:
-      'Sockets that fill with the accent when chosen, and a switch whose knob is the only raised piece.',
+      'Sockets that fill with the accent when chosen, and a switch whose raised knob slides along a carved track.',
     components: ['Checkbox', 'CheckboxGroup', 'RadioGroup', 'Radio', 'Switch'],
     examples: [
       { title: 'Checkboxes', file: 'checkbox' },
@@ -159,7 +159,8 @@ export const catalog: Entry[] = [
     slug: 'slider',
     title: 'Slider',
     group: 'Fields',
-    summary: 'A carved groove with an inlaid fill and raised thumbs. Pass an array for a range.',
+    summary:
+      'A carved slot holding an inlaid fill, and the fill holding a raised knob, at any value. Pass an array for a range.',
     components: ['Slider'],
     examples: [{ title: 'Single value and range', file: 'slider' }],
   },
@@ -188,8 +189,8 @@ export const catalog: Entry[] = [
     title: 'Drop zone',
     group: 'Fields',
     summary:
-      'A well that takes files dropped, pasted or chosen. It cuts deeper and lights its edge while files hover over it.',
-    components: ['DropZone'],
+      'A well that takes files dropped, pasted or chosen. It cuts deeper and is lit while files hover over it.',
+    components: ['DropZone', 'FileList', 'FileItem'],
     examples: [{ title: 'Images', file: 'drop-zone' }],
   },
   {
@@ -229,7 +230,7 @@ export const catalog: Entry[] = [
     group: 'Collections',
     summary:
       'A table in its own well whose rows sort, select and move with the arrow keys, and whose columns resize.',
-    components: ['DataTable', 'Column', 'DataTableBody', 'Row'],
+    components: ['DataTable', 'DataTableHeader', 'Column', 'DataTableBody', 'Row', 'Cell'],
     examples: [
       {
         title: 'Sorting and selection',
@@ -238,7 +239,7 @@ export const catalog: Entry[] = [
       },
       {
         title: 'Resizing and loading',
-        description: 'Drag a column’s groove, or focus it and use the arrow keys.',
+        description: 'Drag the line at a column’s edge, or focus it and use the arrow keys.',
         file: 'data-table-resize',
       },
     ],
@@ -256,7 +257,8 @@ export const catalog: Entry[] = [
     slug: 'tree',
     title: 'Tree',
     group: 'Collections',
-    summary: 'Nested items that open and close, such as files in folders.',
+    summary:
+      'Nested items that open and close, such as files in folders. Each open level is a well of its own, a level deeper.',
     components: ['Tree', 'TreeItem'],
     examples: [{ title: 'Files', file: 'tree' }],
   },
@@ -307,7 +309,7 @@ export const catalog: Entry[] = [
     title: 'Tabs',
     group: 'Navigation',
     summary: 'A carved channel; the chosen tab is inlaid, and the inlay slides between tabs.',
-    components: ['Tab'],
+    components: ['Tabs', 'TabList', 'Tab', 'TabPanel'],
     examples: [{ title: 'Tabs', file: 'tabs' }],
   },
   {
@@ -335,7 +337,7 @@ export const catalog: Entry[] = [
     summary:
       'Pages of a long list in a carved channel, the current page inlaid. Pages are buttons, or links for lists rendered on the server.',
     components: ['Pagination'],
-    examples: [{ title: 'Buttons and links', file: 'pagination' }],
+    examples: [{ title: 'Pages of results', file: 'pagination' }],
   },
   {
     slug: 'alert',
@@ -352,7 +354,8 @@ export const catalog: Entry[] = [
     slug: 'progress',
     title: 'Progress',
     group: 'Feedback',
-    summary: 'Progress fills a carved groove; the spinner turns an inlay in a carved ring.',
+    summary:
+      'Progress is the slider’s slot without a knob: an inlaid bead grows along it. The spinner turns an inlay in a carved ring.',
     components: ['ProgressBar', 'Spinner'],
     examples: [{ title: 'Progress, spinner and skeleton', file: 'progress' }],
   },
@@ -361,7 +364,7 @@ export const catalog: Entry[] = [
     title: 'Meter',
     group: 'Feedback',
     summary:
-      'An amount within a known range, such as storage used, inlaid with a tone that can warn as it fills.',
+      'An amount within a known range, such as storage used: a bead in the slider’s slot, inlaid with a tone that can warn as it fills.',
     components: ['Meter'],
     examples: [{ title: 'Meters', file: 'meter' }],
   },

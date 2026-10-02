@@ -35,7 +35,7 @@ Carved has one idea: every surface is a recess cut into a single material, lit b
 - **Depth is shade.** Each nested surface is cut one level deeper and darker than its parent, down to six levels.
 - **One light.** A single angle places every shadow, lit edge and engraving, so the whole interface agrees. Change it and everything is relit together.
 - **Touch cuts deeper.** Hovering deepens a control's cut; pressing deepens it again, so a button gives way like a key.
-- **Meaning is inlaid.** Accent, success, warning and danger are set into the cut rather than glowing above it. Only moving pieces rise: a switch's knob, a slider's thumb.
+- **Meaning is inlaid.** Accent, success, warning and danger are set into the cut rather than glowing above it. Only moving pieces rise: a switch's knob, a slider's knob, a keycap.
 
 ## Quick start
 
@@ -78,7 +78,7 @@ Labels, descriptions, validation messages, keyboard behaviour and focus manageme
 
 <img src="docs/assets/materials.png" alt="The same field, buttons and badge in each of the seven presets: night, dusk, dawn, light, ponton, jaune and furor" />
 
-Each preset (`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`) is generated from one colour, and so is yours:
+Each preset (`night`, `dusk`, `dawn`, `light`, `ponton`, `jaune`, `furor`) is generated from one colour and an accent chosen for it. Yours needs only the colour; the accent and the other tones are derived unless you choose them:
 
 ```tsx
 import { createTheme } from '@plurid/carved-ui-core';
@@ -99,7 +99,7 @@ The theme engine builds six depths in OKLCH, keeping the hue steady, then solves
 | Fields      | `TextField`, `SearchField`, `NumberField`, `Checkbox`, `CheckboxGroup`, `RadioGroup`, `Switch`, `Slider`, `Fieldset` |
 | Dates       | `DatePicker`, `DateRangePicker`, `DateField`, `TimeField`, `Calendar`, `RangeCalendar`                               |
 | Colour      | `ColorPicker`, `ColorArea`, `ColorSlider`, `ColorWheel`, `ColorField`, `ColorSwatch`, `ColorSwatchPicker`            |
-| Files       | `DropZone`, `FileTrigger`                                                                                            |
+| Files       | `DropZone`, `FileTrigger`, `FileList`, `FileItem`                                                                    |
 | Collections | `Select`, `ComboBox`, `ListBox`, `Menu`, `DataTable`, `GridList`, `Tree`, `TagGroup`                                 |
 | Overlays    | `Modal`, `Drawer`, `Dialog`, `AlertDialog`, `Popover`, `Tooltip`, `CommandPalette`                                   |
 | Navigation  | `Tabs`, `Accordion`, `Disclosure`, `Breadcrumbs`, `Pagination`                                                       |

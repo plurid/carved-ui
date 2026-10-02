@@ -21,7 +21,7 @@ The guarantees cover generated values. If you override a colour, check its contr
 
 ## Interaction
 
-- Every control works with a keyboard, and focus is always visible: fields light their edge in the accent, other controls draw a ring.
+- Every control works with a keyboard, and focus is always visible when the keyboard is in use: a control's own edge lights in the focus colour, drawn inside its shape, and a focused field is lit as a whole, its shadow shortened, its floor brighter and its rim lit all round. Nothing appears after a click.
 - Text never dims to show a state. Hover and press deepen a control's shadow instead.
 - Pressing a button never moves it: a field's error waits until the press completes before appearing or disappearing.
 - Dialogs trap focus, can be closed with Escape, and return focus to what opened them.

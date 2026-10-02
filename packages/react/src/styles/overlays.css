@@ -52,7 +52,7 @@
 }
 
 .carved-modal[data-entering] {
-  animation: carved-rise var(--carved-motion-duration) var(--carved-motion-easing);
+  animation: carved-rise var(--carved-motion-emphasis) var(--carved-motion-easing);
 }
 
 .carved-drawer {
@@ -144,9 +144,11 @@
   overflow: visible;
 }
 
+/* Popovers grow out of their trigger. */
 .carved-popover[data-entering],
 .carved-tooltip[data-entering] {
-  animation: carved-fade var(--carved-motion-duration) var(--carved-motion-easing);
+  transform-origin: var(--trigger-anchor-point);
+  animation: carved-pop var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
 .carved-tooltip {
@@ -220,6 +222,13 @@
 @keyframes carved-fade {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes carved-pop {
+  from {
+    opacity: 0;
+    scale: 0.97;
   }
 }
 

@@ -75,7 +75,7 @@ export function tokensCss(): string {
 /** The complete core stylesheet: cascade layer order, tokens and the material primitives. */
 export function coreStylesheet(materialCss: string): string {
   return [
-    '@layer carved.tokens, carved.material, carved.components;',
+    '@layer carved.tokens, carved.material, carved.components, carved.states;',
     `@layer carved.tokens {\n${tokensCss()}\n}`,
     `@layer carved.material {\n${materialCss}\n}`,
   ].join('\n');

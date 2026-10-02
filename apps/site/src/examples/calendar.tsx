@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Calendar, RangeCalendar } from '@plurid/carved-ui-react';
+import { Calendar, RangeCalendar, useLocale } from '@plurid/carved-ui-react';
 import type { DateValue } from '@plurid/carved-ui-react';
 import { isWeekend, parseDate } from '@internationalized/date';
-import { useLocale } from 'react-aria-components';
 
 export default function Example() {
   const { locale } = useLocale();

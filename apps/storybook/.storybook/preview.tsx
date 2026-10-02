@@ -3,7 +3,8 @@ import { CarvedProvider } from '@plurid/carved-ui-react';
 import { presetNames } from '@plurid/carved-ui-core';
 import type { ThemePreset } from '@plurid/carved-ui-core';
 import '@fontsource-variable/archivo/wdth.css';
-import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import '@plurid/carved-ui-react/styles.css';
 import './laboratory.css';
 

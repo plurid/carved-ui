@@ -65,7 +65,7 @@ export interface ThemeOptions {
   /** Length of a resting carve's shadow in pixels, 0–24. @default 5 */
   shadowDistance?: number;
   /**
-   * Inlay colours. `'standard'` uses fixed semantic hues; `'themed'` derives every hue from the
+   * Inlay colours. `'standard'` uses mineral semantic hues; `'themed'` derives every hue from the
    * base colour, as the original themed button kinds did. An object overrides individual seeds.
    * @default 'standard'
    */
@@ -304,6 +304,7 @@ export function createTheme(options: ThemeOptions): Theme {
   const shadowChroma = Math.min(base.c, 0.03);
   const dark = polarity === 'dark';
   Object.assign(variables, {
+    '--carved-light-angle': `${round(angle, 2)}deg`,
     '--carved-light-x': String(round(Math.cos(radians), 4)),
     '--carved-light-y': String(round(Math.sin(radians), 4)),
     '--carved-shadow-distance': `${round(distance, 2)}px`,

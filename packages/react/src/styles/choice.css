@@ -41,14 +41,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Focus is drawn around the indicator, not the whole label. */
+/* Focus lights the indicator's own edge, not a box around the whole label. */
 .carved-choice-label[data-focus-visible] {
   outline: none;
 }
 
 .carved-choice-label[data-focus-visible] > [aria-hidden] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
+  outline: 2px solid var(--carved-focus-edge, var(--carved-focus));
+  outline-offset: -2px;
 }
 
 .carved-choice-label[data-disabled] {
@@ -91,9 +91,11 @@
 .carved-choice-label:is([data-selected], [data-indeterminate])
   > :is(.carved-checkbox-box, .carved-radio-socket) {
   --carved-carve-ring: 0 0 #0000;
+  --carved-focus-edge: var(--carved-on-accent);
 
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-radio-socket::after {
@@ -142,15 +144,19 @@
   block-size: 1.125rem;
   background-color: var(--carved-muted);
   border-radius: 50%;
+
+  /* The knob slides home with a little overshoot, as a sprung piece would. */
   transition:
-    translate var(--carved-motion-duration) var(--carved-motion-easing),
+    translate var(--carved-motion-emphasis) cubic-bezier(0.3, 1.45, 0.5, 1),
     background-color var(--carved-motion-duration);
 }
 
 .carved-choice-label[data-selected] > .carved-switch-track {
   --carved-carve-ring: 0 0 #0000;
+  --carved-focus-edge: var(--carved-on-accent);
 
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-choice-label[data-selected] .carved-switch-knob {

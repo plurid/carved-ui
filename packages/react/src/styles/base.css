@@ -1,8 +1,10 @@
 /* The themed scope, focus, selection and the behaviour shared by every component. */
 
-.carved-provider {
+/* A provider's overlays render in its portal host, which may sit elsewhere in the page, so the
+ * host carries the provider's inherited type and colour scheme too. */
+.carved-provider,
+.carved-portal-host {
   color: var(--carved-fg);
-  background-color: var(--carved-bg);
   color-scheme: var(--carved-color-scheme);
   accent-color: var(--carved-accent);
   font-family: var(--carved-font-body);
@@ -11,8 +13,23 @@
   text-rendering: optimizelegibility;
 }
 
+.carved-provider {
+  background-color: var(--carved-bg);
+}
+
 .carved-portal-host {
   display: contents;
+}
+
+/* The slot every value sits in. Sliders, progress bars and meters share one instrument: a
+ * carved slot, and inside it an inlaid bead, inset by the gap; a slider's knob sits inside the
+ * bead. */
+.carved-slider,
+.carved-progress {
+  --carved-slot: 1.625rem;
+  --carved-slot-gap: 0.1875rem;
+  --carved-slot-bead: calc(var(--carved-slot) - 2 * var(--carved-slot-gap));
+  --carved-slot-knob: calc(var(--carved-slot-bead) - 2 * var(--carved-slot-gap));
 }
 
 :where(.carved-provider, .carved-portal-host) ::selection {
@@ -26,15 +43,19 @@
   box-sizing: border-box;
 }
 
-/* One focus ring for everything, drawn in the accent ink so it reads on every depth. */
-:where([class*='carved-'])[data-focus-visible],
-:where([class*='carved-']):where(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
+/* Focus is a lit edge, shown only for keyboard use: the control's own edge lights in the
+ * focus colour, drawn inside its shape so it follows every curve. On an inlay it lights in the
+ * ink that sits on the inlay (--carved-focus-edge). Raised pieces, which stand proud, are lit
+ * around their edge, and fields are lit as a whole. Its specificity beats any component's resting `outline: none`; the few
+ * components that show focus their own way, such as fields, opt out. */
+[class*='carved-'][data-focus-visible],
+[class*='carved-']:is(a, button, summary):focus-visible {
+  outline: 2px solid var(--carved-focus-edge, var(--carved-focus));
+  outline-offset: -2px;
 }
 
-:where([class*='carved-'])[data-disabled] {
-  cursor: not-allowed;
+.carved-raise[data-focus-visible] {
+  outline-offset: 2px;
 }
 
 .carved-icon-flip:dir(rtl) {

@@ -64,7 +64,7 @@ export interface ColorSliderProps extends Omit<AriaColorSliderProps, 'children'>
   ref?: Ref<HTMLDivElement>;
 }
 
-/** One channel of a colour along a carved groove of its gradient. */
+/** One channel of a colour, along a carved track of its gradient. */
 export function ColorSlider({ label, showOutput = true, className, ...props }: ColorSliderProps) {
   return (
     <AriaColorSlider
@@ -112,6 +112,7 @@ export function ColorWheel({
 }
 
 export interface ColorFieldProps extends Omit<AriaColorFieldProps, 'children'>, FieldProps {
+  /** Shown in the empty field. It is not a label: give the field a `label` too. */
   placeholder?: string;
   ref?: Ref<HTMLDivElement>;
 }
@@ -135,7 +136,7 @@ export function ColorField({
 }
 
 export interface ColorSwatchProps extends AriaColorSwatchProps {
-  /** @default 'md' */
+  /** The swatch's size. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
   ref?: Ref<HTMLDivElement>;
 }
@@ -183,23 +184,30 @@ export interface ColorPickerProps extends Omit<AriaColorPickerProps, 'children'>
   label?: ReactNode;
   /** Colours offered as swatches below the editor. */
   swatches?: string[];
+  /** Names the button when it shows only the swatch, such as "Pick a colour". */
+  'aria-label'?: string;
 }
 
 /**
  * A swatch button that opens an editor: saturation and brightness on an area, hue on a
  * slider, the hex value in a field and, optionally, preset swatches.
  */
-export function ColorPicker({ label, swatches, ...props }: ColorPickerProps) {
+export function ColorPicker({
+  label,
+  swatches,
+  'aria-label': ariaLabel,
+  ...props
+}: ColorPickerProps) {
   return (
     <AriaColorPicker {...props}>
       <DialogTrigger>
-        <Button variant="secondary" className="carved-color-trigger">
+        <Button variant="secondary" aria-label={ariaLabel} className="carved-color-trigger">
           <ColorSwatch size="sm" />
           {label && <span>{label}</span>}
         </Button>
         <Popover placement="bottom start" className="carved-color-popover">
           <Dialog
-            aria-label={typeof label === 'string' ? label : 'Colour'}
+            aria-label={ariaLabel ?? (typeof label === 'string' ? label : 'Colour')}
             className="carved-color-editor"
           >
             <ColorArea colorSpace="hsb" xChannel="saturation" yChannel="brightness" />

@@ -4,9 +4,9 @@ body {
 }
 
 .laboratory {
-  --carved-font-body: 'Archivo Variable', system-ui, sans-serif;
-  --carved-font-display: 'Archivo Variable', system-ui, sans-serif;
-  --carved-font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --carved-font-body: 'Geist Variable', system-ui, sans-serif;
+  --carved-font-display: 'Archivo Variable', 'Geist Variable', system-ui, sans-serif;
+  --carved-font-mono: 'Geist Mono Variable', ui-monospace, monospace;
 
   min-block-size: 100dvh;
   padding: clamp(1.25rem, 4vw, 3rem);

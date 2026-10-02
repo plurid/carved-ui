@@ -1,9 +1,10 @@
 /* A drop zone is a well that takes files. While files are dragged over it, it cuts deeper and
- * its edge lights in the accent, as a focused field's does. */
+ * is lit, as a focused field is (see fields.css). */
 
 .carved-drop-zone {
   --carved-carve-scale: 0.8;
   --carved-carve-lip: var(--carved-edge);
+  --_floor: var(--carved-bg);
 
   display: flex;
   flex-direction: column;
@@ -17,18 +18,18 @@
   background-color: var(--carved-bg);
   border-radius: calc(var(--carved-radius-surface) * 2);
   outline: none;
+  transition:
+    box-shadow var(--carved-motion-duration) var(--carved-motion-easing),
+    background-color var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
 .carved-drop-zone[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .carved-drop-zone[data-drop-target] {
   --carved-carve-k: 2.5;
   --carved-carve-shade: var(--carved-shade-deep);
-  --carved-carve-lip: var(--carved-focus);
-  --carved-carve-lip-width: 2px;
 }
 
 .carved-drop-zone-icon {
@@ -63,7 +64,102 @@
   opacity: 0.55;
 }
 
+/* Chosen files: a well of rows, one per file. While a file uploads, its row fills with the
+ * accent's wash from its start, as a calendar's range does. */
+.carved-file-list {
+  --carved-carve-scale: 0.6;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--carved-space-1);
+  margin: 0;
+  color: var(--carved-fg);
+  list-style: none;
+  background-color: var(--carved-bg);
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-1));
+}
+
+.carved-file-list:empty {
+  display: none;
+}
+
+.carved-file {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  min-block-size: 3.25rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.875rem;
+  overflow: hidden;
+  border-radius: calc(var(--carved-radius-control) - 2px);
+}
+
+.carved-file[data-invalid] {
+  box-shadow: inset 0 0 0 1px var(--carved-danger);
+}
+
+.carved-file-progress {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.carved-file-wash {
+  display: block;
+  block-size: 100%;
+  background-color: color-mix(in oklab, var(--carved-accent) 22%, transparent);
+  transition: inline-size var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-file-icon {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  color: var(--carved-muted);
+}
+
+.carved-file-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.carved-file-name {
+  display: flex;
+  min-inline-size: 0;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.carved-file-stem {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carved-file-meta {
+  font-size: var(--carved-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--carved-muted);
+}
+
+.carved-file[data-invalid] .carved-file-meta {
+  color: var(--carved-danger-ink);
+}
+
 @media (forced-colors: active) {
+  .carved-file-list,
+  .carved-file[data-invalid] {
+    border: 1px solid CanvasText;
+  }
+
+  .carved-file-wash {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
   .carved-drop-zone {
     border: 1px dashed CanvasText;
   }

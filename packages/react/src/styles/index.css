@@ -1,5 +1,6 @@
-/* Carved for React: core tokens and material, then every component in its own layer. */
-@layer carved.tokens, carved.material, carved.components;
+/* Carved for React: core tokens and material, then the components, then the states that must
+ * win over any component's resting rules. */
+@layer carved.tokens, carved.material, carved.components, carved.states;
 @import '@plurid/carved-ui-core/styles.css';
 @import './base.css' layer(carved.components);
 @import './actions.css' layer(carved.components);
@@ -15,3 +16,4 @@
 @import './navigation.css' layer(carved.components);
 @import './content.css' layer(carved.components);
 @import './feedback.css' layer(carved.components);
+@import './states.css' layer(carved.states);

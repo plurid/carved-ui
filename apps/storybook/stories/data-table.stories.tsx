@@ -135,12 +135,12 @@ export const Resizable: Story = {
       <DataTableBody>
         <Row>
           <Cell>Brand guidelines.pdf</Cell>
-          <Cell>Ana Pop</Cell>
+          <Cell>Amara Okafor</Cell>
           <Cell>4.2 MB</Cell>
         </Row>
         <Row>
           <Cell>Quarterly report.xlsx</Cell>
-          <Cell>Ioan Marin</Cell>
+          <Cell>Kenji Sato</Cell>
           <Cell>860 KB</Cell>
         </Row>
       </DataTableBody>

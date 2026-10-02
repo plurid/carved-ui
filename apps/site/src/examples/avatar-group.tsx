@@ -3,12 +3,12 @@ import { Avatar, AvatarGroup } from '@plurid/carved-ui-react';
 export default function Example() {
   return (
     <AvatarGroup aria-label="Project members" max={4}>
-      <Avatar name="Ana Pop" />
-      <Avatar name="Ioan Marin" />
-      <Avatar name="Mara Ilie" />
-      <Avatar name="Radu Stan" />
-      <Avatar name="Elena Dobre" />
-      <Avatar name="Victor Ene" />
+      <Avatar name="Amara Okafor" />
+      <Avatar name="Kenji Sato" />
+      <Avatar name="Lena Fischer" />
+      <Avatar name="Mateo García" />
+      <Avatar name="Priya Nair" />
+      <Avatar name="Sofia Rossi" />
     </AvatarGroup>
   );
 }

@@ -1,0 +1,37 @@
+/* States that must win over every component's resting rules, so they sit in the last layer.
+ * Each is a single rule here rather than an override in every family. */
+
+/* A disabled control refuses the pointer. React Aria also marks the current breadcrumb
+ * disabled: it is current, not refused. */
+:where([class*='carved-'])[data-disabled]:not([data-current]) {
+  cursor: not-allowed;
+}
+
+/* The content of a disabled tab or disclosure is not itself refused. */
+:where(.carved-tab-panel, .carved-disclosure-panel) {
+  cursor: auto;
+}
+
+/* Read-only controls can be focused and read, not changed. */
+:where(.carved-choice-label, .carved-date-segment)[data-readonly] {
+  cursor: default;
+}
+
+/* High contrast: system colours replace the material, so no polish is painted over them, and a
+ * chosen day or row reads in the system's selection colours whatever its tone. The spinner
+ * keeps its turning arc, which is drawn as an image. */
+@media (forced-colors: active) {
+  [class*='carved-']:not(.carved-spinner),
+  [class*='carved-']:not(.carved-spinner)::before {
+    background-image: none;
+  }
+
+  .carved-calendar-day[data-selected],
+  :is(.carved-data-row, .carved-grid-item)[data-selected],
+  :is(.carved-data-row[data-selected]) > .carved-data-cell,
+  .carved-tree-item[data-selected] .carved-tree-cell {
+    color: HighlightText;
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+}

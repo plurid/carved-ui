@@ -1,6 +1,6 @@
 // Static content: safe to render in React Server Components, so no hooks and no React Aria.
 import type { ComponentProps, ReactNode } from 'react';
-import { cx } from './internal/class-names.js';
+import { cx } from './internal/cx.js';
 import { Danger, Info, Success, Warning } from './internal/icons.js';
 
 export type Tone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger';
@@ -16,6 +16,7 @@ export interface HeadingProps extends ComponentProps<'h2'> {
   variant?: 'default' | 'display' | 'engraved';
 }
 
+/** A heading at a level of the document outline, in one of three styles. */
 export function Heading({ level = 2, variant = 'default', className, ...props }: HeadingProps) {
   const Element = `h${level}` as const;
   return (
@@ -30,10 +31,11 @@ export function Heading({ level = 2, variant = 'default', className, ...props }:
 export interface SeparatorProps extends ComponentProps<'hr'> {
   /** `trench` cuts a wide carved channel between regions. @default 'line' */
   variant?: 'line' | 'trench';
-  /** @default 'horizontal' */
+  /** Horizontal divides stacked content; vertical divides content side by side. @default 'horizontal' */
   orientation?: 'horizontal' | 'vertical';
 }
 
+/** A divider between pieces of content: a fine carved line, or a wide trench between regions. */
 export function Separator({
   variant = 'line',
   orientation = 'horizontal',
@@ -55,7 +57,7 @@ export function Separator({
 }
 
 export interface BadgeProps extends ComponentProps<'span'> {
-  /** @default 'neutral' */
+  /** The meaning the badge is inlaid with. @default 'neutral' */
   tone?: Tone;
 }
 
@@ -93,8 +95,9 @@ export function ToneMark({ tone, className }: { tone: Tone; className?: string }
 }
 
 export interface AlertProps extends Omit<ComponentProps<'div'>, 'title'> {
-  /** @default 'neutral' */
+  /** The meaning the alert is marked with. @default 'neutral' */
   tone?: Tone;
+  /** A short headline, above the message. */
   title?: ReactNode;
   /** An action placed at the end, such as a retry button. */
   action?: ReactNode;

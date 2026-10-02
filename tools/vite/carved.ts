@@ -31,7 +31,7 @@ async function reactAriaEntries(): Promise<string[]> {
   for (const file of await readdir(react, { recursive: true }))
     if (/\.tsx?$/.test(file))
       for (const [, entry] of (await readFile(`${react}${file}`, 'utf8')).matchAll(
-        /from '(react-aria(?:-components)?\/[\w]+)'/g,
+        /from '(react-aria(?:-components)?(?:\/[\w]+)?)'/g,
       ))
         entries.add(entry!);
   return [...entries].sort();

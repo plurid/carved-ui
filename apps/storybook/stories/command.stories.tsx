@@ -51,7 +51,12 @@ export const Commands: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
-    await userEvent.keyboard('{Control>}k{/Control}');
+    // ⌘K on Apple platforms, Ctrl+K elsewhere.
+    const platform =
+      (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform ??
+      navigator.platform;
+    const modifier = /mac|iphone|ipad/i.test(platform) ? 'Meta' : 'Control';
+    await userEvent.keyboard(`{${modifier}>}k{/${modifier}}`);
     const search = await body.findByRole('searchbox', { name: 'Search commands' });
     await waitFor(() => expect(search).toHaveFocus());
     await userEvent.keyboard('bill');

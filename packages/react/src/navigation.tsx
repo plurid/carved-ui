@@ -35,7 +35,7 @@ import type {
   BreadcrumbsProps as AriaBreadcrumbsProps,
 } from 'react-aria-components/Breadcrumbs';
 import { composeRenderProps } from 'react-aria-components/composeRenderProps';
-import { Children } from 'react';
+import { Children, Fragment, isValidElement } from 'react';
 import type { ComponentProps, CSSProperties, ReactNode, Ref } from 'react';
 import { Link as AriaLink } from 'react-aria-components/Link';
 import type { LinkProps as AriaLinkProps } from 'react-aria-components/Link';
@@ -43,6 +43,7 @@ import { DepthScope, useCutDepth, useDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
 import { ChevronDown, ChevronEnd, ChevronStart } from './internal/icons.js';
 
+/** Panels of content, one shown at a time, chosen from a carved channel of tabs. */
 export function Tabs({ className, ...props }: AriaTabsProps & { ref?: Ref<HTMLDivElement> }) {
   return <AriaTabs {...props} className={withClass('carved-tabs', className)} />;
 }
@@ -79,6 +80,7 @@ export function TabPanels<T extends object>({ className, ...props }: AriaTabPane
   return <AriaTabPanels {...props} className={cx('carved-tab-panels', className)} />;
 }
 
+/** The content of one tab, shown while its tab is chosen. */
 export function TabPanel({
   className,
   ...props
@@ -133,9 +135,11 @@ export function DisclosureRoot({ className, children, ...props }: DisclosureRoot
 }
 
 export interface DisclosureHeaderProps {
+  /** The heading text. */
   children: ReactNode;
   /** The heading level wrapping the trigger, to fit the document outline. @default 3 */
   level?: 1 | 2 | 3 | 4 | 5 | 6;
+  /** Classes for the heading. */
   className?: string;
 }
 
@@ -164,7 +168,9 @@ export function DisclosurePanel({
       data-carved-depth={depth}
       className={withClass('carved-disclosure-panel carved-carve', className)}
     >
-      <DepthScope depth={depth}>{children}</DepthScope>
+      <DepthScope depth={depth}>
+        <div className="carved-disclosure-body">{children}</div>
+      </DepthScope>
     </AriaDisclosurePanel>
   );
 }
@@ -172,8 +178,9 @@ export function DisclosurePanel({
 export interface DisclosureProps extends Omit<DisclosureRootProps, 'children'> {
   /** The always-visible heading that toggles the content. */
   title: ReactNode;
-  /** @default 3 */
+  /** The level of the heading that holds the trigger, to fit the document outline. @default 3 */
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+  /** The content shown while open. */
   children?: ReactNode;
 }
 
@@ -187,6 +194,18 @@ export function Disclosure({ title, headingLevel = 3, children, ...props }: Disc
   );
 }
 
+/** The crumbs among children, looking through fragments. */
+function countCrumbs(children: ReactNode): number {
+  return Children.toArray(children).reduce<number>(
+    (count, child) =>
+      count +
+      (isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+        ? countCrumbs(child.props.children)
+        : 1),
+    0,
+  );
+}
+
 /**
  * A trail of places drawn as nested pills: each crumb's pill holds the next one, cut a level
  * deeper, so the current page sits innermost and deepest. Trails of up to eight crumbs nest.
@@ -197,9 +216,9 @@ export function Breadcrumbs<T extends object>({
   ...props
 }: AriaBreadcrumbsProps<T> & { ref?: Ref<HTMLOListElement> }) {
   const depth = useDepth();
-  const crumbs = props.items
-    ? Array.from(props.items).length
-    : Children.toArray(props.children as ReactNode).length;
+  // An iterable such as a generator can be read only once: read it here and pass the copy on.
+  const items = props.items ? Array.from(props.items) : undefined;
+  const crumbs = items ? items.length : countCrumbs(props.children as ReactNode);
   // The n-th crumb sits n levels below this surface, down to the deepest level.
   const levels: Record<string, string> = { '--carved-crumb-count': String(Math.min(crumbs, 8)) };
   for (let step = 1; step <= 5; step++) {
@@ -210,6 +229,7 @@ export function Breadcrumbs<T extends object>({
   return (
     <AriaBreadcrumbs
       {...props}
+      {...(items ? { items } : {})}
       style={{ ...levels, ...style } as CSSProperties}
       className={cx('carved-breadcrumbs', className)}
     />
@@ -218,6 +238,7 @@ export function Breadcrumbs<T extends object>({
 
 export interface BreadcrumbProps
   extends Omit<AriaBreadcrumbProps, 'children'>, Pick<AriaLinkProps, 'href' | 'routerOptions'> {
+  /** The name of the place. */
   children: ReactNode;
 }
 
@@ -267,9 +288,9 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'onChange'>
   siblings?: number;
   /** Names each page for assistive technology. @default (page) => `Page ${page}` */
   pageLabel?: (page: number) => string;
-  /** @default 'Previous page' */
+  /** Names the button or link to the previous page. @default 'Previous page' */
   previousLabel?: string;
-  /** @default 'Next page' */
+  /** Names the button or link to the next page. @default 'Next page' */
   nextLabel?: string;
 }
 
@@ -289,6 +310,9 @@ export function Pagination({
   className,
   ...props
 }: PaginationProps) {
+  if (!(pageCount >= 1)) return null;
+  const current = Math.min(Math.max(Math.round(page), 1), pageCount);
+  const reach = Math.max(Math.floor(siblings), 0);
   const go = (target: number, label: string, children: ReactNode, current = false) => {
     const disabled = target < 1 || target > pageCount;
     const common = {
@@ -307,17 +331,17 @@ export function Pagination({
   return (
     <nav aria-label="Pagination" {...props} className={cx('carved-pagination', className)}>
       <ol className="carved-pagination-list carved-carve">
-        <li>{go(page - 1, previousLabel, <ChevronStart />)}</li>
-        {paginate(page, Math.max(pageCount, 1), siblings).map((number, index) =>
+        <li>{go(current - 1, previousLabel, <ChevronStart />)}</li>
+        {paginate(current, pageCount, reach).map((number, index) =>
           number === null ? (
             <li key={`gap-${index}`} className="carved-page-gap" aria-hidden="true">
               …
             </li>
           ) : (
-            <li key={number}>{go(number, pageLabel(number), number, number === page)}</li>
+            <li key={number}>{go(number, pageLabel(number), number, number === current)}</li>
           ),
         )}
-        <li>{go(page + 1, nextLabel, <ChevronEnd />)}</li>
+        <li>{go(current + 1, nextLabel, <ChevronEnd />)}</li>
       </ol>
     </nav>
   );

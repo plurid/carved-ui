@@ -8,6 +8,7 @@ import {
   Row as AriaRow,
   Table as AriaTable,
   TableBody as AriaTableBody,
+  TableColumnResizeStateContext,
   TableHeader as AriaTableHeader,
   useTableOptions,
 } from 'react-aria-components/Table';
@@ -17,19 +18,25 @@ import type {
   RowProps as AriaRowProps,
   TableBodyProps as AriaTableBodyProps,
   TableHeaderProps as AriaTableHeaderProps,
+  ResizableTableContainerProps,
   TableProps as AriaTableProps,
 } from 'react-aria-components/Table';
 import { composeRenderProps } from 'react-aria-components/composeRenderProps';
+import { useContext } from 'react';
 import type { Ref } from 'react';
 import { Checkbox } from './choice.js';
 import { DepthScope, useCutDepth } from './provider.js';
 import { withClass } from './internal/class-names.js';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from './internal/icons.js';
 
-export interface DataTableProps extends AriaTableProps {
+export interface DataTableProps
+  extends
+    AriaTableProps,
+    Pick<ResizableTableContainerProps, 'onResizeStart' | 'onResize' | 'onResizeEnd'> {
   /**
    * Let columns with `allowsResizing` be resized, by dragging their edge or with the arrow
-   * keys. Column widths then come from each column's `width`, `defaultWidth` and limits.
+   * keys. Column widths then come from each column's `width`, `defaultWidth` and limits, and
+   * `onResize` reports them, so they can be kept.
    * @default false
    */
   isResizable?: boolean;
@@ -40,15 +47,35 @@ export interface DataTableProps extends AriaTableProps {
  * An interactive table cut into its own well: rows can be sorted, selected and navigated with
  * the arrow keys, and columns resized. For static data, the server-rendered `Table` is lighter.
  */
-export function DataTable({ isResizable = false, className, ...props }: DataTableProps) {
+export function DataTable({
+  isResizable = false,
+  onResizeStart,
+  onResize,
+  onResizeEnd,
+  className,
+  ...props
+}: DataTableProps) {
   const depth = useCutDepth();
-  const Well = isResizable ? ResizableTableContainer : 'div';
-  return (
-    <Well data-carved-depth={depth} className="carved-table-well carved-data-well carved-carve">
-      <DepthScope depth={depth}>
-        <AriaTable {...props} className={withClass('carved-data-table', className)} />
-      </DepthScope>
-    </Well>
+  const table = (
+    <DepthScope depth={depth}>
+      <AriaTable {...props} className={withClass('carved-data-table', className)} />
+    </DepthScope>
+  );
+  const well = 'carved-table-well carved-data-well carved-carve';
+  return isResizable ? (
+    <ResizableTableContainer
+      data-carved-depth={depth}
+      onResizeStart={onResizeStart}
+      onResize={onResize}
+      onResizeEnd={onResizeEnd}
+      className={well}
+    >
+      {table}
+    </ResizableTableContainer>
+  ) : (
+    <div data-carved-depth={depth} className={well}>
+      {table}
+    </div>
   );
 }
 
@@ -59,13 +86,17 @@ const selectsWithCheckboxes = ({
 }: ReturnType<typeof useTableOptions>) =>
   selectionBehavior === 'toggle' && selectionMode === 'multiple';
 
+export interface DataTableHeaderProps<T extends object> extends AriaTableHeaderProps<T> {
+  ref?: Ref<HTMLTableSectionElement>;
+}
+
 /** The header row. Adds a checkbox selecting every row when several rows can be selected. */
 export function DataTableHeader<T extends object>({
   columns,
   children,
   className,
   ...props
-}: AriaTableHeaderProps<T> & { ref?: Ref<HTMLTableSectionElement> }) {
+}: DataTableHeaderProps<T>) {
   const options = useTableOptions();
   return (
     <AriaTableHeader {...props} className={withClass('carved-data-header', className)}>
@@ -74,19 +105,23 @@ export function DataTableHeader<T extends object>({
           <Checkbox slot="selection" />
         </AriaColumn>
       )}
-      <Collection items={columns}>{children}</Collection>
+      <Collection items={columns} dependencies={props.dependencies}>
+        {children}
+      </Collection>
     </AriaTableHeader>
   );
 }
 
 export interface ColumnProps extends AriaColumnProps {
-  /** Show a handle at the column's end for resizing it. Needs `isResizable` on the table. */
+  /** Show a handle at the column's end for resizing it, when the table `isResizable`. */
   allowsResizing?: boolean;
   ref?: Ref<HTMLTableCellElement>;
 }
 
 /** A column heading. Sortable columns show their direction, and sort when pressed. */
 export function Column({ allowsResizing = false, className, children, ...props }: ColumnProps) {
+  // Outside a resizable table there is nothing to resize, so no handle.
+  const resizable = useContext(TableColumnResizeStateContext) !== null;
   return (
     <AriaColumn {...props} className={withClass('carved-data-column', className)}>
       {composeRenderProps(children, (content, { allowsSorting, sortDirection }) => (
@@ -103,7 +138,7 @@ export function Column({ allowsResizing = false, className, children, ...props }
               )}
             </span>
           )}
-          {allowsResizing && <ColumnResizer className="carved-column-resizer" />}
+          {allowsResizing && resizable && <ColumnResizer className="carved-column-resizer" />}
         </span>
       ))}
     </AriaColumn>
@@ -147,11 +182,19 @@ export function Row<T extends object>({ id, columns, children, className, ...pro
           <Checkbox slot="selection" />
         </AriaCell>
       )}
-      <Collection items={columns}>{children}</Collection>
+      {/* As React Aria's own row does: cells re-render when the row's value changes. */}
+      <Collection
+        items={columns}
+        dependencies={[props.value, ...(props.dependencies ?? [])]}
+        idScope={id}
+      >
+        {children}
+      </Collection>
     </AriaRow>
   );
 }
 
+/** A cell of a row. */
 export function Cell({ className, ...props }: AriaCellProps & { ref?: Ref<HTMLTableCellElement> }) {
   return <AriaCell {...props} className={withClass('carved-data-cell', className)} />;
 }

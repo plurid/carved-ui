@@ -1,6 +1,5 @@
-import { DatePicker, DateRangePicker } from '@plurid/carved-ui-react';
+import { DatePicker, DateRangePicker, useLocale } from '@plurid/carved-ui-react';
 import { getLocalTimeZone, isWeekend, today } from '@internationalized/date';
-import { useLocale } from 'react-aria-components';
 
 export default function Example() {
   const { locale } = useLocale();
@@ -14,7 +13,8 @@ export default function Example() {
       <DateRangePicker
         label="Time off"
         isDateUnavailable={(date) => isWeekend(date, locale)}
-        description="Weekends are not counted."
+        allowsNonContiguousRanges
+        description="A range may span weekends; they are not counted."
       />
     </div>
   );

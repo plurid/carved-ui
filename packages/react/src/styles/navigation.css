@@ -54,6 +54,8 @@
 }
 
 .carved-tab[data-selected] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
 }
 
@@ -62,18 +64,15 @@
   opacity: 0.55;
 }
 
-.carved-tab[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
-}
-
 .carved-tab-indicator {
   --carved-carve-scale: 0.4;
+  --carved-focus-edge: var(--carved-on-accent);
 
   position: absolute;
   inset: 0;
   z-index: -1;
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   border-radius: inherit;
   transition-timing-function: var(--carved-motion-easing);
   transition-duration: calc(var(--carved-motion-duration) * 1.5);
@@ -148,7 +147,7 @@
 .carved-disclosure-chevron {
   flex: none;
   color: var(--carved-muted);
-  transition: rotate var(--carved-motion-duration) var(--carved-motion-easing);
+  transition: rotate var(--carved-motion-emphasis) var(--carved-motion-easing);
 }
 
 .carved-disclosure-trigger[data-hovered] .carved-disclosure-chevron {
@@ -162,26 +161,37 @@
 .carved-disclosure-panel {
   --carved-carve-scale: 0.45;
 
-  padding: var(--carved-space-3) var(--carved-space-4);
+  /* React Aria measures the panel and animates this height as it opens and closes. */
+  block-size: var(--disclosure-panel-height, auto);
   margin: 0 0.375rem 0.375rem;
+  overflow: clip;
   color: var(--carved-fg);
   background-color: var(--carved-bg);
   border-radius: calc(var(--carved-radius-control) - 2px);
+  transition:
+    block-size var(--carved-motion-emphasis) var(--carved-motion-easing),
+    margin-block-end var(--carved-motion-emphasis) var(--carved-motion-easing);
+}
+
+.carved-disclosure:not([data-expanded]) > .carved-disclosure-panel {
+  margin-block-end: 0;
 }
 
 /* A closed panel stays findable with find-in-page, so it keeps its box: an empty one. */
 .carved-disclosure-panel[hidden] {
-  padding: 0;
-  margin: 0;
   background: none;
   box-shadow: none;
 }
 
-.carved-disclosure-panel > :first-child {
+.carved-disclosure-body {
+  padding: var(--carved-space-3) var(--carved-space-4);
+}
+
+.carved-disclosure-body > :first-child {
   margin-block-start: 0;
 }
 
-.carved-disclosure-panel > :last-child {
+.carved-disclosure-body > :last-child {
   margin-block-end: 0;
 }
 
@@ -379,9 +389,12 @@
 }
 
 .carved-page[aria-current='page'] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   cursor: default;
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   box-shadow: revert-layer;
 }
 

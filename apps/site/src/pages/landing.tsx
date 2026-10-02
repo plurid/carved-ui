@@ -48,6 +48,8 @@ function useFollowingLight() {
         const length = Math.hypot(x, y) || 1;
         element.style.setProperty('--carved-light-x', (x / length).toFixed(3));
         element.style.setProperty('--carved-light-y', (y / length).toFixed(3));
+        // Polished inlays turn their sheen to the same light.
+        element.style.setProperty('--carved-light-angle', `${Math.atan2(y, x)}rad`);
       });
     };
     window.addEventListener('pointermove', move, { passive: true });
@@ -166,10 +168,10 @@ function Materials() {
             <Badge tone="accent">accent</Badge>
             <Badge tone="success">success</Badge>
           </div>
+          {/* Choosing the theme in use does nothing; the button stays, so focus is not lost. */}
           <Button
             size="sm"
             variant={current === name ? 'primary' : 'secondary'}
-            isDisabled={current === name}
             onPress={() => setSiteTheme(name)}
           >
             {current === name ? 'In use' : `Use ${name}`}
@@ -209,8 +211,9 @@ export function Landing() {
             Seven materials, or your own
           </Heading>
           <p className="section-lede">
-            Each preset is generated from one colour. Give <code>createTheme</code> any colour and
-            it builds the same six depths, with text and inlays that stay readable on every one.
+            Each preset is generated from one colour and an accent chosen for it. Give{' '}
+            <code>createTheme</code> any colour and it builds the same six depths, with text and
+            inlays that stay readable on every one.
           </p>
           <Materials />
         </section>

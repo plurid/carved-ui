@@ -155,8 +155,9 @@ export function Material() {
         }
       >
         <p>
-          Colour carries meaning, so it is set into the cut rather than glowing above it. Each
-          tone’s fill reaches 3:1 against every depth, the text on it reaches 4.5:1, and each tone
+          Colour carries meaning, so it is set into the cut rather than glowing above it, as
+          polished mineral: a sheen on the side that faces the light. The accent, success and danger
+          fills reach 3:1 against every depth, the text on every fill reaches 4.5:1, and each tone
           has an ink for text and icons that reaches 4.5:1 everywhere.
         </p>
       </Principle>
@@ -166,7 +167,7 @@ export function Material() {
         demo={
           <div className="stack">
             <Switch defaultSelected>A raised knob in a carved track</Switch>
-            <Slider label="A raised thumb" defaultValue={60} />
+            <Slider label="A raised knob in its fill" defaultValue={60} />
           </div>
         }
       >

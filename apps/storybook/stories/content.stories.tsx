@@ -189,11 +189,11 @@ export const Keys: Story = {
 export const People: Story = {
   render: () => (
     <AvatarGroup aria-label="Project members" max={3}>
-      <Avatar name="Ana Pop" />
-      <Avatar name="Ioan Marin" />
-      <Avatar name="Mara Ilie" />
-      <Avatar name="Radu Stan" />
-      <Avatar name="Elena Dobre" />
+      <Avatar name="Amara Okafor" />
+      <Avatar name="Kenji Sato" />
+      <Avatar name="Lena Fischer" />
+      <Avatar name="Mateo García" />
+      <Avatar name="Priya Nair" />
     </AvatarGroup>
   ),
   play: async ({ canvasElement }) => {

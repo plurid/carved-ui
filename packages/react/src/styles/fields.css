@@ -1,5 +1,5 @@
-/* Fields are wells cut into the surface. The lit edge is drawn in the edge ink, marking the
- * field's boundary at 3:1; focus and invalid states recolour it. */
+/* Fields are wells cut into the surface. At rest the lit edge is drawn in the edge ink,
+ * marking the field's boundary at 3:1. Focused, the whole well is lit. */
 
 .carved-form {
   display: flex;
@@ -48,10 +48,14 @@
   border: 0;
   border-radius: var(--carved-radius-control);
   outline: none;
+  transition:
+    box-shadow var(--carved-motion-duration) var(--carved-motion-easing),
+    background-color var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
 .carved-input {
   padding: 0.625rem 0.875rem;
+  cursor: text;
   font: inherit;
   line-height: 1.5;
   caret-color: var(--carved-accent-ink);
@@ -72,20 +76,38 @@
   cursor: text;
 }
 
-/* Focus cuts the well a little deeper and lights its edge in the accent, as the original
- * input did. It replaces the ring that other controls use. */
-.carved-input[data-focused],
-.carved-input-group[data-focus-within] {
-  --carved-carve-k: 1.5;
-  --carved-carve-lip: var(--carved-focus);
-  --carved-carve-lip-width: 2px;
+/* A field that is focused, or open, is lit: light falls straight into the well, so its shadow
+ * shortens and its floor lifts evenly, halfway back to the surface above, and a crisp rim of
+ * the focus colour runs all the way round. No glow, no colour wash. That is the field's focus,
+ * so its inputs draw no edge of their own. Every well that takes input is lit the same way:
+ * fields, select triggers and drop zones. An invalid field is rimmed in the danger tone. */
+.carved-input[data-focus-visible],
+.carved-group-input[data-focus-visible] {
+  outline: none;
 }
 
 .carved-input[data-invalid],
 .carved-input-group[data-invalid],
-[data-invalid] > .carved-input-group {
-  --carved-carve-lip: var(--carved-danger-ink);
-  --carved-carve-lip-width: 2px;
+[data-invalid] > .carved-input-group,
+.carved-select[data-invalid] .carved-select-trigger {
+  --_light: var(--carved-danger);
+  --carved-carve-ring: inset 0 0 0 1px var(--carved-danger);
+}
+
+.carved-input[data-focused],
+.carved-input-group[data-focus-within],
+.carved-select-trigger[data-focus-visible],
+.carved-select[data-open] .carved-select-trigger,
+.carved-drop-zone:is([data-focus-visible], [data-drop-target]) {
+  --carved-carve-k: 0.35;
+  --carved-carve-lip: transparent;
+  --carved-carve-ring: inset 0 0 0 1px var(--_light, var(--carved-focus));
+
+  background-color: color-mix(
+    in oklab,
+    var(--_floor, var(--carved-cut)),
+    var(--_above, var(--carved-bg)) 45%
+  );
 }
 
 .carved-input:is([data-disabled], :disabled),

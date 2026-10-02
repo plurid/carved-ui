@@ -20,19 +20,35 @@ import { Close } from './internal/icons.js';
 import { ToneMark } from './content.js';
 import type { Tone } from './content.js';
 
+/**
+ * The bead's length for a value: at least its own height once there is any value, growing to
+ * fill the slot at 100%, so the end of the bead travels as a slider's knob does.
+ */
+function beadSize(fraction: number): string {
+  if (!(fraction > 0)) return '0';
+  return `calc(var(--carved-slot-bead) + (100% - var(--carved-slot-bead)) * ${Math.min(fraction, 1)})`;
+}
+
 export interface ProgressBarProps extends Omit<AriaProgressBarProps, 'children'> {
+  /** Names the task, above the bar. */
   label?: ReactNode;
   /** Show the formatted value beside the label. @default true */
   showValue?: boolean;
   ref?: Ref<HTMLDivElement>;
 }
 
-/** Progress of a task, as an inlay filling a carved groove. Omit `value` while it is unknown. */
+/**
+ * Progress of a task: an inlaid bead growing along a carved slot, the slider's instrument
+ * without a knob. Omit `value` while it is unknown.
+ */
 export function ProgressBar({ label, showValue = true, className, ...props }: ProgressBarProps) {
+  const indeterminate = props.isIndeterminate ?? props.value === undefined;
   return (
     <AriaProgressBar
       {...props}
-      isIndeterminate={props.isIndeterminate ?? props.value === undefined}
+      isIndeterminate={indeterminate}
+      // React Aria exposes this only as a render prop; the stylesheet needs it on the element.
+      data-indeterminate={indeterminate || undefined}
       className={withClass('carved-progress', className)}
     >
       {({ percentage, valueText, isIndeterminate }) => (
@@ -44,7 +60,9 @@ export function ProgressBar({ label, showValue = true, className, ...props }: Pr
           <span className="carved-progress-track carved-carve">
             <span
               className="carved-progress-fill"
-              style={isIndeterminate ? undefined : { inlineSize: `${percentage}%` }}
+              style={
+                isIndeterminate ? undefined : { inlineSize: beadSize((percentage ?? 0) / 100) }
+              }
             />
           </span>
         </>
@@ -54,18 +72,22 @@ export function ProgressBar({ label, showValue = true, className, ...props }: Pr
 }
 
 export interface MeterProps extends AriaMeterProps {
+  /** Names the quantity, above the bar. */
   label?: ReactNode;
   /** Show the formatted value beside the label. @default true */
   showValue?: boolean;
   /** The inlay's tone, such as `warning` when storage runs low. @default 'accent' */
   tone?: Exclude<Tone, 'neutral'>;
+  /** Classes for the meter. */
   className?: string;
+  /** Styles for the meter. */
   style?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
 }
 
 /**
- * A quantity within a known range, such as storage used, inlaid in a carved groove. Unlike a
+ * A quantity within a known range, such as storage used: a bead in a carved slot, like a
+ * progress bar's. Unlike a
  * progress bar, it measures an amount rather than a task.
  */
 export function Meter({
@@ -99,14 +121,14 @@ export function Meter({
       )}
       {showValue && <span className="carved-progress-value">{meterProps['aria-valuetext']}</span>}
       <span className="carved-progress-track carved-carve">
-        <span className="carved-progress-fill" style={{ inlineSize: `${percentage * 100}%` }} />
+        <span className="carved-progress-fill" style={{ inlineSize: beadSize(percentage) }} />
       </span>
     </div>
   );
 }
 
 export interface SpinnerProps extends Omit<AriaProgressBarProps, 'children' | 'isIndeterminate'> {
-  /** @default 'md' */
+  /** The spinner's diameter. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
   ref?: Ref<HTMLDivElement>;
 }

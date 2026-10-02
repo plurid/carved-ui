@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { Button } from '@plurid/carved-ui-react';
 import { CopyButton } from './copy-button';
 
 /**
@@ -15,11 +17,39 @@ export function CodeScroll(props: { children?: ReactNode; html?: string }) {
   );
 }
 
-/** Code in a carved well, with a copy button: highlighted HTML, or plain text. */
-export function CodeBlock({ html, source }: { html?: string; source: string }) {
+/**
+ * Code in a carved well, with a copy button: highlighted HTML, or plain text. Code longer than
+ * `foldAfter` lines folds to its first lines, with a button to show the rest.
+ */
+export function CodeBlock({
+  html,
+  source,
+  foldAfter,
+}: {
+  html?: string;
+  source: string;
+  foldAfter?: number;
+}) {
+  const expandable = foldAfter !== undefined && source.split('\n').length > foldAfter;
+  const [expanded, setExpanded] = useState(false);
   return (
-    <div className="code-block carved-carve">
+    <div
+      className="code-block carved-carve"
+      data-expandable={expandable || undefined}
+      data-collapsed={(expandable && !expanded) || undefined}
+    >
       <CopyButton text={source} />
+      {expandable && (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="code-expand"
+          aria-expanded={expanded}
+          onPress={() => setExpanded(!expanded)}
+        >
+          {expanded ? 'Show less' : 'Show all code'}
+        </Button>
+      )}
       {html !== undefined ? (
         <CodeScroll html={html} />
       ) : (

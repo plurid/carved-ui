@@ -97,10 +97,33 @@ Every value is a `--carved-*` custom property, so you can override any of them o
   --carved-radius-control: 4px;
   --carved-accent: #0d6b4f;
   --carved-on-accent: #ffffff;
+  --carved-accent-ink: #0d6b4f;
+  --carved-focus: #0d6b4f;
 }
 ```
 
+A tone comes as a set: its fill (`--carved-accent`), the text that sits on it (`--carved-on-accent`) and its ink for text and icons on surfaces (`--carved-accent-ink`). Keyboard focus is drawn in `--carved-focus`, which a theme sets to its accent; override it with the accent.
+
 Popovers and dialogs render beside their provider, so set overrides that should reach them on the provider itself: through its `style`, or through a class on your application's outermost provider. When you override a colour, check its contrast yourself: the guarantees cover generated values only.
+
+## Routing
+
+Links, breadcrumbs and pagination navigate with ordinary page loads until you give the provider your router. Pass its navigate function, and, for routers with a base path, a hook that turns paths into hrefs:
+
+```tsx
+import { useHref, useNavigate } from 'react-router';
+
+function App() {
+  const navigate = useNavigate();
+  return (
+    <CarvedProvider navigate={navigate} useHref={useHref}>
+      …
+    </CarvedProvider>
+  );
+}
+```
+
+Every link inside then navigates through your router. Links with `target="_blank"` or to other sites still open as usual.
 
 ## Locale and direction
 

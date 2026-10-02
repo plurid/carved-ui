@@ -1,4 +1,4 @@
-import { Suspense, use } from 'react';
+import { use } from 'react';
 import { useParams } from 'react-router';
 import { Heading, Link, Surface } from '@plurid/carved-ui-react';
 import { catalog, groups } from '../catalog';
@@ -17,12 +17,23 @@ function load(file: string): Promise<ExampleModule> {
   if (!module) {
     const importer = modules[`../examples/${file}.tsx`];
     if (!importer) throw new Error(`No example named ${file}`);
-    module = importer();
+    // A failed load is forgotten, so the next visit tries again.
+    module = importer().catch((error: unknown) => {
+      loading.delete(file);
+      throw error;
+    });
     loading.set(file, module);
   }
   return module;
 }
 
+/** Start loading a component page's examples, ahead of a visit. */
+export function preloadExamples(slug: string): void {
+  for (const example of catalog.find((entry) => entry.slug === slug)?.examples ?? [])
+    void load(example.file);
+}
+
+/** Suspends until its example has loaded; the page appears only once all of them have. */
 function LiveSpecimen({ title, description, file }: Example) {
   return <Specimen title={title} description={description} module={use(load(file))} />;
 }
@@ -66,7 +77,7 @@ export function ComponentPage() {
   const entry = catalog.find((candidate) => candidate.slug === slug);
   if (!entry) return <NotFound />;
   // Start every example loading at once, rather than one after another.
-  for (const example of entry.examples) void load(example.file);
+  preloadExamples(entry.slug);
   return (
     <div className="page">
       <header className="page-header">
@@ -76,9 +87,7 @@ export function ComponentPage() {
       </header>
       <div className="specimens">
         {entry.examples.map((example) => (
-          <Suspense key={example.title}>
-            <LiveSpecimen {...example} />
-          </Suspense>
+          <LiveSpecimen key={example.title} {...example} />
         ))}
       </div>
       {entry.components.length > 0 && (

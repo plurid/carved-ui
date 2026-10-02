@@ -123,6 +123,7 @@ export function TextFieldRoot({ className, ...props }: TextFieldRootProps) {
 }
 
 export interface TextFieldProps extends Omit<TextFieldRootProps, 'children'>, FieldProps {
+  /** Shown in the empty field. It is not a label: give the field a `label` too. */
   placeholder?: string;
   /** Render a growing multi-line text area instead of an input. */
   multiline?: boolean;
@@ -154,6 +155,7 @@ export function TextField({
 }
 
 export interface SearchFieldProps extends Omit<AriaSearchFieldProps, 'children'>, FieldProps {
+  /** Shown in the empty field. It is not a label: give the field a `label` too. */
   placeholder?: string;
   ref?: Ref<HTMLDivElement>;
 }
@@ -183,6 +185,7 @@ export function SearchField({
 }
 
 export interface NumberFieldProps extends Omit<AriaNumberFieldProps, 'children'>, FieldProps {
+  /** Shown in the empty field. It is not a label: give the field a `label` too. */
   placeholder?: string;
   ref?: Ref<HTMLDivElement>;
 }

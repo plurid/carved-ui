@@ -5,20 +5,82 @@ body {
 }
 
 .site {
-  --carved-font-body: 'Archivo Variable', system-ui, sans-serif;
-  --carved-font-display: 'Archivo Variable', system-ui, sans-serif;
-  --carved-font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --carved-font-body: 'Geist Variable', system-ui, sans-serif;
+  --carved-font-display: 'Archivo Variable', 'Geist Variable', system-ui, sans-serif;
+  --carved-font-mono: 'Geist Mono Variable', ui-monospace, monospace;
   --site-header: 4.25rem;
   --site-gutter: clamp(1rem, 4vw, 2.5rem);
 
   min-block-size: 100dvh;
-  font-size: 1.0625rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+
+/* Page titles and section headings are set in Archivo's wide cut; everything else in Geist. */
+.site :is(h1, h2).carved-heading:not([data-variant='engraved']) {
+  font-family: var(--carved-font-display);
+  font-weight: 760;
+  font-stretch: 112%;
+  letter-spacing: -0.025em;
+}
+
+.site h3.carved-heading {
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation in flight: a groove along the top of the window, with an inlay sliding through.
+ * It appears only if loading takes longer than a moment. */
+.site-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+  block-size: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--carved-shade);
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+.site-progress::after {
+  position: absolute;
+  inset-block: 0;
+  inline-size: 35%;
+  content: '';
+  background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
+  border-radius: 2px;
+  animation: site-progress 1.1s var(--carved-motion-easing) infinite paused;
+}
+
+.site-progress[data-active] {
+  opacity: 1;
+  transition: opacity 120ms 150ms;
+}
+
+.site-progress[data-active]::after {
+  animation-play-state: running;
+}
+
+@keyframes site-progress {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 300% 0;
+  }
 }
 
 .site code,
 .site pre {
   font-family: var(--carved-font-mono);
   font-size: 0.875em;
+  font-variant-ligatures: none;
 }
 
 .site pre code {
@@ -43,6 +105,11 @@ body {
   inline-size: min(22rem, 100%);
 }
 
+/* For rows that hold several things, such as a person, their role and an action. */
+.roomy {
+  inline-size: min(30rem, 100%);
+}
+
 .pad {
   padding: var(--carved-space-4);
 }
@@ -65,6 +132,23 @@ body {
 }
 
 /* Header */
+.skip-link {
+  position: absolute;
+  inset-block-start: var(--carved-space-2);
+  inset-inline-start: var(--carved-space-2);
+  z-index: 40;
+  padding: var(--carved-space-2) var(--carved-space-4);
+  font-weight: 600;
+  color: var(--carved-on-accent);
+  background-color: var(--carved-accent);
+  border-radius: var(--carved-radius-pill);
+  translate: 0 -200%;
+}
+
+.skip-link:focus-visible {
+  translate: 0;
+}
+
 .site-header {
   position: sticky;
   inset-block-start: 0;
@@ -77,11 +161,14 @@ body {
   background-color: var(--carved-bg);
 }
 
-.wordmark {
+.site .wordmark {
+  padding: 0;
+  font-family: var(--carved-font-display);
   font-size: 1.375rem;
   font-weight: 850;
   font-stretch: 125%;
   text-decoration: none;
+  background-image: none;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -91,7 +178,7 @@ body {
   gap: var(--carved-space-1);
 }
 
-.site-sections .carved-button[aria-current='page'] {
+.site-sections .carved-button[aria-current] {
   color: var(--carved-cut-fg);
   background-color: var(--carved-cut);
   box-shadow: revert-layer;
@@ -124,7 +211,14 @@ body {
 }
 
 .contents-dialog {
-  padding-block-start: var(--carved-space-6);
+  padding-block-start: var(--carved-space-4);
+}
+
+.contents-head {
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Documentation layout */
@@ -160,33 +254,42 @@ body {
   list-style: none;
 }
 
+/* Group titles are small engraved capitals. */
 .nav-title {
   padding-inline: var(--carved-space-3);
   margin: 0 0 var(--carved-space-2);
   font-size: var(--carved-text-xs);
-  font-weight: 700;
+  font-weight: 650;
   color: var(--carved-muted);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
+  text-shadow: 0 calc(var(--carved-light-y) * 1px) 0 var(--carved-lip);
 }
 
-.nav-link {
+/* Sidebar links are plain until touched: hovering shades them a half level, and the current
+ * page is cut a full level in. */
+.site .nav-link {
   display: block;
   padding: 0.375rem var(--carved-space-3);
   font-size: var(--carved-text-sm);
-  color: var(--carved-fg);
-  text-decoration: none;
+  font-weight: 450;
+  color: var(--carved-muted);
+  background-image: none;
   border-radius: var(--carved-radius-control);
+  transition:
+    color var(--carved-motion-duration),
+    background-color var(--carved-motion-duration);
 }
 
-.nav-link[data-hovered] {
-  text-decoration: underline;
+.site .nav-link[data-hovered] {
+  color: var(--carved-fg);
+  background-color: color-mix(in oklab, var(--carved-cut) 55%, transparent);
 }
 
-.nav-link[aria-current='page'] {
+.site .nav-link[aria-current='page'] {
   --carved-carve-scale: 0.4;
 
-  font-weight: 650;
+  font-weight: 600;
   color: var(--carved-cut-fg);
   background-color: var(--carved-cut);
 }
@@ -195,6 +298,11 @@ body {
   min-inline-size: 0;
   max-inline-size: 52rem;
   padding-block-end: var(--carved-space-8);
+}
+
+/* Focus moves to the page's main region on navigation; it is not an interactive target. */
+.docs-main:focus {
+  outline: none;
 }
 
 /* Pages */
@@ -216,8 +324,9 @@ body {
   max-inline-size: 40rem;
   margin: 0;
   font-size: 1.1875rem;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--carved-muted);
+  text-wrap: pretty;
 }
 
 /* Long-form documents */
@@ -256,13 +365,15 @@ body {
   margin-block-start: var(--carved-space-2);
 }
 
-.prose :not(pre) > code,
-.page :not(pre) > code,
-.landing :not(pre) > code {
-  padding: 0.1em 0.35em;
+/* Inline code is a small chip cut into the line. */
+.prose :not(pre) > code:not(.command-text),
+.page :not(pre) > code:not(.command-text),
+.landing :not(pre) > code:not(.command-text) {
+  padding: 0.12em 0.4em;
   color: var(--carved-cut-fg);
   background-color: var(--carved-cut);
-  border-radius: 4px;
+  border-radius: 5px;
+  box-shadow: inset 0 calc(var(--carved-light-y) * 1px) 2px var(--carved-shade);
 }
 
 /* Code */
@@ -288,11 +399,44 @@ body {
   outline-offset: -2px;
 }
 
+/* Long code folds to its first lines, fading out, until it is asked for. */
+.code-block[data-collapsed] .code-scroll {
+  max-block-size: 20rem;
+  overflow-y: hidden;
+}
+
+.code-block[data-collapsed]::after {
+  position: absolute;
+  inset: auto 0 0;
+  block-size: 6rem;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(transparent, var(--carved-cut) 85%);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.code-expand {
+  position: absolute;
+  inset-block-end: var(--carved-space-3);
+  inset-inline-start: 50%;
+  z-index: 1;
+  translate: -50% 0;
+}
+
+.code-expand:dir(rtl) {
+  translate: 50% 0;
+}
+
+.code-block[data-expandable]:not([data-collapsed]) {
+  padding-block-end: 3.5rem;
+}
+
 .code-block pre {
   margin: 0;
-  padding: var(--carved-space-4) var(--carved-space-5);
-  font-size: 0.875rem;
-  line-height: 1.65;
+  padding: var(--carved-space-5);
+  font-size: 0.8125rem;
+  line-height: 1.7;
   background: none !important;
 }
 
@@ -344,19 +488,20 @@ body {
 .specimens {
   display: flex;
   flex-direction: column;
-  gap: var(--carved-space-7);
+  gap: var(--carved-space-8);
 }
 
 .specimen {
   display: flex;
   flex-direction: column;
-  gap: var(--carved-space-3);
+  gap: var(--carved-space-4);
 }
 
-.specimen-header h3 {
+.specimen-header h2 {
   margin: 0;
   font-size: var(--carved-text-lg);
-  font-weight: 650;
+  font-weight: 620;
+  letter-spacing: -0.01em;
 }
 
 .specimen-header p {
@@ -364,10 +509,21 @@ body {
   color: var(--carved-muted);
 }
 
+/* One frame per example: the live stage, then its code in a well cut into the same frame. */
+.specimen-frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  padding: var(--carved-space-2);
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-2));
+}
+
 .specimen-stage {
-  padding: clamp(1.25rem, 4vw, 2.5rem);
-  border: 1px solid var(--carved-hairline);
-  border-radius: var(--carved-radius-surface);
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2.5rem);
+}
+
+.specimen-frame > .code-block {
+  border-radius: var(--carved-radius-control);
 }
 
 /* API tables */
@@ -423,17 +579,34 @@ body {
   flex-direction: column;
   gap: var(--carved-space-2);
   padding: var(--carved-space-5);
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-1));
+}
+
+/* The whole card is the link: touching it cuts the card deeper. */
+.index-card:has(.carved-link[data-hovered]) {
+  --carved-carve-k: 2;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+.index-card:has(.carved-link[data-focus-visible]) {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: -2px;
+}
+
+.index-card h3.carved-heading {
+  font-size: var(--carved-text-md);
 }
 
 .index-card p {
   margin: 0;
   font-size: var(--carved-text-sm);
+  line-height: 1.5;
   color: var(--carved-muted);
 }
 
 .index-card .carved-link {
   color: var(--carved-fg);
-  text-decoration: none;
+  background-image: none;
 }
 
 .index-card .carved-link::after {
@@ -458,13 +631,44 @@ body {
   padding-block-start: clamp(2rem, 8vw, 6rem);
 }
 
+/* The wordmark is cut deep. Each letter is a recess: its far wall in shadow, its near wall
+ * catching the light, which follows the pointer. The fill runs from the edge ink to the muted
+ * ink, both readable against the page, and the chisel is drawn around the letters with
+ * drop shadows, which, unlike text shadows, sit beneath a gradient fill. */
 .hero-title.carved-heading {
+  --_cut: clamp(2px, 0.022em, 5px);
+
   margin-inline-start: -0.04em;
-  font-size: clamp(3.25rem, 17vw, 15rem);
-  font-weight: 900;
+  font-size: clamp(3.25rem, 16vw, 14rem);
+  font-weight: 820;
   font-stretch: 125%;
-  line-height: 0.85;
-  letter-spacing: -0.02em;
+  line-height: 0.88;
+  color: transparent;
+  letter-spacing: 0.005em;
+  text-shadow: none;
+  background-image: linear-gradient(
+    calc(atan2(var(--carved-light-y), var(--carved-light-x)) + 90deg),
+    var(--carved-edge) 10%,
+    var(--carved-muted) 75%
+  );
+  background-clip: text;
+  filter: drop-shadow(
+      calc(var(--carved-light-x) * var(--_cut) * -1) calc(var(--carved-light-y) * var(--_cut) * -1)
+        0 var(--carved-shade-deep)
+    )
+    drop-shadow(
+      calc(var(--carved-light-x) * var(--_cut) * 0.5)
+        calc(var(--carved-light-y) * var(--_cut) * 0.5) 0
+        color-mix(in oklab, var(--carved-fg) 18%, transparent)
+    );
+}
+
+@media (forced-colors: active) {
+  .hero-title.carved-heading {
+    color: CanvasText;
+    background: none;
+    filter: none;
+  }
 }
 
 .hero-lede {
@@ -694,15 +898,9 @@ body {
   align-items: start;
 }
 
-.color-well {
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
+/* The picker's swatch button sits level with the field's well, beside it. */
+.color-field .carved-color-trigger {
   margin-block-start: 1.6rem;
-  padding: 0.3rem;
-  cursor: pointer;
-  background-color: var(--carved-cut);
-  border: 0;
-  border-radius: var(--carved-radius-control);
 }
 
 .lab-preview {
@@ -773,7 +971,8 @@ body {
 }
 
 @media (width < 36rem) {
-  .theme-picker {
+  /* On a phone the picker lives in the contents drawer instead of the header. */
+  .site-tools > .theme-picker {
     display: none;
   }
 

@@ -4,6 +4,8 @@
 .carved-color-area {
   --carved-carve-scale: 0.6;
 
+  cursor: pointer;
+
   flex: none;
   inline-size: 12rem;
   block-size: 12rem;
@@ -11,6 +13,7 @@
 }
 
 .carved-color-thumb {
+  cursor: grab;
   inline-size: 1.25rem;
   block-size: 1.25rem;
   border: 3px solid #fff;
@@ -19,7 +22,17 @@
 }
 
 .carved-color-thumb[data-dragging] {
+  cursor: grabbing;
   scale: 1.15;
+}
+
+/* While a thumb is dragged, the whole control shows it held. */
+:is(.carved-color-area, .carved-color-track, .carved-color-wheel):has([data-dragging]) {
+  cursor: grabbing;
+}
+
+.carved-color-wheel-track {
+  cursor: pointer;
 }
 
 .carved-color-slider {
@@ -28,6 +41,8 @@
 
 .carved-color-track {
   --carved-carve-scale: 0.4;
+
+  cursor: pointer;
 
   grid-column: 1 / -1;
   block-size: 1.5rem;
@@ -92,9 +107,13 @@
   outline: none;
 }
 
+/* A swatch's colour can be anything, so focus rings it, hugging its shape like the chosen one. */
 .carved-swatch-item[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 5px;
+  outline: none;
+}
+
+.carved-swatch-item[data-focus-visible] .carved-color-swatch {
+  --carved-carve-ring: 0 0 0 2px var(--carved-bg), 0 0 0 4px var(--carved-focus);
 }
 
 /* The chosen swatch is ringed: the surface, then the ink. */

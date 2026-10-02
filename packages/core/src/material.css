@@ -13,7 +13,9 @@
  *   --carved-carve-k      depth multiplier for interaction states
  *   --carved-carve-shade  colour of the shadow
  *   --carved-carve-lip    colour of the lit edge, and --carved-carve-lip-width its width
- *   --carved-carve-ring   an extra shadow layer, such as a boundary */
+ *   --carved-carve-ring   an extra shadow layer, such as a boundary
+ * The finished shadow is --carved-carve-shadow, resolved with the carve's own knobs, so a
+ * pseudo-element can draw its owner's carve. */
 .carved-carve {
   --carved-carve-scale: 1;
   --carved-carve-k: 1;
@@ -23,13 +25,14 @@
   --carved-carve-ring: 0 0 #0000;
   --_d: calc(var(--carved-shadow-distance) * var(--carved-carve-scale));
   --_k: calc(var(--_d) * var(--carved-carve-k));
-
-  box-shadow:
+  --carved-carve-shadow:
     inset calc(var(--carved-light-x) * var(--_k)) calc(var(--carved-light-y) * var(--_k))
       calc(var(--_k) + var(--_d)) var(--carved-carve-shade),
     inset calc(var(--carved-light-x) * var(--carved-carve-lip-width) * -1)
       calc(var(--carved-light-y) * var(--carved-carve-lip-width) * -1) 0 var(--carved-carve-lip),
     var(--carved-carve-ring);
+
+  box-shadow: var(--carved-carve-shadow);
   transition: box-shadow var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
@@ -43,10 +46,27 @@
   --carved-carve-shade: var(--carved-shade-deep);
 }
 
-/* Meaning set into the cut: a tone's fill and the text that sits on it. */
+/* Meaning set into the cut: a tone's fill and the text that sits on it. Inlays are polished:
+ * a sheen on the side facing the light, which every fill shares through --carved-sheen, and a
+ * brighter lit edge than plain stone. The sheen is resolved on each element, so it follows any
+ * light set on a part of the page. */
+:root,
+:where([data-carved-theme], [class*='carved-']) {
+  --carved-sheen: linear-gradient(
+    calc(var(--carved-light-angle, 90deg) + 90deg),
+    rgb(255 255 255 / 0.2),
+    rgb(255 255 255 / 0.04) 45%,
+    rgb(0 0 0 / 0.06)
+  );
+}
+
 .carved-inlay {
-  background-color: var(--carved-tone, var(--carved-accent));
+  --carved-carve-lip: rgb(255 255 255 / 0.22);
+  --carved-focus-edge: var(--carved-on-tone, var(--carved-on-accent));
+
   color: var(--carved-on-tone, var(--carved-on-accent));
+  background-color: var(--carved-tone, var(--carved-accent));
+  background-image: var(--carved-sheen);
 }
 
 :where([data-tone='accent']) {
@@ -91,13 +111,17 @@
 }
 
 /* Letters cut into the surface: shade on the wall facing away from the light, a lip on the
- * wall facing it. The chisel scales with the type; the ink keeps full text contrast. */
+ * wall facing it. The chisel scales with the type but stays fine at display sizes, so large
+ * letters read as cut rather than shadowed; the ink keeps full text contrast. */
 .carved-engrave {
+  --_chisel: clamp(1px, 0.03em, 3px);
+
   color: var(--carved-muted);
   text-shadow:
-    calc(var(--carved-light-x) * -0.035em) calc(var(--carved-light-y) * -0.035em) 0
-      var(--carved-shade-deep),
-    calc(var(--carved-light-x) * 0.02em) calc(var(--carved-light-y) * 0.02em) 0 var(--carved-lip);
+    calc(var(--carved-light-x) * var(--_chisel) * -1)
+      calc(var(--carved-light-y) * var(--_chisel) * -1) 0 var(--carved-shade-deep),
+    calc(var(--carved-light-x) * var(--_chisel) * 0.6)
+      calc(var(--carved-light-y) * var(--_chisel) * 0.6) 0 var(--carved-lip);
 }
 
 /* A channel dividing two regions, after the original 15px rule. */
@@ -114,6 +138,10 @@
 }
 
 @media (forced-colors: active) {
+  .carved-inlay {
+    background-image: none;
+  }
+
   .carved-carve,
   .carved-raise,
   .carved-engrave {

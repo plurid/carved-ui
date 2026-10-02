@@ -83,7 +83,9 @@ export interface MenuSectionProps<T extends object> extends Omit<
   AriaMenuSectionProps<T>,
   'children'
 > {
+  /** The visible heading of the group. */
   title?: ReactNode;
+  /** `MenuItem`s, or a function rendering each of `items`. */
   children: ReactNode | ((item: T) => ReactNode);
 }
 
@@ -98,7 +100,9 @@ export function MenuSection<T extends object>({
   return (
     <AriaMenuSection {...props} className={cx('carved-section', className)}>
       {title && <Header className="carved-section-title">{title}</Header>}
-      <Collection items={items}>{children}</Collection>
+      <Collection items={items} dependencies={props.dependencies}>
+        {children}
+      </Collection>
     </AriaMenuSection>
   );
 }

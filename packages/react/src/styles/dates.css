@@ -31,6 +31,7 @@
 
 .carved-date-segment {
   padding: 0.125rem 0.1875rem;
+  cursor: text;
   color: var(--carved-cut-fg);
   text-align: end;
   caret-color: transparent;
@@ -47,9 +48,17 @@
   color: var(--carved-cut-muted);
 }
 
+/* The focused segment is inlaid; that is its focus. */
+.carved-date-segment[data-focus-visible] {
+  outline: none;
+}
+
 .carved-date-segment[data-focused] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
 }
 
 .carved-date-segment[data-invalid]:not([data-focused], [data-placeholder]) {
@@ -121,6 +130,8 @@
 .carved-calendar-day {
   --carved-carve-scale: 0.35;
 
+  position: relative;
+  isolation: isolate;
   display: grid;
   place-items: center;
   inline-size: 2.375rem;
@@ -151,11 +162,23 @@
   );
 }
 
+/* A chosen day is a bead: an inlaid disc behind its number, like a slider's knob in its fill. */
 .carved-calendar-day[data-selected] {
+  --carved-focus-edge: var(--carved-on-accent);
+
   font-weight: 650;
   color: var(--carved-on-accent);
-  background-color: var(--carved-accent);
-  box-shadow: revert-layer;
+}
+
+.carved-calendar-day[data-selected]::before {
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  content: '';
+  background-color: var(--_bead, var(--carved-accent));
+  background-image: var(--carved-sheen);
+  border-radius: 50%;
+  box-shadow: var(--carved-carve-shadow);
 }
 
 .carved-calendar-day[data-outside-month] {
@@ -165,39 +188,54 @@
 .carved-calendar-day[data-unavailable] {
   color: var(--carved-muted);
   text-decoration: line-through;
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .carved-calendar-day[data-disabled] {
-  cursor: default;
   opacity: 0.4;
 }
 
 .carved-calendar-day[data-invalid][data-selected] {
+  --_bead: var(--carved-danger);
+  --carved-focus-edge: var(--carved-on-danger);
+
   color: var(--carved-on-danger);
-  background-color: var(--carved-danger);
 }
 
-/* A range: the days between its ends are a band one level deeper, flat so it reads as one. */
+/* A range is a band of the accent's wash, flat so it reads as one piece, running between two
+ * beads. Each week row rounds the band off at its ends. */
+.carved-range-calendar .carved-calendar-day[data-selected] {
+  --_wash: color-mix(in oklab, var(--carved-accent) 24%, var(--carved-bg));
+}
+
 .carved-range-calendar
   .carved-calendar-day[data-selected]:not([data-selection-start], [data-selection-end]) {
+  --carved-focus-edge: var(--carved-focus);
+
   font-weight: inherit;
-  color: var(--carved-cut-fg);
-  background-color: var(--carved-cut);
+  color: var(--carved-fg);
+  background-color: var(--_wash);
   border-radius: 0;
 
   /* Days sit at fractional pixels; reach into the next day so the band shows no seams. */
-  box-shadow: 1px 0 0 var(--carved-cut);
+  box-shadow: 1px 0 0 var(--_wash);
 }
 
+.carved-range-calendar
+  .carved-calendar-day[data-selected]:not([data-selection-start], [data-selection-end])::before {
+  content: none;
+}
+
+/* The band runs into each end's bead from the inner side. */
 .carved-range-calendar .carved-calendar-day[data-selection-start]:not([data-selection-end]) {
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
+  background-image: linear-gradient(to right, transparent 50%, var(--_wash) 50%);
+  border-radius: 0;
+  box-shadow: 1px 0 0 var(--_wash);
 }
 
 .carved-range-calendar .carved-calendar-day[data-selection-end]:not([data-selection-start]) {
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
+  background-image: linear-gradient(to left, transparent 50%, var(--_wash) 50%);
+  border-radius: 0;
 }
 
 .carved-range-calendar td:first-child .carved-calendar-day[data-selected] {
@@ -208,11 +246,24 @@
 .carved-range-calendar td:last-child .carved-calendar-day[data-selected] {
   border-start-end-radius: 50%;
   border-end-end-radius: 50%;
+  box-shadow: none;
+}
+
+/* Right to left, the band runs the other way. */
+.carved-range-calendar
+  .carved-calendar-day[data-selection-start]:not([data-selection-end]):dir(rtl) {
+  background-image: linear-gradient(to left, transparent 50%, var(--_wash) 50%);
+  box-shadow: -1px 0 0 var(--_wash);
+}
+
+.carved-range-calendar
+  .carved-calendar-day[data-selection-end]:not([data-selection-start]):dir(rtl) {
+  background-image: linear-gradient(to right, transparent 50%, var(--_wash) 50%);
 }
 
 .carved-range-calendar
   .carved-calendar-day[data-selected]:not([data-selection-start], [data-selection-end]):dir(rtl) {
-  box-shadow: -1px 0 0 var(--carved-cut);
+  box-shadow: -1px 0 0 var(--_wash);
 }
 
 /* Inside a field's popover, the popover is the well. */
@@ -229,7 +280,12 @@
   .carved-calendar-day[data-selected] {
     color: HighlightText;
     background-color: Highlight;
+    background-image: none;
     forced-color-adjust: none;
+  }
+
+  .carved-calendar-day[data-selected]::before {
+    content: none;
   }
 
   .carved-calendar-day[data-today]:not([data-selected]) {

@@ -140,7 +140,7 @@ export interface AlertDialogProps extends Omit<DialogProps, 'role' | 'children'>
   tone?: 'accent' | 'danger';
   /** Label of the confirming action, such as "Delete project". */
   actionLabel: string;
-  /** @default 'Cancel' */
+  /** The label of the button that cancels. @default 'Cancel' */
   cancelLabel?: string;
   /**
    * Runs when the action is confirmed. The dialog closes afterwards; if a promise is returned,
@@ -184,7 +184,12 @@ export function AlertDialog({
               autoFocus
               onPress={async () => {
                 setFailure(null);
-                const result = onAction?.();
+                let result: void | Promise<void>;
+                try {
+                  result = onAction?.();
+                } catch (reason) {
+                  return setFailure({ reason });
+                }
                 if (!result) return close();
                 setPending(true);
                 try {
@@ -243,6 +248,7 @@ export function OverlayArrow({ className, ...props }: Omit<OverlayArrowProps, 'c
 }
 
 export interface TooltipProps extends AriaTooltipProps {
+  /** Point an arrow at the trigger. */
   showArrow?: boolean;
   ref?: Ref<HTMLDivElement>;
 }

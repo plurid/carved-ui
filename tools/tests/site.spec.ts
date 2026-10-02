@@ -62,6 +62,25 @@ test('the theme lab regenerates its preview', async ({ page }) => {
   await expect(page.getByText('Use a CSS colour without transparency')).toBeVisible();
 });
 
+test('navigating to a component page never shows it half loaded', async ({ page }) => {
+  await open(page, '/components/button/');
+  // Record what the new page holds at the moment its title first appears.
+  await page.evaluate(() => {
+    const record = () => {
+      if (document.querySelector('h1')?.textContent !== 'Date and time') return;
+      (window as unknown as { stages?: number }).stages ??=
+        document.querySelectorAll('.specimen-stage').length;
+    };
+    new MutationObserver(record).observe(document.body, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+  });
+  await page.getByRole('link', { name: 'Date and time', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => (window as { stages?: number }).stages)).toBe(2);
+});
+
 test('client navigation keeps the page shell', async ({ page }) => {
   await open(page, '/');
   await page.getByRole('link', { name: 'Get started' }).click();

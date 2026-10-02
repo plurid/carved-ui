@@ -268,7 +268,15 @@ test('drop zone: dropped files of the accepted type are taken, others refused', 
 
 test('command palette: the shortcut opens it, typing filters, Enter runs', async ({ page }) => {
   await story(page, 'testing-browser--collections-harness');
-  await page.keyboard.press('ControlOrMeta+k');
+  // ⌘K on Apple platforms, Ctrl+K elsewhere, by the platform the page reports. Emulated
+  // devices report theirs through client hints, so those come first, as in the palette.
+  const apple = await page.evaluate(() =>
+    /mac|iphone|ipad/i.test(
+      (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform ??
+        navigator.platform,
+    ),
+  );
+  await page.keyboard.press(apple ? 'Meta+k' : 'Control+k');
   const search = page.getByRole('searchbox', { name: 'Search commands' });
   await expect(search).toBeFocused();
   await search.fill('bill');
@@ -277,6 +285,94 @@ test('command palette: the shortcut opens it, typing filters, Enter runs', async
   await page.keyboard.press('Enter');
   await expect(page.getByLabel('Last command')).toHaveText('billing');
   await expect(page.getByRole('dialog')).toBeHidden();
+});
+
+test('focus is a lit edge for the keyboard, and nothing after a click', async ({ page }) => {
+  await story(page, 'testing-browser--controls-harness');
+  const save = page.getByRole('button', { name: 'Save', exact: true });
+  const edge = () =>
+    save.evaluate((button) => {
+      const style = getComputedStyle(button);
+      return { style: style.outlineStyle, offset: style.outlineOffset };
+    });
+  await save.click();
+  expect((await edge()).style).toBe('none');
+  // Safari does not focus a clicked button; focus it, then use the keyboard without moving.
+  await save.focus();
+  expect((await edge()).style).toBe('none');
+  await page.keyboard.press('ArrowRight');
+  await expect(save).toBeFocused();
+  // Drawn inside the control, following its shape, rather than floating around it.
+  expect(await edge()).toEqual({ style: 'solid', offset: '-2px' });
+});
+
+test('links run along an engraved groove that deepens when touched', async ({ page }) => {
+  await story(page, 'actions-button--links');
+  const link = page.locator('.carved-link').first();
+  const groove = () => link.evaluate((element) => getComputedStyle(element).backgroundSize);
+  expect(await link.evaluate((element) => getComputedStyle(element).textDecorationLine)).toBe(
+    'none',
+  );
+  expect(await groove()).toBe('100% 1px, 100% 1px');
+  await link.hover();
+  await expect.poll(groove).toBe('100% 2px, 100% 1px');
+});
+
+test('a slider thumb stays inside its carved slot and lands under the pointer', async ({
+  page,
+}) => {
+  await story(page, 'testing-browser--controls-harness');
+  const input = page.getByRole('slider', { name: 'Volume' });
+  const slider = page.locator('.carved-slider').filter({ has: input });
+  const track = slider.locator('.carved-slider-track');
+  const thumb = slider.locator('.carved-slider-thumb');
+  const expectInside = async () => {
+    const [slot, rail, knob] = await Promise.all([
+      slider.boundingBox(),
+      track.boundingBox(),
+      thumb.boundingBox(),
+    ]);
+    // The slot spans the slider's width and the rail's height.
+    expect(knob!.x).toBeGreaterThan(slot!.x);
+    expect(knob!.x + knob!.width).toBeLessThan(slot!.x + slot!.width);
+    expect(knob!.y).toBeGreaterThan(rail!.y);
+    expect(knob!.y + knob!.height).toBeLessThan(rail!.y + rail!.height);
+  };
+  await input.focus();
+  await page.keyboard.press('Home');
+  await expect(input).toHaveValue('0');
+  await expectInside();
+  await page.keyboard.press('End');
+  await expect(input).toHaveValue('100');
+  await expectInside();
+  // The pointer maps onto the rail the thumb travels: a quarter along it is a quarter.
+  const rail = (await track.boundingBox())!;
+  await page.mouse.click(rail.x + rail.width / 4, rail.y + rail.height / 2);
+  await expect(input).toHaveValue('25');
+});
+
+test('every control shows the cursor for what it does', async ({ page }) => {
+  await story(page, 'testing-browser--controls-harness');
+  const cursor = (locator: ReturnType<Page['locator']>) =>
+    locator.evaluate((element) => getComputedStyle(element).cursor);
+  expect(await cursor(page.getByRole('button', { name: 'Save', exact: true }))).toBe('pointer');
+  expect(await cursor(page.getByRole('textbox', { name: 'Email' }))).toBe('text');
+  expect(await cursor(page.locator('.carved-slider-thumb').first())).toBe('grab');
+  expect(await cursor(page.locator('.carved-slider-track').first())).toBe('pointer');
+  // Disabled wins over every resting cursor.
+  expect(await cursor(page.getByRole('button', { name: 'Unavailable' }))).toBe('not-allowed');
+});
+
+test('a progress bar at 1% shows a whole bead in its slot', async ({ page }) => {
+  await story(page, 'feedback-alert--progress');
+  const fill = page.getByRole('progressbar', { name: 'Starting' }).locator('.carved-progress-fill');
+  const box = (await fill.boundingBox())!;
+  // The bead is never narrower than it is tall, so a small value reads as a round inlay.
+  expect(box.width).toBeGreaterThanOrEqual(box.height - 0.5);
+  expect(box.height).toBeGreaterThan(18);
+  await expect(
+    page.getByRole('progressbar', { name: 'Queued' }).locator('.carved-progress-fill'),
+  ).toHaveCSS('inline-size', '0px');
 });
 
 test.describe('visual', { tag: '@visual' }, () => {

@@ -100,6 +100,15 @@ describe('createTheme', () => {
     expect(left['--carved-shadow-distance']).toBe('8px');
   });
 
+  it('gives sheens the same light as shadows', () => {
+    for (const shadowAngle of [0, 45, 90, 210, 330]) {
+      const variables = createTheme({ color: '#345678', shadowAngle }).variables;
+      const angle = (Number.parseFloat(variables['--carved-light-angle']!) * Math.PI) / 180;
+      expect(Math.cos(angle)).toBeCloseTo(Number(variables['--carved-light-x']), 3);
+      expect(Math.sin(angle)).toBeCloseTo(Number(variables['--carved-light-y']), 3);
+    }
+  });
+
   it('accepts any concrete CSS colour and is deterministic and frozen', () => {
     for (const color of [
       '#fff',
@@ -166,7 +175,7 @@ describe('stylesheet output', () => {
 
   it('declares the cascade layers before any rule', () => {
     expect(coreStylesheet('.x{}').split('\n')[0]).toBe(
-      '@layer carved.tokens, carved.material, carved.components;',
+      '@layer carved.tokens, carved.material, carved.components, carved.states;',
     );
   });
 

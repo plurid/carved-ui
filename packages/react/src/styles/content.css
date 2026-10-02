@@ -82,6 +82,11 @@ h6.carved-heading {
   margin: 0 var(--carved-space-5);
 }
 
+/* A neutral inlay is plain stone: no polish. */
+.carved-inlay[data-tone='neutral'] {
+  background-image: none;
+}
+
 .carved-badge {
   --carved-carve-scale: 0.25;
 
@@ -323,7 +328,7 @@ h6.carved-heading {
   font-size: var(--carved-text-lg);
 }
 
-.carved-avatar.carved-avatar-more {
+.carved-avatar-group > .carved-avatar.carved-avatar-more {
   font-size: var(--carved-text-xs);
   color: var(--carved-cut-muted);
 }

@@ -21,7 +21,7 @@ flowchart LR
 
 - **Tokens** (`src/tokens.ts`): space, radius, type, motion and layering, written in the Design Tokens Community Group format, plus the seven preset themes. This file is the single source of truth; `tokens.json` is generated from it.
 - **The theme engine** (`src/theme.ts`): `createTheme` turns one colour into a theme. It builds six depths in OKLCH, keeping hue steady and the whole ramp on one side of mid-grey, then solves text, muted text, edges and four inlays so their contrast holds on every depth. It also places the light. It is pure and deterministic, so the same function makes the preset CSS at build time and custom themes at runtime.
-- **The material** (`src/material.css`): the primitives every component composes (`carved-carve`, `carved-inlay`, `carved-raise`, `carved-engrave`, `carved-trench`). Each reads the light from custom properties, so a theme relights everything at once.
+- **The material** (`src/material.css`): the primitives every component composes (`carved-carve`, `carved-inlay`, `carved-raise`, `carved-engrave`, `carved-trench`). Each reads the light from custom properties, so a theme relights everything at once. Inlays are polished: `--carved-sheen` brightens the side of every tone fill that faces the light, using the same angle as the shadows.
 - **CSS output** (`src/css.ts`): `themeToCss`, the depth rules that map `[data-carved-depth]` to a level's colours, and the assembled stylesheet.
 
 ## The React package
@@ -45,7 +45,8 @@ Both develop against package source through a shared Vite plugin (`tools/vite/ca
 
 - **React Aria** provides keyboard interaction, focus management, collections, overlays and internationalisation that would otherwise take years to get right. Carved adds the material on top and keeps React Aria's props visible.
 - **Plain CSS and custom properties** rather than CSS-in-JS: no runtime, server rendering for free, and overrides with ordinary CSS.
-- **OKLCH, solved per theme**, rather than hand-picked colours: any base colour gets the same structure and the same contrast guarantees.
+- **OKLCH, solved per theme**, rather than hand-picked colours: any base colour gets the same structure and the same contrast guarantees. Tone seeds are minerals, low in chroma, rather than stock primaries; the engine keeps each seed's hue and chroma and solves only its lightness.
+- **Focus is a lit edge.** For keyboard use only, a focused control's own edge lights up, drawn inside its shape, rather than a ring floating around it. A focused field is lit as a whole: light falls straight in, so its shadow shortens, its floor lifts evenly and a crisp rim of the focus colour runs all the way round, never along one edge.
 - **Recipes stay editable.** Patterns that every application shapes differently (settings forms, confirmations, searchable tables, page frames) live in `docs/examples` as source to copy, not as packaged components.
 - **A well that holds controls is a surface.** A data table, tree, grid list, standalone calendar or drop zone is cut one level below its surface and sets that depth, so the rows, days and buttons inside it can cut deeper still. A tree goes further: each open level is a well of its own.
 - **What is not here yet**: virtualised grids with editable cells, drag-and-drop reordering and rich text editing. They can start as recipes and move into the packages once their shape settles.

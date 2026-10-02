@@ -41,7 +41,7 @@ import { Description, FieldButton, FieldError, InputGroup, Label } from './field
 import type { FieldProps } from './fields.js';
 import { Checkbox } from './choice.js';
 import { Popover } from './overlays.js';
-import { useCutDepth } from './provider.js';
+import { DepthScope, useCutDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
 import { Check, ChevronDown, Close } from './internal/icons.js';
 
@@ -89,6 +89,7 @@ export interface ListBoxSectionProps<T extends object> extends Omit<
 > {
   /** The visible heading of the group. */
   title?: ReactNode;
+  /** `ListBoxItem`s, or a function rendering each of `items`. */
   children: ReactNode | ((item: T) => ReactNode);
 }
 
@@ -103,7 +104,9 @@ export function ListBoxSection<T extends object>({
   return (
     <AriaListBoxSection {...props} className={cx('carved-section', className)}>
       {title && <Header className="carved-section-title">{title}</Header>}
-      <Collection items={items}>{children}</Collection>
+      <Collection items={items} dependencies={props.dependencies}>
+        {children}
+      </Collection>
     </AriaListBoxSection>
   );
 }
@@ -184,6 +187,7 @@ export function ComboBoxRoot<T extends object, M extends SelectionMode = 'single
 
 export interface ComboBoxProps<T extends object, M extends SelectionMode = 'single'>
   extends Omit<ComboBoxRootProps<T, M>, 'children'>, FieldProps {
+  /** Shown in the empty field. It is not a label: give the field a `label` too. */
   placeholder?: string;
   /** `ComboBoxItem`s and `ComboBoxSection`s, or a function rendering each item. */
   children: ReactNode | ((item: T) => ReactNode);
@@ -225,12 +229,16 @@ export interface GridListProps<T extends object> extends AriaGridListProps<T> {
  * and other controls; arrow keys move between items, and Tab into an item's controls.
  */
 export function GridList<T extends object>({ className, ...props }: GridListProps<T>) {
+  const depth = useCutDepth();
+  // The scope wraps the list, so its items, and anything they open, sit a level below it.
   return (
-    <AriaGridList
-      {...props}
-      data-carved-depth={useCutDepth()}
-      className={withClass('carved-grid-list carved-carve', className)}
-    />
+    <DepthScope depth={depth}>
+      <AriaGridList
+        {...props}
+        data-carved-depth={depth}
+        className={withClass('carved-grid-list carved-carve', className)}
+      />
+    </DepthScope>
   );
 }
 
@@ -267,6 +275,7 @@ export interface TagGroupProps<T extends object>
   extends
     Omit<AriaTagGroupProps, 'children'>,
     Pick<TagListProps<T>, 'items' | 'children' | 'renderEmptyState'> {
+  /** Names the group of tags. */
   label?: ReactNode;
   /** Help text below the tags. */
   description?: ReactNode;

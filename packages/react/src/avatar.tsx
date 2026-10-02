@@ -1,14 +1,14 @@
 'use client';
 import { Children, useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
-import { cx } from './internal/class-names.js';
+import { cx } from './internal/cx.js';
 
 export interface AvatarProps extends ComponentProps<'span'> {
   /** The person's name: the accessible label, and the source of the initials. */
   name: string;
   /** An image URL. Initials are shown until it loads, and if it fails. */
   src?: string;
-  /** @default 'md' */
+  /** The socket's diameter. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -24,9 +24,9 @@ export function Avatar({ name, src, size = 'md', className, ...props }: AvatarPr
     .toLocaleUpperCase();
   return (
     <span
-      {...props}
       role="img"
       aria-label={name}
+      {...props}
       data-size={size}
       className={cx('carved-avatar carved-carve', className)}
     >

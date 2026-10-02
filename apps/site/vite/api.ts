@@ -36,7 +36,12 @@ function describe(checker: ts.TypeChecker, type: ts.Type): string {
 const source = fileURLToPath(new URL('../../../packages/react/src/', import.meta.url));
 const id = 'virtual:carved-api';
 
-function extract(): Record<string, ComponentApi> {
+/**
+ * The props each exported component declares itself, with their documentation. An alias such
+ * as `export const CommandItem = MenuItem` takes the props of the component it names and its
+ * own description; an alias of another package's component has a description only.
+ */
+export function extract(): Record<string, ComponentApi> {
   const program = ts.createProgram([`${source}index.ts`], {
     jsx: ts.JsxEmit.ReactJSX,
     module: ts.ModuleKind.NodeNext,
@@ -46,38 +51,58 @@ function extract(): Record<string, ComponentApi> {
   });
   const checker = program.getTypeChecker();
   const index = program.getSourceFile(`${source}index.ts`)!;
+  const resolve = (symbol: ts.Symbol) =>
+    symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
+  const documentation = (symbol: ts.Symbol) =>
+    ts.displayPartsToString(symbol.getDocumentationComment(checker));
+
+  const props = (declaration: ts.FunctionDeclaration): Prop[] => {
+    const parameter = checker.getSignatureFromDeclaration(declaration)?.getParameters()[0];
+    if (!parameter) return [];
+    return checker
+      .getTypeOfSymbolAtLocation(parameter, declaration)
+      .getProperties()
+      .filter((prop) =>
+        prop.declarations?.some((node) => node.getSourceFile().fileName.startsWith(source)),
+      )
+      .map((prop) => {
+        const defaultValue = prop.getJsDocTags(checker).find((tag) => tag.name === 'default');
+        const type = checker.getTypeOfSymbolAtLocation(prop, declaration);
+        return {
+          name: prop.getName(),
+          // Spell out short unions such as variants; keep long or structural types by name.
+          type: describe(checker, checker.getNonNullableType(type)),
+          required: !(prop.flags & ts.SymbolFlags.Optional),
+          ...(defaultValue ? { defaultValue: ts.displayPartsToString(defaultValue.text) } : {}),
+          description: ts.displayPartsToString(prop.getDocumentationComment(checker)),
+        };
+      })
+      .filter((prop) => prop.name !== 'ref');
+  };
+
   const api: Record<string, ComponentApi> = {};
   for (const exported of checker.getExportsOfModule(checker.getSymbolAtLocation(index)!)) {
-    const symbol =
-      exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
+    const symbol = resolve(exported);
     const declaration = symbol.valueDeclaration;
-    if (!declaration || !ts.isFunctionDeclaration(declaration)) continue;
-    const signature = checker.getSignatureFromDeclaration(declaration);
-    const parameter = signature?.getParameters()[0];
-    if (!parameter) continue;
-    const props = checker.getTypeOfSymbolAtLocation(parameter, declaration);
-    api[exported.getName()] = {
-      description: ts.displayPartsToString(symbol.getDocumentationComment(checker)),
-      props: props
-        .getProperties()
-        .filter((prop) =>
-          prop.declarations?.some((node) => node.getSourceFile().fileName.startsWith(source)),
-        )
-        .map((prop) => {
-          const tags = prop.getJsDocTags(checker);
-          const defaultValue = tags.find((tag) => tag.name === 'default');
-          const type = checker.getTypeOfSymbolAtLocation(prop, declaration);
-          return {
-            name: prop.getName(),
-            // Spell out short unions such as variants; keep long or structural types by name.
-            type: describe(checker, checker.getNonNullableType(type)),
-            required: !(prop.flags & ts.SymbolFlags.Optional),
-            ...(defaultValue ? { defaultValue: ts.displayPartsToString(defaultValue.text) } : {}),
-            description: ts.displayPartsToString(prop.getDocumentationComment(checker)),
-          };
-        })
-        .filter((prop) => prop.name !== 'ref'),
-    };
+    if (!declaration) continue;
+    if (ts.isFunctionDeclaration(declaration)) {
+      api[exported.getName()] = { description: documentation(symbol), props: props(declaration) };
+    } else if (
+      ts.isVariableDeclaration(declaration) &&
+      declaration.initializer &&
+      ts.isIdentifier(declaration.initializer)
+    ) {
+      const named = checker.getSymbolAtLocation(declaration.initializer);
+      const target = named && resolve(named).valueDeclaration;
+      const own = documentation(symbol);
+      api[exported.getName()] =
+        target && ts.isFunctionDeclaration(target)
+          ? {
+              description: own || documentation(resolve(named!)),
+              props: props(target),
+            }
+          : { description: own, props: [] };
+    }
   }
   return api;
 }

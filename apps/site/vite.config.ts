@@ -14,6 +14,8 @@ export default defineConfig({
   base: process.env.SITE_BASE ?? '/',
   // The guides and recipes live outside this package; resolve their imports from here.
   resolve: { dedupe: ['@mdx-js/react', 'react', 'react-dom'] },
+  // Transform the pages and examples when the dev server starts, not on the first visit.
+  server: { warmup: { clientFiles: ['./src/pages/*.tsx', './src/examples/**/*.tsx'] } },
   plugins: [
     carved(),
     examples(),

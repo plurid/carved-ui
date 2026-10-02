@@ -23,7 +23,7 @@ export interface ButtonProps extends AriaButtonProps {
    * @default 'primary'
    */
   variant?: ButtonVariant;
-  /** @default 'md' */
+  /** Height, padding and type size. @default 'md' */
   size?: Size;
   ref?: Ref<HTMLButtonElement>;
 }
@@ -68,7 +68,7 @@ export function IconButton({ variant = 'ghost', className, ...props }: IconButto
 }
 
 export interface LinkProps extends AriaLinkProps {
-  /** `link` is underlined inline text; any button variant renders the link as a button. @default 'link' */
+  /** `link` is inline text on an engraved line; any button variant renders the link as a button. @default 'link' */
   variant?: 'link' | ButtonVariant;
   /** Size when rendered as a button. @default 'md' */
   size?: Size;
@@ -89,7 +89,7 @@ export function Link({ variant = 'link', size = 'md', className, ...props }: Lin
 }
 
 export interface ToggleButtonProps extends AriaToggleButtonProps {
-  /** @default 'md' */
+  /** Height, padding and type size. @default 'md' */
   size?: Size;
   ref?: Ref<HTMLButtonElement>;
 }

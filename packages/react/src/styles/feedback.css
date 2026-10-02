@@ -1,4 +1,7 @@
-/* Progress fills a carved groove; the spinner is an inlay turning in a carved ring. */
+/* Progress and meters are the slider's instrument without a knob: a carved slot with an inlaid
+ * bead inside it (see slider.css). The bead never shrinks below its own height, so a small
+ * value reads as a round inlay rather than a sliver. The spinner is an inlay turning in a
+ * carved ring. */
 
 .carved-progress {
   display: grid;
@@ -15,33 +18,41 @@
 }
 
 .carved-progress-track {
-  --carved-carve-scale: 0.3;
+  --carved-carve-scale: 0.45;
   --carved-carve-ring: inset 0 0 0 1px var(--carved-edge);
 
   position: relative;
   grid-column: 1 / -1;
   display: block;
-  block-size: 0.5rem;
+  block-size: var(--carved-slot);
+  padding: var(--carved-slot-gap);
   overflow: hidden;
   background-color: var(--carved-cut);
   border-radius: var(--carved-radius-pill);
 }
 
 .carved-progress-fill {
+  --carved-focus-edge: var(--carved-on-accent);
+
   display: block;
   block-size: 100%;
   background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
   border-radius: inherit;
   transition: inline-size var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
 /* A meter's fill is inlaid with its tone. */
 .carved-meter .carved-progress-fill {
+  --carved-focus-edge: var(--carved-on-tone);
+
   background-color: var(--carved-tone);
+  background-image: var(--carved-sheen);
 }
 
 .carved-progress[data-indeterminate] .carved-progress-fill {
-  inline-size: 40%;
+  inline-size: 35%;
+  mask-image: linear-gradient(to right, transparent, #000 25%, #000 75%, transparent);
   animation: carved-sweep 1.4s var(--carved-motion-easing) infinite;
 }
 
@@ -111,13 +122,15 @@
   outline: none;
 }
 
-.carved-toast[data-focus-visible] {
-  outline: 2px solid var(--carved-focus);
-  outline-offset: 2px;
+.carved-toast[data-entering] {
+  animation: carved-arrive var(--carved-motion-emphasis) var(--carved-motion-easing);
 }
 
-.carved-toast[data-entering] {
-  animation: carved-fade var(--carved-motion-duration) var(--carved-motion-easing);
+@keyframes carved-arrive {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
 }
 
 .carved-toast-content {

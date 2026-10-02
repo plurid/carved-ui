@@ -15,9 +15,18 @@ const titles: Record<string, string> = {
   '/recipes': 'Recipes',
 };
 
+/**
+ * A path without its trailing slash. Static hosts such as GitHub Pages redirect `/start` to
+ * `/start/`; both are the same page.
+ */
+export function canonical(path: string): string {
+  return path.length > 1 ? path.replace(/\/+$/, '') : path;
+}
+
 /** The document title of a page. */
 export function titleFor(path: string): string {
-  return titles[path] ? `${titles[path]} · Carved UI` : 'Carved UI: surfaces cut into one material';
+  const page = titles[canonical(path)];
+  return page ? `${page} · Carved UI` : 'Carved UI: surfaces cut into one material';
 }
 
 /** Every page, for prerendering. */

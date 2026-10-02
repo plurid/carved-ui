@@ -1,8 +1,9 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
-import type { ComponentPropsWithRef, CSSProperties, ReactNode } from 'react';
+import type { ComponentProps, ComponentPropsWithRef, CSSProperties, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { I18nProvider, useLocale } from 'react-aria-components/I18nProvider';
+import { RouterProvider } from 'react-aria';
 import { UNSAFE_PortalProvider } from 'react-aria/PortalProvider';
 import { useIsSSR } from 'react-aria/SSRProvider';
 import type { Theme, ThemePreset, ThemeVariables } from '@plurid/carved-ui-core';
@@ -45,6 +46,14 @@ export interface CarvedProviderProps extends Omit<ComponentPropsWithRef<'div'>, 
    * when omitted.
    */
   locale?: string;
+  /**
+   * Your router's navigate function. Links, breadcrumbs and pagination inside then navigate
+   * through it, without reloading the page. Inherited from an enclosing provider when omitted.
+   */
+  navigate?: ComponentProps<typeof RouterProvider>['navigate'];
+  /** Turns your router's paths into hrefs, for routers with a base path. */
+  useHref?: ComponentProps<typeof RouterProvider>['useHref'];
+  /** Inline styles, which may also set any `--carved-*` custom property. */
   style?: CarvedStyle;
 }
 
@@ -52,13 +61,21 @@ export interface CarvedProviderProps extends Omit<ComponentPropsWithRef<'div'>, 
  * A themed scope. Everything inside, including popovers and dialogs, uses its theme,
  * locale and text direction. Providers can nest to theme part of a page differently.
  */
-export function CarvedProvider({ locale, ...props }: CarvedProviderProps) {
-  if (!locale) return <Scope {...props} />;
-  return (
+export function CarvedProvider({ locale, navigate, useHref, ...props }: CarvedProviderProps) {
+  let scope = locale ? (
     <I18nProvider locale={locale}>
       <Scope {...props} localized />
     </I18nProvider>
+  ) : (
+    <Scope {...props} />
   );
+  if (navigate)
+    scope = (
+      <RouterProvider navigate={navigate} useHref={useHref}>
+        {scope}
+      </RouterProvider>
+    );
+  return scope;
 }
 
 function Scope({
@@ -68,7 +85,7 @@ function Scope({
   style,
   children,
   ...props
-}: Omit<CarvedProviderProps, 'locale'> & { localized?: boolean }) {
+}: Omit<CarvedProviderProps, 'locale' | 'navigate' | 'useHref'> & { localized?: boolean }) {
   if (typeof theme === 'object' && !theme?.variables)
     throw new TypeError('CarvedProvider expects a preset name or a theme from createTheme');
   const { locale, direction } = useLocale();
@@ -129,6 +146,7 @@ export interface SurfaceProps extends Omit<ComponentPropsWithRef<'div'>, 'style'
   depth?: Depth;
   /** The element to render, for landmark and sectioning semantics. @default 'div' */
   as?: SurfaceElement;
+  /** Inline styles, which may also set any `--carved-*` custom property. */
   style?: CarvedStyle;
 }
 

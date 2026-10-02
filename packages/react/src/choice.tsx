@@ -59,6 +59,7 @@ export function Checkbox({
 }
 
 export interface CheckboxGroupProps extends Omit<AriaCheckboxGroupProps, 'children'>, FieldProps {
+  /** The `Checkbox`es of the group. */
   children?: ReactNode;
   ref?: Ref<HTMLDivElement>;
 }
@@ -83,6 +84,7 @@ export function CheckboxGroup({
 }
 
 export interface RadioGroupProps extends Omit<AriaRadioGroupProps, 'children'>, FieldProps {
+  /** The `Radio`s of the group. */
   children?: ReactNode;
   ref?: Ref<HTMLDivElement>;
 }

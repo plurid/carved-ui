@@ -1,6 +1,8 @@
 export type { DateValue, Key, Selection, SortDescriptor, TimeValue } from 'react-aria-components';
 
 export { CarvedProvider, Surface, Card, useDepth } from './provider.js';
+/** The current locale and its text direction, for formatting of your own. */
+export { useLocale } from 'react-aria-components/I18nProvider';
 export type { CarvedProviderProps, CarvedStyle, Depth, SurfaceProps } from './provider.js';
 
 export { Button, IconButton, Link, ToggleButton, ToggleButtonGroup, Toolbar } from './actions.js';
@@ -79,8 +81,8 @@ export type {
   ColorWheelProps,
 } from './color.js';
 
-export { DropZone, FileTrigger } from './files.js';
-export type { DropZoneProps } from './files.js';
+export { DropZone, FileItem, FileList, FileTrigger } from './files.js';
+export type { DropZoneProps, FileDescription, FileItemProps, FileListProps } from './files.js';
 
 export { Checkbox, CheckboxGroup, Radio, RadioGroup, Switch } from './choice.js';
 export type {
@@ -137,7 +139,13 @@ export { Tree, TreeItem } from './tree.js';
 export type { TreeItemProps, TreeProps } from './tree.js';
 
 export { Cell, Column, DataTable, DataTableBody, DataTableHeader, Row } from './data-table.js';
-export type { ColumnProps, DataTableBodyProps, DataTableProps, RowProps } from './data-table.js';
+export type {
+  ColumnProps,
+  DataTableBodyProps,
+  DataTableHeaderProps,
+  DataTableProps,
+  RowProps,
+} from './data-table.js';
 
 export {
   Menu,

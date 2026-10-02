@@ -13,7 +13,7 @@ import type {
 import type { Key } from 'react-aria-components/Tree';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { Checkbox } from './choice.js';
-import { useCutDepth } from './provider.js';
+import { DepthScope, useCutDepth } from './provider.js';
 import { withClass } from './internal/class-names.js';
 import { ChevronEnd } from './internal/icons.js';
 
@@ -39,16 +39,19 @@ export function Tree<T extends object>({ className, style, ...props }: TreeProps
     levels[`--carved-tree-fg-${level}`] = `var(--carved-fg-${surface})`;
     levels[`--carved-tree-muted-${level}`] = `var(--carved-muted-${surface})`;
   }
+  // The scope wraps the tree, so its items, and anything they open, sit a level below it.
   return (
-    <AriaTree
-      {...props}
-      data-carved-depth={depth}
-      style={(values) => ({
-        ...levels,
-        ...(typeof style === 'function' ? style(values) : style),
-      })}
-      className={withClass('carved-tree carved-carve', className)}
-    />
+    <DepthScope depth={depth}>
+      <AriaTree
+        {...props}
+        data-carved-depth={depth}
+        style={(values) => ({
+          ...levels,
+          ...(typeof style === 'function' ? style(values) : style),
+        })}
+        className={withClass('carved-tree carved-carve', className)}
+      />
+    </DepthScope>
   );
 }
 

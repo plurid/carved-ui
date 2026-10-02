@@ -1,11 +1,12 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, useTransition } from 'react';
 import { Route, Routes, useHref, useNavigate } from 'react-router';
 import type { NavigateOptions } from 'react-router';
-import { RouterProvider } from 'react-aria-components';
 import { CarvedProvider } from '@plurid/carved-ui-react';
 import { DocsLayout } from './components/layout';
 import { Prose } from './components/prose';
 import { Landing } from './pages/landing';
+import { Hydrated, PageError } from './components/page-state';
+import { pages } from './prefetch';
 import { useSiteTheme } from './theme';
 
 declare module 'react-aria-components' {
@@ -17,30 +18,12 @@ declare module 'react-aria-components' {
 // Each page loads when it is first visited; prerendering waits for all of them.
 const page = <T,>(load: () => Promise<T>, pick: (module: T) => React.ComponentType) =>
   lazy(() => load().then((module) => ({ default: pick(module) })));
-const Material = page(
-  () => import('./pages/material'),
-  (module) => module.Material,
-);
-const ThemeLab = page(
-  () => import('./pages/themes'),
-  (module) => module.ThemeLab,
-);
-const ComponentIndex = page(
-  () => import('./pages/components'),
-  (module) => module.ComponentIndex,
-);
-const ComponentPage = page(
-  () => import('./pages/components'),
-  (module) => module.ComponentPage,
-);
-const Recipes = page(
-  () => import('./pages/recipes'),
-  (module) => module.Recipes,
-);
-const NotFound = page(
-  () => import('./pages/not-found'),
-  (module) => module.NotFound,
-);
+const Material = page(pages.material, (module) => module.Material);
+const ThemeLab = page(pages.themes, (module) => module.ThemeLab);
+const ComponentIndex = page(pages.components, (module) => module.ComponentIndex);
+const ComponentPage = page(pages.components, (module) => module.ComponentPage);
+const Recipes = page(pages.recipes, (module) => module.Recipes);
+const NotFound = page(pages.notFound, (module) => module.NotFound);
 // The guides are the repository's own Markdown, so they read the same on GitHub.
 const guide = (load: () => Promise<{ default: React.ComponentType }>) =>
   page(load, (module) => () => (
@@ -48,47 +31,51 @@ const guide = (load: () => Promise<{ default: React.ComponentType }>) =>
       <module.default />
     </Prose>
   ));
-const Start = guide(() => import('../../../docs/getting-started.md'));
-const Accessibility = guide(() => import('../../../docs/accessibility.md'));
-const Migration = guide(() => import('../../../docs/migration.md'));
+const Start = guide(pages.start);
+const Accessibility = guide(pages.accessibility);
+const Migration = guide(pages.migration);
 
 export const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-/**
- * Marks the page interactive for the browser tests. It sits inside the pages' Suspense boundary,
- * so it runs only once the current page, which may load lazily, has hydrated too.
- */
-function Hydrated() {
-  useEffect(() => {
-    document.documentElement.dataset.hydrated = '';
-  }, []);
-  return null;
-}
 
 export function App() {
   const navigate = useNavigate();
   const theme = useSiteTheme();
+  // Navigation is a transition: the current page stays until the next has fully loaded,
+  // and a groove at the top of the window shows that it is on its way.
+  const [isNavigating, startNavigation] = useTransition();
   return (
-    <RouterProvider navigate={navigate} useHref={useHref}>
-      <CarvedProvider theme={theme} locale="en-US" className="site">
-        <Suspense>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route element={<DocsLayout />}>
-              <Route path="/start" element={<Start />} />
-              <Route path="/material" element={<Material />} />
-              <Route path="/themes" element={<ThemeLab />} />
-              <Route path="/accessibility" element={<Accessibility />} />
-              <Route path="/migration" element={<Migration />} />
-              <Route path="/components" element={<ComponentIndex />} />
-              <Route path="/components/:slug" element={<ComponentPage />} />
-              <Route path="/recipes" element={<Recipes />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-          <Hydrated />
-        </Suspense>
-      </CarvedProvider>
-    </RouterProvider>
+    <CarvedProvider
+      theme={theme}
+      locale="en-US"
+      navigate={(to, options) => startNavigation(() => navigate(to, options))}
+      useHref={useHref}
+      className="site"
+    >
+      <div className="site-progress" data-active={isNavigating || undefined} aria-hidden="true" />
+      <PageError>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Landing />
+                <Hydrated />
+              </>
+            }
+          />
+          <Route element={<DocsLayout />}>
+            <Route path="/start" element={<Start />} />
+            <Route path="/material" element={<Material />} />
+            <Route path="/themes" element={<ThemeLab />} />
+            <Route path="/accessibility" element={<Accessibility />} />
+            <Route path="/migration" element={<Migration />} />
+            <Route path="/components" element={<ComponentIndex />} />
+            <Route path="/components/:slug" element={<ComponentPage />} />
+            <Route path="/recipes" element={<Recipes />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </PageError>
+    </CarvedProvider>
   );
 }
