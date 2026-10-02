@@ -54,13 +54,20 @@ const Migration = guide(() => import('../../../docs/migration.md'));
 
 export const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-export function App() {
-  const navigate = useNavigate();
-  const theme = useSiteTheme();
-  // Marks the moment the prerendered page becomes interactive; the browser tests wait for it.
+/**
+ * Marks the page interactive for the browser tests. It sits inside the pages' Suspense boundary,
+ * so it runs only once the current page, which may load lazily, has hydrated too.
+ */
+function Hydrated() {
   useEffect(() => {
     document.documentElement.dataset.hydrated = '';
   }, []);
+  return null;
+}
+
+export function App() {
+  const navigate = useNavigate();
+  const theme = useSiteTheme();
   return (
     <RouterProvider navigate={navigate} useHref={useHref}>
       <CarvedProvider theme={theme} locale="en-US" className="site">
@@ -79,6 +86,7 @@ export function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
+          <Hydrated />
         </Suspense>
       </CarvedProvider>
     </RouterProvider>
