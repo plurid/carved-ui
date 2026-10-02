@@ -152,12 +152,24 @@
   cursor: not-allowed;
 }
 
-/* Breadcrumbs */
+/* Breadcrumbs: nested pills. The trail is a grid with a column per crumb and a thin column
+ * after them. Each crumb spans from its own column to the end, so it contains the crumbs that
+ * follow it; a subgrid keeps its label in its own column. Each is inset from the one around
+ * it and cut a level deeper, so the current page sits innermost and deepest. */
 .carved-breadcrumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--carved-space-2);
-  align-items: center;
+  --_inset: 0.3125rem;
+  --_count: var(--carved-crumb-count, 1);
+
+  display: grid;
+  grid-template-rows: minmax(
+    calc(2.125rem + 2 * (min(var(--_count), 5) - 1) * var(--_inset)),
+    auto
+  );
+  grid-template-columns:
+    repeat(var(--_count), max-content)
+    calc((min(var(--_count), 5) - 1) * var(--_inset));
+  inline-size: fit-content;
+  max-inline-size: 100%;
   padding: 0;
   margin: 0;
   font-size: var(--carved-text-sm);
@@ -165,13 +177,120 @@
 }
 
 .carved-breadcrumb {
-  display: flex;
-  gap: var(--carved-space-2);
+  --carved-carve-scale: 0.45;
+
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-row: 1;
   align-items: center;
+  margin-block: calc(var(--_level) * var(--_inset));
+  margin-inline-end: calc(var(--_level) * var(--_inset));
+  border-radius: var(--carved-radius-pill);
 }
 
-.carved-breadcrumb-separator {
-  color: var(--carved-muted);
+.carved-breadcrumb:nth-child(1) {
+  --_level: 0;
+
+  grid-column: 1 / -1;
+  color: var(--carved-crumb-fg-1);
+  background-color: var(--carved-crumb-bg-1);
+}
+
+.carved-breadcrumb:nth-child(2) {
+  --_level: 1;
+
+  grid-column: 2 / -1;
+  color: var(--carved-crumb-fg-2);
+  background-color: var(--carved-crumb-bg-2);
+}
+
+.carved-breadcrumb:nth-child(3) {
+  --_level: 2;
+
+  grid-column: 3 / -1;
+  color: var(--carved-crumb-fg-3);
+  background-color: var(--carved-crumb-bg-3);
+}
+
+.carved-breadcrumb:nth-child(4) {
+  --_level: 3;
+
+  grid-column: 4 / -1;
+  color: var(--carved-crumb-fg-4);
+  background-color: var(--carved-crumb-bg-4);
+}
+
+.carved-breadcrumb:nth-child(5) {
+  --_level: 4;
+
+  grid-column: 5 / -1;
+  color: var(--carved-crumb-fg-5);
+  background-color: var(--carved-crumb-bg-5);
+}
+
+.carved-breadcrumb:nth-child(6) {
+  --_level: 4;
+
+  grid-column: 6 / -1;
+  color: var(--carved-crumb-fg-5);
+  background-color: var(--carved-crumb-bg-5);
+}
+
+.carved-breadcrumb:nth-child(7) {
+  --_level: 4;
+
+  grid-column: 7 / -1;
+  color: var(--carved-crumb-fg-5);
+  background-color: var(--carved-crumb-bg-5);
+}
+
+.carved-breadcrumb:nth-child(8) {
+  --_level: 4;
+
+  grid-column: 8 / -1;
+  color: var(--carved-crumb-fg-5);
+  background-color: var(--carved-crumb-bg-5);
+}
+
+/* Touch cuts the crumb's pill deeper. */
+.carved-breadcrumb:has(> [data-hovered]) {
+  --carved-carve-k: 2;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+.carved-breadcrumb:has(> [data-pressed]) {
+  --carved-carve-k: 3;
+  --carved-carve-shade: var(--carved-shade-deep);
+}
+
+.carved-crumb {
+  grid-column: 1;
+  padding-inline: 0.875rem 0.5rem;
+  font-weight: 600;
+  line-height: 2.125rem;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: var(--carved-radius-pill);
+  outline-offset: -2px;
+}
+
+.carved-breadcrumb:last-child .carved-crumb {
+  padding-inline-end: 0.875rem;
+}
+
+.carved-crumb[data-hovered] {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.carved-crumb[data-current] {
+  cursor: default;
+}
+
+.carved-crumb[data-disabled]:not([data-current]) {
+  opacity: 0.55;
 }
 
 @media (forced-colors: active) {
@@ -187,5 +306,9 @@
   .carved-tab-indicator {
     background-color: Highlight;
     forced-color-adjust: none;
+  }
+
+  .carved-breadcrumb {
+    border: 1px solid CanvasText;
   }
 }

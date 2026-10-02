@@ -221,7 +221,8 @@ export const catalog: Entry[] = [
     slug: 'breadcrumbs',
     title: 'Breadcrumbs',
     group: 'Navigation',
-    summary: 'The trail to the current page. The last crumb is the page itself.',
+    summary:
+      'Nested pills: each crumb holds the next, cut one level deeper, so the page you are on sits innermost and deepest.',
     components: ['Breadcrumb'],
     examples: [{ title: 'Breadcrumbs', module: breadcrumbs }],
   },

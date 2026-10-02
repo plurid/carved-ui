@@ -1,6 +1,6 @@
 // Develop against Carved's source: aliases the packages to src, and generates the core
 // stylesheet from the theme engine so token and theme edits reload without a build.
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runnerImport } from 'vite';
@@ -17,7 +17,11 @@ async function writeCoreStylesheet(): Promise<string[]> {
   }>(`${core}css.ts`);
   const material = await readFile(`${core}material.css`, 'utf8');
   await mkdir(dirname(generated), { recursive: true });
-  await writeFile(generated, module.coreStylesheet(material));
+  // Storybook, its tests and the site may generate this at once: replace it atomically, so no
+  // reader ever sees a half-written file.
+  const temporary = `${generated}.${process.pid}.tmp`;
+  await writeFile(temporary, module.coreStylesheet(material));
+  await rename(temporary, generated);
   return [`${core}css.ts`, `${core}material.css`, ...dependencies];
 }
 

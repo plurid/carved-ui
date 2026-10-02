@@ -35,11 +35,13 @@ import type {
   BreadcrumbsProps as AriaBreadcrumbsProps,
 } from 'react-aria-components/Breadcrumbs';
 import { composeRenderProps } from 'react-aria-components/composeRenderProps';
-import type { ReactNode, Ref } from 'react';
-import { Link } from './actions.js';
-import type { LinkProps } from './actions.js';
+import { Children } from 'react';
+import type { CSSProperties, ReactNode, Ref } from 'react';
+import { Link as AriaLink } from 'react-aria-components/Link';
+import type { LinkProps as AriaLinkProps } from 'react-aria-components/Link';
+import { useDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
-import { ChevronDown, ChevronEnd } from './internal/icons.js';
+import { ChevronDown } from './internal/icons.js';
 
 export function Tabs({ className, ...props }: AriaTabsProps & { ref?: Ref<HTMLDivElement> }) {
   return <AriaTabs {...props} className={withClass('carved-tabs', className)} />;
@@ -147,15 +149,37 @@ export function Disclosure({ title, headingLevel = 3, children, ...props }: Disc
   );
 }
 
+/**
+ * A trail of places drawn as nested pills: each crumb's pill holds the next one, cut a level
+ * deeper, so the current page sits innermost and deepest. Trails of up to eight crumbs nest.
+ */
 export function Breadcrumbs<T extends object>({
   className,
+  style,
   ...props
 }: AriaBreadcrumbsProps<T> & { ref?: Ref<HTMLOListElement> }) {
-  return <AriaBreadcrumbs {...props} className={cx('carved-breadcrumbs', className)} />;
+  const depth = useDepth();
+  const crumbs = props.items
+    ? Array.from(props.items).length
+    : Children.toArray(props.children as ReactNode).length;
+  // The n-th crumb sits n levels below this surface, down to the deepest level.
+  const levels: Record<string, string> = { '--carved-crumb-count': String(Math.min(crumbs, 8)) };
+  for (let step = 1; step <= 5; step++) {
+    const level = Math.min(depth + step, 5);
+    levels[`--carved-crumb-bg-${step}`] = `var(--carved-surface-${level})`;
+    levels[`--carved-crumb-fg-${step}`] = `var(--carved-fg-${level})`;
+  }
+  return (
+    <AriaBreadcrumbs
+      {...props}
+      style={{ ...levels, ...style } as CSSProperties}
+      className={cx('carved-breadcrumbs', className)}
+    />
+  );
 }
 
 export interface BreadcrumbProps
-  extends Omit<AriaBreadcrumbProps, 'children'>, Pick<LinkProps, 'href' | 'routerOptions'> {
+  extends Omit<AriaBreadcrumbProps, 'children'>, Pick<AriaLinkProps, 'href' | 'routerOptions'> {
   children: ReactNode;
 }
 
@@ -168,15 +192,10 @@ export function Breadcrumb({
   ...props
 }: BreadcrumbProps) {
   return (
-    <AriaBreadcrumb {...props} className={withClass('carved-breadcrumb', className)}>
-      {({ isCurrent }) => (
-        <>
-          <Link href={href} routerOptions={routerOptions}>
-            {children}
-          </Link>
-          {!isCurrent && <ChevronEnd className="carved-breadcrumb-separator" />}
-        </>
-      )}
+    <AriaBreadcrumb {...props} className={withClass('carved-breadcrumb carved-carve', className)}>
+      <AriaLink href={href} routerOptions={routerOptions} className="carved-crumb">
+        {children}
+      </AriaLink>
     </AriaBreadcrumb>
   );
 }
