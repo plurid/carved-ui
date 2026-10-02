@@ -56,7 +56,11 @@ export const List: Story = {
     await userEvent.click(canvas.getByRole('option', { name: 'Person 2' }));
     await userEvent.keyboard('{End}');
     await waitFor(() => expect(canvas.getByRole('option', { name: 'Person 1000' })).toHaveFocus());
-    await expect(canvas.getByRole('option', { name: 'Person 2' })).toHaveAttribute(
+    // Out of view, the chosen option is no longer rendered; back in view, it is still chosen.
+    await waitFor(() => expect(canvas.queryByRole('option', { name: 'Person 2' })).toBeNull());
+    await userEvent.keyboard('{Home}');
+    await waitFor(() => expect(canvas.getByRole('option', { name: 'Person 1' })).toHaveFocus());
+    await expect(await canvas.findByRole('option', { name: 'Person 2' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
@@ -174,6 +178,6 @@ export const Table: Story = {
         'descending',
       ),
     );
-    await expect(canvas.getAllByRole('rowheader')[0]).toHaveTextContent('1000');
+    await waitFor(() => expect(canvas.getAllByRole('rowheader')[0]).toHaveTextContent('1000'));
   },
 };
