@@ -314,7 +314,8 @@ export const catalog: Entry[] = [
     slug: 'disclosure',
     title: 'Disclosure and accordion',
     group: 'Navigation',
-    summary: 'Content that folds under its heading, alone or in a group.',
+    summary:
+      'Wells that open: each disclosure is cut into its accordion, and its open panel is cut deeper still.',
     components: ['Disclosure', 'Accordion', 'DisclosureHeader'],
     examples: [{ title: 'Accordion', file: 'disclosure' }],
   },

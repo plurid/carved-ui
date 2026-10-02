@@ -39,7 +39,7 @@ import { Children } from 'react';
 import type { ComponentProps, CSSProperties, ReactNode, Ref } from 'react';
 import { Link as AriaLink } from 'react-aria-components/Link';
 import type { LinkProps as AriaLinkProps } from 'react-aria-components/Link';
-import { useDepth } from './provider.js';
+import { DepthScope, useCutDepth, useDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
 import { ChevronDown, ChevronEnd, ChevronStart } from './internal/icons.js';
 
@@ -86,21 +86,50 @@ export function TabPanel({
   return <AriaTabPanel {...props} className={withClass('carved-tab-panel', className)} />;
 }
 
-/** A stack of disclosures. Set `allowsMultipleExpanded` to open several at once. */
+/**
+ * A stack of disclosures in a well. Each disclosure is a well a level deeper inside it, and an
+ * open one cuts its panel deeper still. Set `allowsMultipleExpanded` to open several at once.
+ */
 export function Accordion({
   className,
+  children,
   ...props
 }: DisclosureGroupProps & { ref?: Ref<HTMLDivElement> }) {
-  return <AriaDisclosureGroup {...props} className={withClass('carved-accordion', className)} />;
+  const depth = useCutDepth();
+  return (
+    <AriaDisclosureGroup
+      {...props}
+      data-carved-depth={depth}
+      className={withClass('carved-accordion carved-carve', className)}
+    >
+      {composeRenderProps(children, (content) => (
+        <DepthScope depth={depth}>{content}</DepthScope>
+      ))}
+    </AriaDisclosureGroup>
+  );
 }
 
 export interface DisclosureRootProps extends AriaDisclosureProps {
   ref?: Ref<HTMLDivElement>;
 }
 
-/** The bare disclosure, for arranging its header and panel yourself. */
-export function DisclosureRoot({ className, ...props }: DisclosureRootProps) {
-  return <AriaDisclosure {...props} className={withClass('carved-disclosure', className)} />;
+/**
+ * The bare disclosure, for arranging its header and panel yourself: a well one level below its
+ * surface, or below its accordion.
+ */
+export function DisclosureRoot({ className, children, ...props }: DisclosureRootProps) {
+  const depth = useCutDepth();
+  return (
+    <AriaDisclosure
+      {...props}
+      data-carved-depth={depth}
+      className={withClass('carved-disclosure carved-carve', className)}
+    >
+      {composeRenderProps(children, (content) => (
+        <DepthScope depth={depth}>{content}</DepthScope>
+      ))}
+    </AriaDisclosure>
+  );
 }
 
 export interface DisclosureHeaderProps {
@@ -122,12 +151,21 @@ export function DisclosureHeader({ children, level = 3, className }: DisclosureH
   );
 }
 
+/** The content of a disclosure, cut a level deeper than the disclosure while it is open. */
 export function DisclosurePanel({
   className,
+  children,
   ...props
 }: AriaDisclosurePanelProps & { ref?: Ref<HTMLDivElement> }) {
+  const depth = useCutDepth();
   return (
-    <AriaDisclosurePanel {...props} className={withClass('carved-disclosure-panel', className)} />
+    <AriaDisclosurePanel
+      {...props}
+      data-carved-depth={depth}
+      className={withClass('carved-disclosure-panel carved-carve', className)}
+    >
+      <DepthScope depth={depth}>{children}</DepthScope>
+    </AriaDisclosurePanel>
   );
 }
 

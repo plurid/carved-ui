@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { parseDate } from '@internationalized/date';
 import { createTheme } from '@plurid/carved-ui-core';
 import {
+  Accordion,
   Alert,
   Avatar,
   AvatarGroup,
@@ -24,6 +25,7 @@ import {
   DataTableBody,
   DataTableHeader,
   DatePicker,
+  Disclosure,
   DropZone,
   Heading,
   IconButton,
@@ -94,6 +96,24 @@ describe('depth', () => {
       ),
     ];
     expect(depths.map((match) => Number(match[1]))).toEqual([1, 2, 3, 4, 5, 5, 5]);
+  });
+
+  it('cuts an accordion, its disclosures and an open panel a level deeper each', () => {
+    const markup = html(
+      h(
+        Accordion,
+        { defaultExpandedKeys: ['open'] },
+        h(Disclosure, { id: 'open', title: 'Open' }, 'Inside'),
+        h(Disclosure, { id: 'closed', title: 'Closed' }, 'Hidden'),
+      ),
+    );
+    const depth = (name: string) =>
+      [...markup.matchAll(new RegExp(`<[^>]*class="carved-${name}[ "][^>]*>`, 'g'))].map(
+        ([tag]) => tag.match(/data-carved-depth="(\d)"/)?.[1],
+      );
+    expect(depth('accordion')).toEqual(['1']);
+    expect(depth('disclosure')).toEqual(['2', '2']);
+    expect(depth('disclosure-panel')).toEqual(['3', '3']);
   });
 
   it('accepts an explicit depth and rejects invalid ones', () => {
