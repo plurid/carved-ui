@@ -204,6 +204,81 @@ test('an avatar whose image fails shows its initials', async ({ page }) => {
   await expect(page.getByRole('img', { name: 'Broken Image' }).locator('img')).toHaveCount(0);
 });
 
+test('date picker: the calendar opens, moves and chooses by keyboard', async ({ page }) => {
+  await story(page, 'testing-browser--collections-harness');
+  await page.getByRole('button', { name: /Calendar/ }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('button', { name: /March 10, 2026/ })).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('Launch', { exact: true })).toHaveText('2026-03-17');
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await audit(page);
+});
+
+test('data table: sorting and selecting', async ({ page }) => {
+  await story(page, 'testing-browser--collections-harness');
+  const latency = page.getByRole('columnheader', { name: /Latency/ });
+  await latency.click();
+  await expect(latency).toHaveAttribute('aria-sort', 'ascending');
+  await expect(page.getByRole('row').nth(1)).toContainText('Frankfurt');
+  await latency.click();
+  await expect(page.getByRole('row').nth(1)).toContainText('Virginia');
+  // The select-all checkbox sits in the first column's header.
+  await page.getByRole('columnheader').first().locator('.carved-checkbox-box').click();
+  await expect(page.locator('[role="row"][aria-selected="true"]')).toHaveCount(3);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Space');
+  await expect(page.locator('[role="row"][aria-selected="true"]')).toHaveCount(2);
+});
+
+test('tree: each open level is a well one depth deeper', async ({ page }) => {
+  await story(page, 'testing-browser--collections-harness');
+  const fills = await page
+    .getByRole('row', { name: 'button.tsx' })
+    .locator('.carved-tree-well')
+    .evaluateAll((wells) => wells.map((well) => getComputedStyle(well).backgroundColor));
+  expect(fills).toHaveLength(2);
+  expect(fills[0]).not.toBe(fills[1]);
+  await page.getByRole('row', { name: 'components' }).click();
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.getByRole('row', { name: 'button.tsx' })).toHaveCount(0);
+});
+
+test('drop zone: dropped files of the accepted type are taken, others refused', async ({
+  page,
+  browserName,
+}) => {
+  // React Aria takes a dropped file through its file system entry, and Chromium gives files
+  // made by a script none. Real drops have one; Storybook covers choosing files in Chromium.
+  test.skip(browserName === 'chromium', 'Chromium gives scripted files no file system entry');
+  await story(page, 'testing-browser--collections-harness');
+  const zone = page.locator('.carved-drop-zone');
+  const transfer = await page.evaluateHandle(() => {
+    const data = new DataTransfer();
+    data.items.add(new File(['png'], 'photo.png', { type: 'image/png' }));
+    data.items.add(new File(['txt'], 'notes.txt', { type: 'text/plain' }));
+    return data;
+  });
+  for (const type of ['dragenter', 'dragover', 'drop'])
+    await zone.dispatchEvent(type, { dataTransfer: transfer });
+  await expect(page.getByLabel('Dropped files')).toHaveText('photo.png');
+});
+
+test('command palette: the shortcut opens it, typing filters, Enter runs', async ({ page }) => {
+  await story(page, 'testing-browser--collections-harness');
+  await page.keyboard.press('ControlOrMeta+k');
+  const search = page.getByRole('searchbox', { name: 'Search commands' });
+  await expect(search).toBeFocused();
+  await search.fill('bill');
+  await expect(page.getByRole('menuitem')).toHaveCount(1);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('Last command')).toHaveText('billing');
+  await expect(page.getByRole('dialog')).toBeHidden();
+});
+
 test.describe('visual', { tag: '@visual' }, () => {
   test.skip(({ browserName }) => browserName !== 'chromium', 'Baselines use Chromium.');
   for (const theme of ['ponton', 'light', 'furor'])

@@ -2,21 +2,44 @@ import { describe, expect, it } from 'vitest';
 import { createElement as h } from 'react';
 import type { ReactNode } from 'react';
 import { renderToString } from 'react-dom/server';
+import { parseDate } from '@internationalized/date';
 import { createTheme } from '@plurid/carved-ui-core';
 import {
   Alert,
+  Avatar,
+  AvatarGroup,
   Badge,
   Button,
+  Calendar,
   Card,
   CardHeader,
   CardTitle,
   CarvedProvider,
+  Cell,
+  ColorPicker,
+  Column,
+  CommandItem,
+  CommandPalette,
+  DataTable,
+  DataTableBody,
+  DataTableHeader,
+  DatePicker,
+  DropZone,
   Heading,
   IconButton,
+  Kbd,
+  Meter,
+  NumberField,
+  Pagination,
+  Row,
   Select,
   SelectItem,
   Surface,
+  Tag,
+  TagGroup,
   TextField,
+  Tree,
+  TreeItem,
 } from '@plurid/carved-ui-react';
 
 const html = (node: ReactNode) => renderToString(node);
@@ -115,5 +138,85 @@ describe('content', () => {
 
   it('requires a name for icon buttons', () => {
     expect(() => html(h(IconButton, { 'aria-label': ' ' }, 'x'))).toThrow('non-empty aria-label');
+  });
+});
+
+describe('server rendering of interactive components', () => {
+  it('renders dates, colours, numbers and files with their labels', () => {
+    const markup = html(
+      h(
+        CarvedProvider,
+        { locale: 'en-US' },
+        h(DatePicker, { label: 'Launch', defaultValue: parseDate('2026-03-10') }),
+        h(Calendar, { 'aria-label': 'Day', defaultValue: parseDate('2026-03-10') }),
+        h(NumberField, { label: 'Seats', defaultValue: 4 }),
+        h(ColorPicker, { label: 'Accent', defaultValue: '#1380C3' }),
+        h(DropZone, { label: 'Drop images here' }),
+        h(Meter, { label: 'Storage', value: 42 }),
+      ),
+    );
+    for (const text of ['Launch', 'March 2026', 'Seats', 'Accent', 'Drop images here', 'Storage'])
+      expect(markup).toContain(text);
+    expect(markup).toContain('role="meter"');
+  });
+
+  it('renders collections, and a closed command palette as nothing', () => {
+    const markup = html(
+      h(
+        CarvedProvider,
+        null,
+        h(
+          DataTable,
+          { 'aria-label': 'Deploys' },
+          h(DataTableHeader, null, h(Column, { isRowHeader: true }, 'Commit')),
+          h(DataTableBody, null, h(Row, null, h(Cell, null, 'a41f'))),
+        ),
+        h(Tree, { 'aria-label': 'Files' }, h(TreeItem, { id: 'src', title: 'src' })),
+        h(TagGroup, { label: 'Labels' }, h(Tag, { id: 'bug' }, 'Bug')),
+        h(CommandPalette, null, h(CommandItem, { id: 'new' }, 'New project')),
+      ),
+    );
+    for (const text of ['Deploys', 'a41f', 'src', 'Bug']) expect(markup).toContain(text);
+    expect(markup).not.toContain('New project');
+  });
+
+  it('renders keys and groups of people without React Aria', () => {
+    expect(html(h(Kbd, null, '⌘K'))).toBe('<kbd class="carved-kbd carved-raise">⌘K</kbd>');
+    const people = html(
+      h(AvatarGroup, {
+        'aria-label': 'Members',
+        max: 2,
+        children: ['Ana Pop', 'Ioan Marin', 'Mara Ilie'].map((name) =>
+          h(Avatar, { key: name, name }),
+        ),
+      }),
+    );
+    expect(people).toContain('aria-label="1 more"');
+    expect(people.match(/role="img"/g)).toHaveLength(3);
+  });
+});
+
+describe('pagination', () => {
+  const pages = (page: number, pageCount: number) =>
+    [...html(h(Pagination, { page, pageCount })).matchAll(/aria-label="Page (\d+)"|…/g)].map(
+      (match) => match[1] ?? '…',
+    );
+
+  it('shows the ends and the neighbours of the current page', () => {
+    expect(pages(6, 24)).toEqual(['1', '…', '5', '6', '7', '…', '24']);
+    expect(pages(1, 24)).toEqual(['1', '2', '…', '24']);
+  });
+
+  it('never hides a single page behind an ellipsis', () => {
+    expect(pages(4, 7)).toEqual(['1', '2', '3', '4', '5', '6', '7']);
+    expect(pages(1, 1)).toEqual(['1']);
+  });
+
+  it('marks the current page and turns pages into links when given URLs', () => {
+    const markup = html(h(Pagination, { page: 2, pageCount: 3, href: (page) => `?page=${page}` }));
+    expect(markup).toMatch(
+      /aria-label="Page 2"[^>]*aria-current="page"|aria-current="page"[^>]*aria-label="Page 2"/,
+    );
+    expect(markup).toContain('href="?page=3"');
   });
 });

@@ -35,6 +35,11 @@
   transition: inline-size var(--carved-motion-duration) var(--carved-motion-easing);
 }
 
+/* A meter's fill is inlaid with its tone. */
+.carved-meter .carved-progress-fill {
+  background-color: var(--carved-tone);
+}
+
 .carved-progress[data-indeterminate] .carved-progress-fill {
   inline-size: 40%;
   animation: carved-sweep 1.4s var(--carved-motion-easing) infinite;

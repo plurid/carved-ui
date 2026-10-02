@@ -24,7 +24,7 @@ import { composeRenderProps } from 'react-aria-components/composeRenderProps';
 import { createContext, useCallback, useContext, useEffect, useId, useState } from 'react';
 import type { ComponentProps, ReactNode, Ref } from 'react';
 import { Button } from './actions.js';
-import { DepthScope, useOverlayDepth } from './provider.js';
+import { DepthScope, useCutDepth } from './provider.js';
 import { Alert } from './content.js';
 import { cx, withClass } from './internal/class-names.js';
 
@@ -214,7 +214,7 @@ export interface PopoverProps extends AriaPopoverProps {
 
 /** A well cut beside its trigger, one level deeper than the surface it opens from. */
 export function Popover({ showArrow = false, className, children, ...props }: PopoverProps) {
-  const depth = useOverlayDepth();
+  const depth = useCutDepth();
   return (
     <AriaPopover
       offset={showArrow ? 12 : 6}
@@ -253,7 +253,7 @@ export function Tooltip({ showArrow = false, className, children, ...props }: To
     <AriaTooltip
       offset={showArrow ? 10 : 6}
       {...props}
-      data-carved-depth={useOverlayDepth()}
+      data-carved-depth={useCutDepth()}
       className={withClass('carved-tooltip carved-carve', className)}
     >
       {composeRenderProps(children, (content) => (

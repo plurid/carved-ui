@@ -1,0 +1,74 @@
+/* A drop zone is a well that takes files. While files are dragged over it, it cuts deeper and
+ * its edge lights in the accent, as a focused field's does. */
+
+.carved-drop-zone {
+  --carved-carve-scale: 0.8;
+  --carved-carve-lip: var(--carved-edge);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  align-items: center;
+  justify-content: center;
+  min-block-size: 11rem;
+  padding: var(--carved-space-5);
+  color: var(--carved-fg);
+  text-align: center;
+  background-color: var(--carved-bg);
+  border-radius: calc(var(--carved-radius-surface) * 2);
+  outline: none;
+}
+
+.carved-drop-zone[data-focus-visible] {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: 2px;
+}
+
+.carved-drop-zone[data-drop-target] {
+  --carved-carve-k: 2.5;
+  --carved-carve-shade: var(--carved-shade-deep);
+  --carved-carve-lip: var(--carved-focus);
+  --carved-carve-lip-width: 2px;
+}
+
+.carved-drop-zone-icon {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  color: var(--carved-muted);
+  transition:
+    translate var(--carved-motion-duration) var(--carved-motion-easing),
+    color var(--carved-motion-duration);
+}
+
+.carved-drop-zone[data-drop-target] .carved-drop-zone-icon {
+  color: var(--carved-accent-ink);
+  translate: 0 -0.25rem;
+}
+
+.carved-drop-zone-label {
+  font-weight: 650;
+}
+
+.carved-drop-zone-description {
+  max-inline-size: 28rem;
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.carved-drop-zone .carved-button {
+  margin-block-start: var(--carved-space-2);
+}
+
+.carved-drop-zone[data-disabled] {
+  opacity: 0.55;
+}
+
+@media (forced-colors: active) {
+  .carved-drop-zone {
+    border: 1px dashed CanvasText;
+  }
+
+  .carved-drop-zone[data-drop-target] {
+    border: 2px solid Highlight;
+  }
+}

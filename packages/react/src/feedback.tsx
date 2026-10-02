@@ -1,4 +1,6 @@
 'use client';
+import { useMeter } from 'react-aria/useMeter';
+import type { AriaMeterProps } from 'react-aria/useMeter';
 import { ProgressBar as AriaProgressBar } from 'react-aria-components/ProgressBar';
 import type { ProgressBarProps as AriaProgressBarProps } from 'react-aria-components/ProgressBar';
 import {
@@ -9,11 +11,11 @@ import {
 } from 'react-aria-components/Toast';
 import type { ToastRegionProps as AriaToastRegionProps } from 'react-aria-components/Toast';
 import { Text } from 'react-aria-components/Text';
-import type { ReactNode, Ref } from 'react';
+import type { CSSProperties, ReactNode, Ref } from 'react';
 import { Button, IconButton } from './actions.js';
 import { Label } from './fields.js';
 import { DepthScope } from './provider.js';
-import { withClass } from './internal/class-names.js';
+import { cx, withClass } from './internal/class-names.js';
 import { Close } from './internal/icons.js';
 import { ToneMark } from './content.js';
 import type { Tone } from './content.js';
@@ -48,6 +50,58 @@ export function ProgressBar({ label, showValue = true, className, ...props }: Pr
         </>
       )}
     </AriaProgressBar>
+  );
+}
+
+export interface MeterProps extends AriaMeterProps {
+  label?: ReactNode;
+  /** Show the formatted value beside the label. @default true */
+  showValue?: boolean;
+  /** The inlay's tone, such as `warning` when storage runs low. @default 'accent' */
+  tone?: Exclude<Tone, 'neutral'>;
+  className?: string;
+  style?: CSSProperties;
+  ref?: Ref<HTMLDivElement>;
+}
+
+/**
+ * A quantity within a known range, such as storage used, inlaid in a carved groove. Unlike a
+ * progress bar, it measures an amount rather than a task.
+ */
+export function Meter({
+  label,
+  showValue = true,
+  tone = 'accent',
+  className,
+  style,
+  ref,
+  ...props
+}: MeterProps) {
+  const { meterProps, labelProps } = useMeter({ ...props, label });
+  const { value = 0, minValue = 0, maxValue = 100 } = props;
+  const range = maxValue - minValue;
+  const percentage =
+    range > 0 ? (Math.min(Math.max(value, minValue), maxValue) - minValue) / range : 0;
+  return (
+    <div
+      {...meterProps}
+      // React Aria falls back to `progressbar` for old browsers; every supported one has `meter`.
+      role="meter"
+      ref={ref}
+      style={style}
+      data-tone={tone}
+      className={cx('carved-progress carved-meter', className)}
+    >
+      {label && (
+        <span {...labelProps} className="carved-label">
+          {label}
+        </span>
+      )}
+      {showValue && <span className="carved-progress-value">{meterProps['aria-valuetext']}</span>}
+      <span className="carved-progress-track carved-carve">
+        <span className="carved-progress-fill" style={{ inlineSize: `${percentage * 100}%` }} />
+      </span>
+    </div>
   );
 }
 

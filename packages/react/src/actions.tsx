@@ -7,6 +7,8 @@ import { ToggleButton as AriaToggleButton } from 'react-aria-components/ToggleBu
 import type { ToggleButtonProps as AriaToggleButtonProps } from 'react-aria-components/ToggleButton';
 import { ToggleButtonGroup as AriaToggleButtonGroup } from 'react-aria-components/ToggleButtonGroup';
 import type { ToggleButtonGroupProps as AriaToggleButtonGroupProps } from 'react-aria-components/ToggleButtonGroup';
+import { Toolbar as AriaToolbar } from 'react-aria-components/Toolbar';
+import type { ToolbarProps as AriaToolbarProps } from 'react-aria-components/Toolbar';
 import { composeRenderProps } from 'react-aria-components/composeRenderProps';
 import type { Ref } from 'react';
 import { withClass } from './internal/class-names.js';
@@ -115,4 +117,16 @@ export function ToggleButtonGroup({ className, ...props }: ToggleButtonGroupProp
       className={withClass('carved-toggle-group carved-carve', className)}
     />
   );
+}
+
+export interface ToolbarProps extends AriaToolbarProps {
+  ref?: Ref<HTMLDivElement>;
+}
+
+/**
+ * A carved channel of related controls, such as formatting buttons. It is one Tab stop;
+ * arrow keys move between its controls. Divide groups with a vertical `Separator`.
+ */
+export function Toolbar({ className, ...props }: ToolbarProps) {
+  return <AriaToolbar {...props} className={withClass('carved-toolbar carved-carve', className)} />;
 }

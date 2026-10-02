@@ -1,0 +1,139 @@
+/* Colour: areas, grooves and swatches are carved over their colours, and thumbs, the moving
+ * pieces, are raised rings. */
+
+.carved-color-area {
+  --carved-carve-scale: 0.6;
+
+  flex: none;
+  inline-size: 12rem;
+  block-size: 12rem;
+  border-radius: var(--carved-radius-control);
+}
+
+.carved-color-thumb {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  transition: scale var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-color-thumb[data-dragging] {
+  scale: 1.15;
+}
+
+.carved-color-slider {
+  min-inline-size: 12rem;
+}
+
+.carved-color-track {
+  --carved-carve-scale: 0.4;
+
+  grid-column: 1 / -1;
+  block-size: 1.5rem;
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-color-track .carved-color-thumb {
+  inset-block-start: 50%;
+}
+
+.carved-color-slider[data-orientation='vertical'] .carved-color-track {
+  inline-size: 1.5rem;
+  block-size: 12rem;
+}
+
+.carved-color-slider[data-orientation='vertical'] .carved-color-thumb {
+  /* React Aria centres thumbs with a physical translate, so position them physically too. */
+  left: 50%;
+}
+
+.carved-color-wheel {
+  flex: none;
+}
+
+.carved-color-slider[data-disabled],
+.carved-color-area[data-disabled],
+.carved-color-wheel[data-disabled] {
+  opacity: 0.55;
+}
+
+.carved-color-swatch {
+  --carved-carve-scale: 0.3;
+  --carved-carve-lip: rgb(255 255 255 / 0.25);
+
+  flex: none;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 6px;
+}
+
+.carved-color-swatch[data-size='sm'] {
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  border-radius: 50%;
+}
+
+.carved-color-swatch[data-size='lg'] {
+  inline-size: 3rem;
+  block-size: 3rem;
+  border-radius: 8px;
+}
+
+.carved-swatch-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-2);
+}
+
+.carved-swatch-item {
+  cursor: pointer;
+  border-radius: 6px;
+  outline: none;
+}
+
+.carved-swatch-item[data-focus-visible] {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: 5px;
+}
+
+/* The chosen swatch is ringed: the surface, then the ink. */
+.carved-swatch-item[data-selected] .carved-color-swatch {
+  --carved-carve-ring: 0 0 0 2px var(--carved-bg), 0 0 0 4px var(--carved-fg);
+}
+
+.carved-color-trigger {
+  padding-inline: 0.6875rem;
+}
+
+.carved-color-trigger:has(> span:not([role])) {
+  padding-inline: 0.6875rem 1.125rem;
+}
+
+.carved-color-editor {
+  inline-size: 16.5rem;
+}
+
+.carved-color-editor .carved-color-area {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+}
+
+.carved-color-editor .carved-color-slider {
+  min-inline-size: 0;
+}
+
+@media (forced-colors: active) {
+  .carved-color-area,
+  .carved-color-track,
+  .carved-color-swatch {
+    forced-color-adjust: none;
+    border: 1px solid CanvasText;
+  }
+
+  .carved-swatch-item[data-selected] .carved-color-swatch {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}

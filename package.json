@@ -34,6 +34,7 @@
     "@axe-core/playwright": "4.13.0",
     "@changesets/cli": "3.0.3",
     "@eslint/js": "^10.0.1",
+    "@internationalized/date": "3.12.4",
     "@playwright/test": "1.63.0",
     "@plurid/carved-ui-core": "workspace:*",
     "@plurid/carved-ui-react": "workspace:*",

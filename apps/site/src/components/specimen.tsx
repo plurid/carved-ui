@@ -1,9 +1,22 @@
 import { useId } from 'react';
-import type { Example } from '../catalog';
+import type { ComponentType } from 'react';
 import { CodeBlock } from './code-block';
 
+/** A module imported with `?example`: a demo and its source. */
+export interface ExampleModule {
+  default: ComponentType;
+  code: string;
+  source: string;
+}
+
+interface SpecimenProps {
+  title: string;
+  description?: string;
+  module: ExampleModule;
+}
+
 /** One example: the live component on its own stage, and the code that makes it. */
-export function Specimen({ title, description, module }: Example) {
+export function Specimen({ title, description, module }: SpecimenProps) {
   const id = useId();
   const { default: Demo, code, source } = module;
   return (

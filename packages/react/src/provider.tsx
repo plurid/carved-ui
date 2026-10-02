@@ -25,8 +25,11 @@ export function DepthScope({ depth, children }: { depth: Depth; children: ReactN
   return <DepthContext value={depth}>{children}</DepthContext>;
 }
 
-/** The depth an overlay opened from here is cut at: one level below the opener. */
-export function useOverlayDepth(): Depth {
+/**
+ * The depth of something cut into the current surface: an overlay opened from here, or a well
+ * that holds controls of its own. It is one level deeper, so its controls can cut deeper still.
+ */
+export function useCutDepth(): Depth {
   return Math.min(useDepth() + 1, 5) as Depth;
 }
 

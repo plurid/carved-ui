@@ -112,6 +112,23 @@ Give a provider a `locale` to set the language, number and date formatting, and 
 
 Without a `locale`, Carved leaves `dir` and `lang` to your page.
 
+## Dates and colours
+
+Date fields, pickers and calendars work with dates from `@internationalized/date`, which keep the calendar system and time zone that a plain `Date` loses. Install it beside Carved to create and read them:
+
+```sh
+pnpm add @internationalized/date
+```
+
+```tsx
+import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
+
+<DatePicker label="Launch date" defaultValue={parseDate('2026-03-10')} />;
+<Calendar aria-label="Delivery day" minValue={today(getLocalTimeZone())} />;
+```
+
+Colour components take a CSS colour string or a `Color` from `parseColor`, which Carved exports.
+
 ## Server rendering
 
 Static content (`Heading`, `Separator`, `Badge`, `Alert`, `Skeleton`, `Table` and the card parts) renders in React Server Components. Interactive components are client components; import them anywhere and your framework will hydrate them. In the Next.js App Router, import the stylesheet in your root layout.

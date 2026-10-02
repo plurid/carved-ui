@@ -186,3 +186,23 @@ export const TableCell = (props: ComponentProps<'td'>) => <td {...props} />;
 export const TableHeader = ({ scope = 'col', ...props }: ComponentProps<'th'>) => (
   <th scope={scope} {...props} />
 );
+
+/** A key or combination, such as `⌘K`, set on a raised keycap: keys are pieces that move. */
+export function Kbd({ className, ...props }: ComponentProps<'kbd'>) {
+  return <kbd {...props} className={cx('carved-kbd carved-raise', className)} />;
+}
+
+export interface FieldsetProps extends ComponentProps<'fieldset'> {
+  /** Names the group of fields. */
+  legend?: ReactNode;
+}
+
+/** A named group of related fields, such as an address. */
+export function Fieldset({ legend, className, children, ...props }: FieldsetProps) {
+  return (
+    <fieldset {...props} className={cx('carved-fieldset', className)}>
+      {legend && <legend className="carved-fieldset-legend">{legend}</legend>}
+      {children}
+    </fieldset>
+  );
+}

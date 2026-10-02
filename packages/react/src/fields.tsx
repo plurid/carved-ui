@@ -20,13 +20,15 @@ import { TextField as AriaTextField } from 'react-aria-components/TextField';
 import type { TextFieldProps as AriaTextFieldProps } from 'react-aria-components/TextField';
 import { SearchField as AriaSearchField } from 'react-aria-components/SearchField';
 import type { SearchFieldProps as AriaSearchFieldProps } from 'react-aria-components/SearchField';
+import { NumberField as AriaNumberField } from 'react-aria-components/NumberField';
+import type { NumberFieldProps as AriaNumberFieldProps } from 'react-aria-components/NumberField';
 import { useContext } from 'react';
 import type { ReactNode, Ref } from 'react';
 import { Button } from './actions.js';
 import type { ButtonProps } from './actions.js';
 import { cx, withClass } from './internal/class-names.js';
 import { useHeldDuringPress } from './internal/hold.js';
-import { Close, Search } from './internal/icons.js';
+import { Close, Minus, Plus, Search } from './internal/icons.js';
 
 /** Props shared by every composed field. */
 export interface FieldProps {
@@ -101,7 +103,8 @@ export function FieldButton({ className, ...props }: ButtonProps) {
   );
 }
 
-function FieldFooter({ description, errorMessage }: FieldProps) {
+/** A field's help text and validation message, in the order every field shows them. */
+export function FieldFooter({ description, errorMessage }: FieldProps) {
   return (
     <>
       {description && <Description>{description}</Description>}
@@ -176,5 +179,39 @@ export function SearchField({
       </InputGroup>
       <FieldFooter description={description} errorMessage={errorMessage} />
     </AriaSearchField>
+  );
+}
+
+export interface NumberFieldProps extends Omit<AriaNumberFieldProps, 'children'>, FieldProps {
+  placeholder?: string;
+  ref?: Ref<HTMLDivElement>;
+}
+
+/**
+ * A field for numbers, formatted for the locale. Arrow keys, the wheel and the step buttons
+ * change the value by `step`; `formatOptions` show it as a percentage, currency or unit.
+ */
+export function NumberField({
+  label,
+  description,
+  errorMessage,
+  placeholder,
+  className,
+  ...props
+}: NumberFieldProps) {
+  return (
+    <AriaNumberField {...props} className={withClass('carved-field carved-number', className)}>
+      {label && <Label>{label}</Label>}
+      <InputGroup>
+        <AriaInput placeholder={placeholder} className="carved-group-input" />
+        <FieldButton slot="decrement">
+          <Minus />
+        </FieldButton>
+        <FieldButton slot="increment">
+          <Plus />
+        </FieldButton>
+      </InputGroup>
+      <FieldFooter description={description} errorMessage={errorMessage} />
+    </AriaNumberField>
   );
 }

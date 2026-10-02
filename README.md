@@ -92,18 +92,21 @@ The theme engine builds six depths in OKLCH, keeping the hue steady, then solves
 
 ## Components
 
-| Family      | Components                                                                                |
-| ----------- | ----------------------------------------------------------------------------------------- |
-| Foundations | `CarvedProvider`, `Surface`, `Card`                                                       |
-| Actions     | `Button`, `IconButton`, `Link`, `ToggleButton`, `ToggleButtonGroup`                       |
-| Fields      | `TextField`, `SearchField`, `Checkbox`, `CheckboxGroup`, `RadioGroup`, `Switch`, `Slider` |
-| Collections | `Select`, `ComboBox`, `ListBox`, `Menu`                                                   |
-| Overlays    | `Modal`, `Drawer`, `Dialog`, `AlertDialog`, `Popover`, `Tooltip`                          |
-| Navigation  | `Tabs`, `Accordion`, `Disclosure`, `Breadcrumbs`                                          |
-| Feedback    | `Alert`, `ToastRegion`, `ProgressBar`, `Spinner`, `Skeleton`                              |
-| Content     | `Heading`, `Separator`, `Badge`, `Avatar`, `Table`                                        |
+| Family      | Components                                                                                                           |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Foundations | `CarvedProvider`, `Surface`, `Card`                                                                                  |
+| Actions     | `Button`, `IconButton`, `Link`, `ToggleButton`, `ToggleButtonGroup`, `Toolbar`                                       |
+| Fields      | `TextField`, `SearchField`, `NumberField`, `Checkbox`, `CheckboxGroup`, `RadioGroup`, `Switch`, `Slider`, `Fieldset` |
+| Dates       | `DatePicker`, `DateRangePicker`, `DateField`, `TimeField`, `Calendar`, `RangeCalendar`                               |
+| Colour      | `ColorPicker`, `ColorArea`, `ColorSlider`, `ColorWheel`, `ColorField`, `ColorSwatch`, `ColorSwatchPicker`            |
+| Files       | `DropZone`, `FileTrigger`                                                                                            |
+| Collections | `Select`, `ComboBox`, `ListBox`, `Menu`, `DataTable`, `GridList`, `Tree`, `TagGroup`                                 |
+| Overlays    | `Modal`, `Drawer`, `Dialog`, `AlertDialog`, `Popover`, `Tooltip`, `CommandPalette`                                   |
+| Navigation  | `Tabs`, `Accordion`, `Disclosure`, `Breadcrumbs`, `Pagination`                                                       |
+| Feedback    | `Alert`, `ToastRegion`, `ProgressBar`, `Meter`, `Spinner`, `Skeleton`                                                |
+| Content     | `Heading`, `Separator`, `Badge`, `Avatar`, `AvatarGroup`, `Kbd`, `Table`                                             |
 
-Interaction, focus and screen reader behaviour come from [React Aria](https://react-spectrum.adobe.com/react-aria/). Every component is documented on the [site](https://plurid.github.io/carved-ui/components) with live examples and its full API. Patterns that every app shapes differently, like settings forms, confirmations, searchable tables and page frames, are [recipes](docs/examples/README.md) to copy and make your own.
+Interaction, focus and screen reader behaviour come from [React Aria](https://react-spectrum.adobe.com/react-aria/). Every component is documented on the [site](https://plurid.github.io/carved-ui/components) with live examples and its full API. Patterns that every app shapes differently, like settings forms, confirmations, searchable tables, empty states and page frames, are [recipes](docs/examples/README.md) to copy and make your own.
 
 ## Packages
 

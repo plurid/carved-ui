@@ -6,7 +6,11 @@
 @import './fields.css' layer(carved.components);
 @import './choice.css' layer(carved.components);
 @import './slider.css' layer(carved.components);
+@import './dates.css' layer(carved.components);
+@import './color.css' layer(carved.components);
+@import './files.css' layer(carved.components);
 @import './collections.css' layer(carved.components);
+@import './data.css' layer(carved.components);
 @import './overlays.css' layer(carved.components);
 @import './navigation.css' layer(carved.components);
 @import './content.css' layer(carved.components);

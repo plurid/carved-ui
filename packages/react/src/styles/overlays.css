@@ -175,6 +175,48 @@
   rotate: 90deg;
 }
 
+/* The command palette: a dialog cut near the top of the page, holding a search well over a
+ * list of commands. */
+.carved-scrim.carved-command-scrim {
+  place-items: start center;
+  padding-block-start: min(14vh, 7rem);
+}
+
+.carved-modal.carved-command {
+  display: flex;
+  flex-direction: column;
+  inline-size: min(36rem, 100%);
+  max-block-size: min(30rem, calc(100dvh - min(14vh, 7rem) - var(--carved-space-4)));
+  overflow: hidden;
+}
+
+.carved-command-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  min-block-size: 0;
+  padding: var(--carved-space-3);
+  outline: none;
+}
+
+.carved-menu.carved-command-list {
+  flex: 1;
+  min-block-size: 0;
+  padding: 0;
+}
+
+.carved-command-list .carved-item {
+  min-block-size: 2.75rem;
+}
+
+.carved-command-empty {
+  padding: var(--carved-space-5) var(--carved-space-3);
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+  text-align: center;
+}
+
 @keyframes carved-fade {
   from {
     opacity: 0;

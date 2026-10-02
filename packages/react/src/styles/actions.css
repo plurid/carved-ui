@@ -25,6 +25,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.carved-button svg {
+  flex: none;
+}
+
 .carved-button[data-variant='primary'] {
   color: var(--carved-on-accent);
   background-color: var(--carved-accent);
@@ -163,6 +167,57 @@
   box-shadow: revert-layer;
 }
 
+/* A toolbar is a channel like a toggle group, holding buttons, toggles and dividers. */
+.carved-toolbar {
+  --carved-carve-scale: 0.6;
+
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-1);
+  align-items: center;
+  max-inline-size: 100%;
+  padding: var(--carved-space-1);
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-toolbar[data-orientation='vertical'] {
+  flex-direction: column;
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-1));
+}
+
+.carved-toolbar > .carved-separator[aria-orientation='vertical'] {
+  align-self: center;
+  block-size: 1.5rem;
+  margin: 0 var(--carved-space-1);
+}
+
+.carved-toolbar[data-orientation='vertical'] > .carved-separator {
+  align-self: stretch;
+  margin: var(--carved-space-1);
+}
+
+.carved-toolbar :is(.carved-toggle, .carved-button[data-variant='ghost']) {
+  color: var(--carved-cut-fg);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.carved-toolbar
+  :is(.carved-toggle, .carved-button[data-variant='ghost']):is([data-hovered], [data-pressed]) {
+  --carved-carve-scale: 0.4;
+
+  box-shadow: revert-layer;
+}
+
+.carved-toolbar .carved-toggle[data-selected] {
+  --carved-carve-scale: 0.4;
+
+  color: var(--carved-on-accent);
+  background-color: var(--carved-accent);
+  box-shadow: revert-layer;
+}
+
 @keyframes carved-spin {
   to {
     transform: rotate(1turn);
@@ -178,8 +233,13 @@
     border-color: transparent;
   }
 
+  .carved-toolbar {
+    border: 1px solid ButtonText;
+  }
+
   .carved-toggle[data-selected],
-  .carved-toggle-group .carved-toggle[data-selected] {
+  .carved-toggle-group .carved-toggle[data-selected],
+  .carved-toolbar .carved-toggle[data-selected] {
     color: HighlightText;
     background-color: Highlight;
     forced-color-adjust: none;

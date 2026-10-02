@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import {
   Avatar,
+  AvatarGroup,
   Badge,
   Button,
   Card,
@@ -11,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
   Heading,
+  Kbd,
   Separator,
   Surface,
   Table,
@@ -173,5 +175,30 @@ export const NativeTable: Story = {
     await expect(
       within(canvasElement).getByRole('table', { name: 'Deploys this week' }),
     ).toBeVisible();
+  },
+};
+
+export const Keys: Story = {
+  render: () => (
+    <p>
+      Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search, or <Kbd>Esc</Kbd> to close.
+    </p>
+  ),
+};
+
+export const People: Story = {
+  render: () => (
+    <AvatarGroup aria-label="Project members" max={3}>
+      <Avatar name="Ana Pop" />
+      <Avatar name="Ioan Marin" />
+      <Avatar name="Mara Ilie" />
+      <Avatar name="Radu Stan" />
+      <Avatar name="Elena Dobre" />
+    </AvatarGroup>
+  ),
+  play: async ({ canvasElement }) => {
+    const group = within(canvasElement).getByRole('group', { name: 'Project members' });
+    await expect(within(group).getAllByRole('img')).toHaveLength(4);
+    await expect(within(group).getByRole('img', { name: '2 more' })).toBeVisible();
   },
 };

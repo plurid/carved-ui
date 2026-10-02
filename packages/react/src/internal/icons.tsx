@@ -77,3 +77,41 @@ export const Danger = (props: IconProps) => (
     <path d="m9 9 6 6M15 9l-6 6" />
   </Icon>
 );
+export const Plus = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M12 5v14M5 12h14" />
+  </Icon>
+);
+/** Points toward the start of the line; flips in right-to-left layouts. */
+export const ChevronStart = (props: IconProps) => (
+  <Icon className="carved-icon-flip" {...props}>
+    <path d="m15 6-6 6 6 6" />
+  </Icon>
+);
+export const ChevronUp = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="m6 15 6-6 6 6" />
+  </Icon>
+);
+export const ChevronsUpDown = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="m8 9 4-4 4 4M8 15l4 4 4-4" />
+  </Icon>
+);
+export const CalendarIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <rect x="4" y="5" width="16" height="15" rx="2" />
+    <path d="M4 10h16M9 3v4M15 3v4" />
+  </Icon>
+);
+export const ClockIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 2" />
+  </Icon>
+);
+export const Upload = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" />
+  </Icon>
+);

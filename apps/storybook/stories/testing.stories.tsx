@@ -1,16 +1,31 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { parseDate } from '@internationalized/date';
 import {
   Button,
   CarvedProvider,
+  Cell,
   Checkbox,
+  Column,
+  CommandItem,
+  CommandPalette,
+  DataTable,
+  DataTableBody,
+  DataTableHeader,
+  DatePicker,
+  DropZone,
+  Row,
+  Tree,
+  TreeItem,
   ComboBox,
   ComboBoxItem,
   Dialog,
   DialogFooter,
   DialogTrigger,
   Form,
+  type DateValue,
   type Key,
+  type SortDescriptor,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -156,3 +171,72 @@ export const PortalsHarness: Story = {
     );
   },
 };
+
+const regions = [
+  { id: 'fra', name: 'Frankfurt', latency: 18 },
+  { id: 'iad', name: 'Virginia', latency: 92 },
+  { id: 'ams', name: 'Amsterdam', latency: 21 },
+];
+
+/** Dates, tables, trees, files and commands, for the browser suite. */
+function Collections() {
+  const [date, setDate] = useState<DateValue | null>(parseDate('2026-03-10'));
+  const [sort, setSort] = useState<SortDescriptor>({ column: 'name', direction: 'ascending' });
+  const [files, setFiles] = useState<string[]>([]);
+  const [command, setCommand] = useState<Key | null>(null);
+  const rows = [...regions].sort((a, b) => {
+    const key = sort.column as 'name' | 'latency';
+    const order = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
+    return sort.direction === 'descending' ? -order : order;
+  });
+  return (
+    <div className="lab-stack lab-narrow">
+      <DatePicker label="Launch date" value={date} onChange={setDate} />
+      <output aria-label="Launch">{date?.toString()}</output>
+      <DataTable
+        aria-label="Regions"
+        selectionMode="multiple"
+        sortDescriptor={sort}
+        onSortChange={setSort}
+      >
+        <DataTableHeader>
+          <Column id="name" isRowHeader allowsSorting>
+            Region
+          </Column>
+          <Column id="latency" allowsSorting>
+            Latency
+          </Column>
+        </DataTableHeader>
+        <DataTableBody items={rows}>
+          {(region) => (
+            <Row>
+              <Cell>{region.name}</Cell>
+              <Cell>{region.latency} ms</Cell>
+            </Row>
+          )}
+        </DataTableBody>
+      </DataTable>
+      <Tree aria-label="Files" defaultExpandedKeys={['src', 'components']}>
+        <TreeItem id="src" title="src">
+          <TreeItem id="components" title="components">
+            <TreeItem id="button" title="button.tsx" />
+          </TreeItem>
+        </TreeItem>
+      </Tree>
+      <DropZone
+        label="Drop images here"
+        acceptedFileTypes={['image/png']}
+        allowsMultiple
+        onSelect={(chosen) => setFiles(chosen.map((file) => file.name))}
+      />
+      <output aria-label="Dropped files">{files.join(', ')}</output>
+      <CommandPalette onAction={setCommand}>
+        <CommandItem id="new">New project</CommandItem>
+        <CommandItem id="billing">Billing</CommandItem>
+      </CommandPalette>
+      <output aria-label="Last command">{command}</output>
+    </div>
+  );
+}
+
+export const CollectionsHarness: Story = { render: () => <Collections /> };

@@ -38,13 +38,6 @@
   color: var(--carved-muted);
 }
 
-.recipe-pagination {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--carved-space-1);
-  align-items: center;
-}
-
 .recipe-shell {
   display: flex;
   flex-direction: column;

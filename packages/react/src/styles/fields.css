@@ -115,7 +115,7 @@
   appearance: none;
 }
 
-.carved-field-button {
+.carved-button.carved-field-button {
   inline-size: 2.25rem;
   padding: 0;
   color: var(--carved-cut-muted);
@@ -128,6 +128,15 @@
 
 .carved-search[data-empty] .carved-search-clear {
   visibility: hidden;
+}
+
+/* A number's well holds its steppers at the end. */
+.carved-number .carved-group-input {
+  font-variant-numeric: tabular-nums;
+}
+
+.carved-number .carved-field-button + .carved-field-button {
+  margin-inline-start: calc(var(--carved-space-1) * -1);
 }
 
 @media (forced-colors: active) {

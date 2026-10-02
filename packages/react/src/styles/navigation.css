@@ -293,7 +293,82 @@
   opacity: 0.55;
 }
 
+/* Pagination: a carved channel of pages, the current one inlaid, as tabs are. */
+.carved-pagination-list {
+  --carved-carve-scale: 0.6;
+
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-1);
+  align-items: center;
+  max-inline-size: 100%;
+  padding: var(--carved-space-1);
+  margin: 0;
+  list-style: none;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-pagination-list > li {
+  display: flex;
+}
+
+.carved-page {
+  --carved-carve-scale: 0.4;
+
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0 0.5rem;
+  font: inherit;
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--carved-cut-muted);
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--carved-radius-pill);
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-page:is([data-hovered], [data-pressed]) {
+  color: var(--carved-cut-fg);
+  box-shadow: revert-layer;
+}
+
+.carved-page[aria-current='page'] {
+  color: var(--carved-on-accent);
+  cursor: default;
+  background-color: var(--carved-accent);
+  box-shadow: revert-layer;
+}
+
+.carved-page[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.carved-page-gap {
+  min-inline-size: 1.25rem;
+  color: var(--carved-cut-muted);
+  text-align: center;
+}
+
 @media (forced-colors: active) {
+  .carved-pagination-list {
+    border: 1px solid ButtonText;
+  }
+
+  .carved-page[aria-current='page'] {
+    color: HighlightText;
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
   .carved-tab-list {
     border: 1px solid ButtonText;
   }

@@ -47,4 +47,5 @@ Both develop against package source through a shared Vite plugin (`tools/vite/ca
 - **Plain CSS and custom properties** rather than CSS-in-JS: no runtime, server rendering for free, and overrides with ordinary CSS.
 - **OKLCH, solved per theme**, rather than hand-picked colours: any base colour gets the same structure and the same contrast guarantees.
 - **Recipes stay editable.** Patterns that every application shapes differently (settings forms, confirmations, searchable tables, page frames) live in `docs/examples` as source to copy, not as packaged components.
-- **What is not here yet**: data grids, date pickers, file uploads and command palettes. They can start as recipes and move into the packages once their shape settles.
+- **A well that holds controls is a surface.** A data table, tree, grid list, standalone calendar or drop zone is cut one level below its surface and sets that depth, so the rows, days and buttons inside it can cut deeper still. A tree goes further: each open level is a well of its own.
+- **What is not here yet**: virtualised grids with editable cells, drag-and-drop reordering and rich text editing. They can start as recipes and move into the packages once their shape settles.

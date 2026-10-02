@@ -33,9 +33,11 @@ for (const path of pages)
     expect(violations).toEqual([]);
     expect(errors).toEqual([]);
     await page.setViewportSize({ width: 390, height: 844 });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
-      390,
-    );
+    // Components that size themselves with resize observers, like resizable tables, settle a
+    // frame after the viewport changes.
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+      .toBeLessThanOrEqual(390);
   });
 
 test('the site theme can be changed and is remembered', async ({ page }) => {

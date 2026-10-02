@@ -173,7 +173,90 @@
   min-inline-size: 12rem;
 }
 
+/* Tags: small carved pills, inlaid with the accent when selected. */
+.carved-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-2);
+  outline: none;
+}
+
+.carved-tag-list[data-empty] {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.carved-tag {
+  --carved-carve-scale: 0.3;
+
+  display: inline-flex;
+  gap: 0.125rem;
+  align-items: center;
+  min-block-size: 1.875rem;
+  padding: 0 0.75rem;
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  color: var(--carved-cut-fg);
+  cursor: default;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+  outline-offset: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-tag[data-allows-removing] {
+  padding-inline-end: 0.25rem;
+}
+
+.carved-tag[data-selection-mode='single'],
+.carved-tag[data-selection-mode='multiple'] {
+  cursor: pointer;
+}
+
+.carved-tag[data-selected] {
+  color: var(--carved-on-accent);
+  background-color: var(--carved-accent);
+}
+
+.carved-tag[data-disabled] {
+  opacity: 0.55;
+}
+
+.carved-tag-remove {
+  display: grid;
+  place-items: center;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.carved-tag-remove svg {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+}
+
+.carved-tag-remove:is([data-hovered], [data-focus-visible]) {
+  background-color: color-mix(in oklab, currentcolor 16%, transparent);
+  opacity: 1;
+}
+
 @media (forced-colors: active) {
+  .carved-tag {
+    border: 1px solid ButtonText;
+  }
+
+  .carved-tag[data-selected] {
+    color: HighlightText;
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+
   .carved-item:is([data-focused], [data-pressed], [data-open]) {
     color: HighlightText;
     background-color: Highlight;

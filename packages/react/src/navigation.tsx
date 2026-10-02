@@ -36,12 +36,12 @@ import type {
 } from 'react-aria-components/Breadcrumbs';
 import { composeRenderProps } from 'react-aria-components/composeRenderProps';
 import { Children } from 'react';
-import type { CSSProperties, ReactNode, Ref } from 'react';
+import type { ComponentProps, CSSProperties, ReactNode, Ref } from 'react';
 import { Link as AriaLink } from 'react-aria-components/Link';
 import type { LinkProps as AriaLinkProps } from 'react-aria-components/Link';
 import { useDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
-import { ChevronDown } from './internal/icons.js';
+import { ChevronDown, ChevronEnd, ChevronStart } from './internal/icons.js';
 
 export function Tabs({ className, ...props }: AriaTabsProps & { ref?: Ref<HTMLDivElement> }) {
   return <AriaTabs {...props} className={withClass('carved-tabs', className)} />;
@@ -197,5 +197,90 @@ export function Breadcrumb({
         {children}
       </AriaLink>
     </AriaBreadcrumb>
+  );
+}
+
+/** The pages to show: the first, the last, and the current one with its neighbours. */
+export function paginate(page: number, pageCount: number, siblings: number): (number | null)[] {
+  const shown = new Set([1, pageCount]);
+  for (let near = page - siblings; near <= page + siblings; near++)
+    if (near >= 1 && near <= pageCount) shown.add(near);
+  const pages: (number | null)[] = [];
+  for (const number of [...shown].sort((a, b) => a - b)) {
+    const previous = pages.at(-1);
+    // A gap of one page shows that page; only longer gaps collapse into an ellipsis.
+    if (typeof previous === 'number' && number - previous === 2) pages.push(previous + 1);
+    else if (typeof previous === 'number' && number - previous > 2) pages.push(null);
+    pages.push(number);
+  }
+  return pages;
+}
+
+export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'onChange'> {
+  /** The current page, counting from 1. */
+  page: number;
+  /** How many pages there are. */
+  pageCount: number;
+  /** Called with the page to show, when pages are buttons. */
+  onPageChange?: (page: number) => void;
+  /** Builds each page's URL, making the pages links, for lists rendered on the server. */
+  href?: (page: number) => string;
+  /** Pages shown either side of the current one before the rest collapse. @default 1 */
+  siblings?: number;
+  /** Names each page for assistive technology. @default (page) => `Page ${page}` */
+  pageLabel?: (page: number) => string;
+  /** @default 'Previous page' */
+  previousLabel?: string;
+  /** @default 'Next page' */
+  nextLabel?: string;
+}
+
+/**
+ * Pages of a long list, in a carved channel with the current page inlaid. Pages are buttons
+ * calling `onPageChange`, or links when `href` is given.
+ */
+export function Pagination({
+  page,
+  pageCount,
+  onPageChange,
+  href,
+  siblings = 1,
+  pageLabel = (number) => `Page ${number}`,
+  previousLabel = 'Previous page',
+  nextLabel = 'Next page',
+  className,
+  ...props
+}: PaginationProps) {
+  const go = (target: number, label: string, children: ReactNode, current = false) => {
+    const disabled = target < 1 || target > pageCount;
+    const common = {
+      'aria-label': label,
+      'aria-current': current ? ('page' as const) : undefined,
+      isDisabled: disabled,
+      className: 'carved-page carved-carve',
+      children,
+    };
+    return href ? (
+      <AriaLink {...common} href={disabled ? undefined : href(target)} />
+    ) : (
+      <AriaButton {...common} onPress={() => current || onPageChange?.(target)} />
+    );
+  };
+  return (
+    <nav aria-label="Pagination" {...props} className={cx('carved-pagination', className)}>
+      <ol className="carved-pagination-list carved-carve">
+        <li>{go(page - 1, previousLabel, <ChevronStart />)}</li>
+        {paginate(page, Math.max(pageCount, 1), siblings).map((number, index) =>
+          number === null ? (
+            <li key={`gap-${index}`} className="carved-page-gap" aria-hidden="true">
+              …
+            </li>
+          ) : (
+            <li key={number}>{go(number, pageLabel(number), number, number === page)}</li>
+          ),
+        )}
+        <li>{go(page + 1, nextLabel, <ChevronEnd />)}</li>
+      </ol>
+    </nav>
   );
 }

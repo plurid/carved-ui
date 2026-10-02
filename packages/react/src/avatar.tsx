@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import type { ComponentProps } from 'react';
+import { Children, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { cx } from './internal/class-names.js';
 
 export interface AvatarProps extends ComponentProps<'span'> {
@@ -37,5 +37,44 @@ export function Avatar({ name, src, size = 'md', className, ...props }: AvatarPr
         <img src={src} alt="" loading="lazy" onError={() => setFailed(src)} />
       )}
     </span>
+  );
+}
+
+export interface AvatarGroupProps extends ComponentProps<'div'> {
+  /** `Avatar`s. */
+  children: ReactNode;
+  /** The most avatars to show; the rest are counted in a final socket. */
+  max?: number;
+  /** The size of every avatar in the group. @default 'md' */
+  size?: 'sm' | 'md' | 'lg';
+  /** Names the count of hidden people. @default (count) => `${count} more` */
+  moreLabel?: (count: number) => string;
+}
+
+/** People shown together: avatars overlapping in a row, then a count of the rest. */
+export function AvatarGroup({
+  children,
+  max,
+  size = 'md',
+  moreLabel = (count) => `${count} more`,
+  className,
+  ...props
+}: AvatarGroupProps) {
+  const avatars = Children.toArray(children);
+  const shown = max === undefined ? avatars : avatars.slice(0, Math.max(max, 0));
+  const hidden = avatars.length - shown.length;
+  return (
+    <div role="group" {...props} data-size={size} className={cx('carved-avatar-group', className)}>
+      {shown}
+      {hidden > 0 && (
+        <span
+          role="img"
+          aria-label={moreLabel(hidden)}
+          className="carved-avatar carved-avatar-more carved-carve"
+        >
+          <span aria-hidden="true">+{hidden}</span>
+        </span>
+      )}
+    </div>
   );
 }

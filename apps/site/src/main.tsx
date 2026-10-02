@@ -16,5 +16,7 @@ const app = (
     </BrowserRouter>
   </StrictMode>
 );
-if (root.hasChildNodes()) hydrateRoot(root, app);
+// Prerendered pages are hydrated. In development the root holds only the `<!--app-->`
+// placeholder, so the app renders from scratch.
+if (root.firstElementChild) hydrateRoot(root, app);
 else createRoot(root).render(app);

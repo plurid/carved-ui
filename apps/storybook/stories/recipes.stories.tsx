@@ -3,7 +3,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppShell } from '../../../docs/examples/app-shell';
 import { ConfirmAction } from '../../../docs/examples/confirm-action';
 import { EmptyState } from '../../../docs/examples/empty-state';
-import { Pagination } from '../../../docs/examples/pagination';
 import { SearchableTable } from '../../../docs/examples/searchable-table';
 import { SettingsForm } from '../../../docs/examples/settings-form';
 import type { Project } from '../../../docs/examples/searchable-table';
@@ -90,16 +89,6 @@ export const Empty: Story = {
       Projects you create or join appear here.
     </EmptyState>
   ),
-};
-
-export const Pages: Story = {
-  render: () => <Pagination page={2} pages={5} href={(number) => `#page-${number}`} />,
-  play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByRole('link', { name: 'Page 2' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
-  },
 };
 
 export const Shell: Story = {

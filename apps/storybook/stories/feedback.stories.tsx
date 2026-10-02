@@ -4,6 +4,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import {
   Alert,
   Button,
+  Meter,
   ProgressBar,
   Skeleton,
   Spinner,
@@ -140,5 +141,21 @@ export const Toasts: Story = {
     await waitFor(() => expect(page.getByText('Project saved')).toBeVisible());
     await userEvent.click(page.getByRole('button', { name: 'Dismiss' }));
     await waitFor(() => expect(page.queryByText('Project saved')).toBeNull());
+  },
+};
+
+export const Meters: Story = {
+  render: () => (
+    <div className="lab-stack">
+      <Meter label="Storage" value={42} valueLabel="42 of 100 GB" />
+      <Meter label="Seats used" value={9} maxValue={10} tone="warning" />
+      <Meter label="Error budget spent" value={97} tone="danger" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('meter', { name: 'Storage' })).toHaveAttribute(
+      'aria-valuenow',
+      '42',
+    );
   },
 };
