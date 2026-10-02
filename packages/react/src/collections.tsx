@@ -43,6 +43,7 @@ import { Checkbox } from './choice.js';
 import { Popover } from './overlays.js';
 import { DepthScope, useCutDepth } from './provider.js';
 import { cx, withClass } from './internal/class-names.js';
+import { useIsVirtualized } from './internal/virtualized.js';
 import { Check, ChevronDown, Close } from './internal/icons.js';
 
 type SelectionMode = 'single' | 'multiple';
@@ -53,7 +54,13 @@ export interface ListBoxProps<T extends object> extends AriaListBoxProps<T> {
 
 /** A list of options. Used inside `Select` and `ComboBox`, or on its own. */
 export function ListBox<T extends object>({ className, ...props }: ListBoxProps<T>) {
-  return <AriaListBox {...props} className={withClass('carved-listbox', className)} />;
+  return (
+    <AriaListBox
+      {...props}
+      data-virtualized={useIsVirtualized() || undefined}
+      className={withClass('carved-listbox', className)}
+    />
+  );
 }
 
 export interface ListBoxItemProps<T extends object> extends AriaListBoxItemProps<T> {
@@ -230,12 +237,14 @@ export interface GridListProps<T extends object> extends AriaGridListProps<T> {
  */
 export function GridList<T extends object>({ className, ...props }: GridListProps<T>) {
   const depth = useCutDepth();
+  const virtualized = useIsVirtualized();
   // The scope wraps the list, so its items, and anything they open, sit a level below it.
   return (
     <DepthScope depth={depth}>
       <AriaGridList
         {...props}
         data-carved-depth={depth}
+        data-virtualized={virtualized || undefined}
         className={withClass('carved-grid-list carved-carve', className)}
       />
     </DepthScope>

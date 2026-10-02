@@ -21,6 +21,7 @@ import { composeRenderProps } from 'react-aria-components/composeRenderProps';
 import type { ReactNode, Ref } from 'react';
 import { Popover } from './overlays.js';
 import { cx, withClass } from './internal/class-names.js';
+import { useIsVirtualized } from './internal/virtualized.js';
 import { Check, ChevronEnd } from './internal/icons.js';
 
 export const MenuTrigger = AriaMenuTrigger;
@@ -32,7 +33,13 @@ export interface MenuListProps<T extends object> extends AriaMenuProps<T> {
 
 /** A menu rendered in place, without a popover. */
 export function MenuList<T extends object>({ className, ...props }: MenuListProps<T>) {
-  return <AriaMenu {...props} className={withClass('carved-menu', className)} />;
+  return (
+    <AriaMenu
+      {...props}
+      data-virtualized={useIsVirtualized() || undefined}
+      className={withClass('carved-menu', className)}
+    />
+  );
 }
 
 export interface MenuProps<T extends object> extends MenuListProps<T> {

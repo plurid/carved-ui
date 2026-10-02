@@ -7,6 +7,7 @@ import { Prose } from './components/prose';
 import { Landing } from './pages/landing';
 import { Hydrated, PageError } from './components/page-state';
 import { pages } from './prefetch';
+import { ShowcaseLayout } from './showcase/layout';
 import { useSiteTheme } from './theme';
 
 declare module 'react-aria-components' {
@@ -24,6 +25,10 @@ const ComponentIndex = page(pages.components, (module) => module.ComponentIndex)
 const ComponentPage = page(pages.components, (module) => module.ComponentPage);
 const Recipes = page(pages.recipes, (module) => module.Recipes);
 const NotFound = page(pages.notFound, (module) => module.NotFound);
+const Showcase = page(pages.showcase, (module) => module.Showcase);
+const PostRoute = page(pages.post, (module) => module.PostRoute);
+const QuarryRoute = page(pages.quarry, (module) => module.QuarryRoute);
+const StrataRoute = page(pages.strata, (module) => module.StrataRoute);
 // The guides are the repository's own Markdown, so they read the same on GitHub.
 const guide = (load: () => Promise<{ default: React.ComponentType }>) =>
   page(load, (module) => () => (
@@ -72,7 +77,14 @@ export function App() {
             <Route path="/components" element={<ComponentIndex />} />
             <Route path="/components/:slug" element={<ComponentPage />} />
             <Route path="/recipes" element={<Recipes />} />
+            <Route path="/showcase" element={<Showcase />} />
             <Route path="*" element={<NotFound />} />
+          </Route>
+          {/* The showcase apps fill the window with their own frames. */}
+          <Route element={<ShowcaseLayout />}>
+            <Route path="/showcase/mail/*" element={<PostRoute />} />
+            <Route path="/showcase/console/*" element={<QuarryRoute />} />
+            <Route path="/showcase/files/*" element={<StrataRoute />} />
           </Route>
         </Routes>
       </PageError>

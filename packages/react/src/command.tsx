@@ -1,10 +1,10 @@
 'use client';
-import { Autocomplete, useFilter } from 'react-aria-components/Autocomplete';
 import { Dialog as AriaDialog, OverlayTriggerStateContext } from 'react-aria-components/Dialog';
 import { Modal as AriaModal, ModalOverlay } from 'react-aria-components/Modal';
 import { PopoverContext } from 'react-aria-components/Popover';
 import { useContext, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { Autocomplete } from './autocomplete.js';
 import { SearchField } from './fields.js';
 import { MenuItem, MenuList, MenuSection } from './menu.js';
 import type { MenuListProps } from './menu.js';
@@ -97,7 +97,6 @@ export function CommandPalette<T extends object>({
   const trigger = popover?.trigger === 'DialogTrigger' ? overlay : null;
   const [ownOpen, setOwnOpen] = useState(defaultOpen);
   const [search, setSearch] = useState('');
-  const { contains } = useFilter({ sensitivity: 'base' });
   const isOpen = isOpenProp ?? trigger?.isOpen ?? ownOpen;
 
   // Each opening starts from an empty search, however the palette was last closed.
@@ -148,7 +147,7 @@ export function CommandPalette<T extends object>({
       >
         <DepthScope depth={1}>
           <AriaDialog aria-label={label} className="carved-command-dialog">
-            <Autocomplete inputValue={search} onInputChange={setSearch} filter={contains}>
+            <Autocomplete inputValue={search} onInputChange={setSearch}>
               <SearchField aria-label={placeholder} placeholder={placeholder} autoFocus />
               <MenuList
                 {...props}

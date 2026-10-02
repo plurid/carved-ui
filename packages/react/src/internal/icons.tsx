@@ -47,6 +47,11 @@ export const Close = (props: IconProps) => (
     <path d="M6 6l12 12M18 6 6 18" />
   </Icon>
 );
+export const MenuIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M4 7h16M4 12h16M4 17h16" />
+  </Icon>
+);
 export const Search = (props: IconProps) => (
   <Icon {...props}>
     <circle cx="11" cy="11" r="6.5" />

@@ -1,0 +1,252 @@
+/* Quarry, a deploy console: pages of cards and a table that fills the window. */
+
+.quarry-brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.quarry-project {
+  flex: none;
+  inline-size: 9rem;
+}
+
+.quarry-exit {
+  margin-block-start: auto;
+}
+
+.quarry-spacer {
+  flex: 1;
+}
+
+.quarry-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-5);
+  min-block-size: 100%;
+  padding: var(--carved-space-1) var(--carved-space-2) var(--carved-space-6);
+}
+
+.quarry-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-1) var(--carved-space-4);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.quarry-page-head > h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.quarry-page-head > p {
+  margin: 0;
+}
+
+.quarry-muted {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.quarry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: var(--carved-space-4);
+  align-items: start;
+}
+
+.quarry-number {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Deploys per day: a carved slot per day, holding an inlaid bead as tall as its count. */
+.quarry-bars {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: var(--carved-space-1);
+  align-items: end;
+}
+
+.quarry-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-1);
+  align-items: center;
+}
+
+.quarry-slot {
+  --carved-carve-scale: 0.5;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  inline-size: min(100%, 1.5rem);
+  block-size: 9rem;
+  padding: 3px;
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+}
+
+.quarry-bead {
+  block-size: calc(1.125rem + (100% - 1.125rem) * var(--_share));
+  background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
+  border-radius: var(--carved-radius-pill);
+}
+
+.quarry-day {
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+}
+
+.quarry-chart {
+  margin: 0;
+}
+
+.quarry-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.quarry-recent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.quarry-recent > li {
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.quarry-recent-link {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Deploys: the table takes the rest of the window. */
+.quarry-deploys {
+  block-size: 100%;
+  padding-block-end: var(--carved-space-2);
+}
+
+.quarry-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-3);
+  align-items: center;
+}
+
+.quarry-search {
+  flex: 1 1 16rem;
+}
+
+.quarry-table {
+  flex: 1;
+  min-block-size: 18rem;
+  transition: opacity var(--carved-motion-duration);
+}
+
+.quarry-table[data-pending] {
+  opacity: 0.7;
+}
+
+.quarry-commit {
+  margin-inline-end: var(--carved-space-1);
+  font-size: var(--carved-text-xs);
+}
+
+/* A deploy's details */
+.quarry-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+}
+
+.quarry-drawer-status {
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+}
+
+.quarry-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--carved-space-3);
+  margin: 0;
+}
+
+.quarry-facts dt {
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.quarry-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.quarry-log {
+  --carved-carve-scale: 0.5;
+
+  padding: var(--carved-space-3) var(--carved-space-4);
+  margin: 0;
+  overflow: auto;
+  font-family: var(--carved-font-mono, ui-monospace, monospace);
+  font-size: var(--carved-text-sm);
+  line-height: 1.7;
+  color: var(--carved-cut-fg);
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-control);
+}
+
+/* Settings */
+.quarry-settings {
+  max-inline-size: 46rem;
+}
+
+.quarry-settings-form {
+  gap: var(--carved-space-4);
+}
+
+.quarry-save {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.quarry-danger {
+  gap: var(--carved-space-4);
+}
+
+@container carved-shell (width < 40rem) {
+  .quarry .carved-shell-header > :is(.carved-avatar, .quarry-brand),
+  .quarry-goto-keys {
+    display: none;
+  }
+
+  .quarry-goto-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

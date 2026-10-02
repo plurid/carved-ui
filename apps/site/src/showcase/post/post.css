@@ -1,0 +1,289 @@
+/* Post, a mail client: the message list and the open message share a split view. On a narrow
+ * screen they take turns. */
+
+.post-brand {
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.post-dot {
+  display: inline-block;
+  flex: none;
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
+  border-radius: 50%;
+}
+
+.post-dot[data-tone='success'] {
+  background-color: var(--carved-success);
+}
+
+.post-dot[data-tone='warning'] {
+  background-color: var(--carved-warning);
+}
+
+.post-storage {
+  padding-inline: var(--carved-space-3);
+  margin-block-start: auto;
+}
+
+.post-main {
+  container: post / inline-size;
+  block-size: 100%;
+}
+
+.post-split {
+  block-size: 100%;
+}
+
+/* The list */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  block-size: 100%;
+}
+
+.post-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-1) var(--carved-space-3);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-inline: var(--carved-space-1);
+}
+
+.post-place {
+  margin: 0;
+  font-size: var(--carved-text-xl);
+}
+
+.post-count {
+  margin: 0;
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-messages {
+  flex: 1;
+  min-block-size: 0;
+}
+
+.post-row .carved-grid-item-content {
+  align-items: flex-start;
+}
+
+.post-row {
+  padding-block: 0.625rem;
+}
+
+.post-row-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-inline-size: 0;
+}
+
+.post-row-top {
+  display: flex;
+  gap: var(--carved-space-2);
+  align-items: baseline;
+}
+
+.post-row-from,
+.post-row-subject,
+.post-row-snippet {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-row-from {
+  flex: 1;
+  min-inline-size: 0;
+  font-weight: 500;
+}
+
+.post-row-time {
+  flex: none;
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-row-subject {
+  font-size: var(--carved-text-sm);
+}
+
+.post-row-snippet {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.post-row-unread :is(.post-row-from, .post-row-subject) {
+  font-weight: 700;
+}
+
+.post-row-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-block-start: 0.375rem;
+}
+
+/* The open message's row is inlaid with the accent: what was muted takes the inlay's ink. */
+.post-row[data-selected] :is(.post-row-time, .post-row-snippet) {
+  color: inherit;
+}
+
+/* The open message */
+.post-reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  block-size: 100%;
+  padding: var(--carved-space-3) var(--carved-space-5) var(--carved-space-4);
+}
+
+.post-reading-empty {
+  align-items: center;
+  justify-content: center;
+  color: var(--carved-muted);
+  text-align: center;
+}
+
+.post-actions {
+  flex-wrap: wrap;
+  align-self: flex-start;
+}
+
+.post-back {
+  display: none;
+}
+
+.post-star[data-selected] svg {
+  fill: currentcolor;
+}
+
+.post-letter {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+  min-block-size: 0;
+  padding: var(--carved-space-1);
+  overflow: auto;
+  border-radius: var(--carved-radius-control);
+  outline: none;
+}
+
+.post-letter:focus-visible {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: -2px;
+}
+
+.post-subject {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.post-sender {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-3);
+  align-items: center;
+}
+
+.post-sender-text {
+  display: flex;
+  flex: 1 1 12rem;
+  flex-direction: column;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.post-muted {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+.post-body {
+  max-inline-size: 40rem;
+  line-height: 1.65;
+}
+
+.post-body p {
+  margin: 0 0 1em;
+}
+
+.post-reply {
+  display: flex;
+  flex-direction: row;
+  gap: var(--carved-space-3);
+  align-items: flex-end;
+}
+
+.post-reply > .carved-field {
+  flex: 1;
+}
+
+/* Writing */
+.post-compose-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+}
+
+.post-attach {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  align-items: flex-start;
+}
+
+.post-attach > .carved-file-list {
+  align-self: stretch;
+}
+
+/* A narrow window shows the list or the open message, with a way back to the list. */
+@container post (width < 46rem) {
+  .post-main .post-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .post-main .post-split > .carved-split-handle,
+  .post-main[data-view='list'] .post-split > .carved-split-pane:last-child,
+  .post-main[data-view='message'] .post-split > .carved-split-pane:first-child {
+    display: none;
+  }
+
+  .post-back {
+    display: inline-flex;
+  }
+
+  .post-reading {
+    padding-inline: var(--carved-space-3);
+  }
+}
+
+@container carved-shell (width < 34rem) {
+  .post-compose-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .post .carved-shell-header > .carved-avatar {
+    display: none;
+  }
+}

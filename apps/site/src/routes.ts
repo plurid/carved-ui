@@ -1,4 +1,5 @@
 import { catalog } from './catalog';
+import { showcasePages } from './showcase/meta';
 
 export const guides = [
   { path: '/start', title: 'Getting started' },
@@ -13,6 +14,8 @@ const titles: Record<string, string> = {
   ...Object.fromEntries(catalog.map((entry) => [`/components/${entry.slug}`, entry.title])),
   '/components': 'Components',
   '/recipes': 'Recipes',
+  '/showcase': 'Showcase',
+  ...Object.fromEntries(showcasePages.map((page) => [page.path, page.title])),
 };
 
 /**
@@ -36,4 +39,6 @@ export const paths = [
   '/components',
   ...catalog.map((entry) => `/components/${entry.slug}`),
   '/recipes',
+  '/showcase',
+  ...showcasePages.map((page) => page.path),
 ];

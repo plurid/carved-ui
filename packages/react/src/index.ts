@@ -135,6 +135,33 @@ export type {
   TagProps,
 } from './collections.js';
 
+export {
+  GridLayout,
+  LayoutSize,
+  ListLayout,
+  TableLayout,
+  Virtualizer,
+  WaterfallLayout,
+} from './virtualizer.js';
+export type {
+  GridLayoutOptions,
+  ListLayoutOptions,
+  TableLayoutProps,
+  VirtualizerProps,
+  WaterfallLayoutOptions,
+} from './virtualizer.js';
+
+export { AppShell, Sidebar, SidebarItem, SidebarSection } from './app-shell.js';
+export type {
+  AppShellProps,
+  SidebarItemProps,
+  SidebarProps,
+  SidebarSectionProps,
+} from './app-shell.js';
+
+export { SplitPane, SplitView } from './split-view.js';
+export type { SplitPaneProps, SplitViewProps } from './split-view.js';
+
 export { Tree, TreeItem } from './tree.js';
 export type { TreeItemProps, TreeProps } from './tree.js';
 
@@ -157,6 +184,9 @@ export {
   SubmenuTrigger,
 } from './menu.js';
 export type { MenuItemProps, MenuListProps, MenuProps, MenuSectionProps } from './menu.js';
+
+export { Autocomplete, useFilter } from './autocomplete.js';
+export type { AutocompleteProps } from './autocomplete.js';
 
 export { CommandItem, CommandPalette, CommandSection } from './command.js';
 export type { CommandPaletteProps } from './command.js';

@@ -39,6 +39,9 @@ export function DocsNavigation() {
           <li>
             <NavLink href="/recipes">Recipes</NavLink>
           </li>
+          <li>
+            <NavLink href="/showcase">Showcase</NavLink>
+          </li>
         </ul>
       </section>
       {groups.map((group) => (

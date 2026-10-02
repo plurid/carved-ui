@@ -79,6 +79,9 @@ const reactAria: Record<string, string> = {
   CommandPalette: 'Menu',
   CommandItem: 'Menu',
   Tabs: 'Tabs',
+  Autocomplete: 'Autocomplete',
+  Virtualizer: 'Virtualizer',
+  SidebarItem: 'Link',
   TabList: 'Tabs',
   TabPanel: 'Tabs',
 };
@@ -97,6 +100,11 @@ const native: Record<string, string> = {
   FileList: 'ul',
   FileItem: 'li',
   Pagination: 'nav',
+  SplitView: 'div',
+  SplitPane: 'div',
+  AppShell: 'div',
+  Sidebar: 'nav',
+  SidebarSection: 'section',
 };
 
 /** Show `code` in documentation comments as code. */

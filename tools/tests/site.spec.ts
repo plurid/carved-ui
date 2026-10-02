@@ -88,3 +88,101 @@ test('client navigation keeps the page shell', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'Getting started' })).toBeVisible();
   await expect(page).toHaveTitle('Getting started · Carved UI');
 });
+
+test.describe('showcase', () => {
+  test('Post filters five thousand messages, opens one and sends a reply', async ({ page }) => {
+    await open(page, '/showcase/mail');
+    const list = page.getByRole('grid', { name: 'Inbox' });
+    await expect(list).toHaveAttribute('aria-rowcount', '5000');
+    // Only the messages in view are rendered.
+    expect(await list.getByRole('row').count()).toBeLessThan(40);
+    await page.getByRole('searchbox', { name: 'Search Inbox' }).fill('lisbon');
+    await expect(list.getByRole('row').first()).toContainText('Lisbon');
+    await list.getByRole('row').first().click();
+    const reading = page.getByRole('article');
+    await expect(reading.getByRole('heading', { level: 2 })).toContainText('Lisbon');
+    await reading.getByRole('textbox', { name: /Reply to/ }).fill('See you there.');
+    await reading.getByRole('button', { name: 'Send' }).click();
+    await expect(page.getByText('Reply sent')).toBeVisible();
+  });
+
+  test('Post takes turns between list and message on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page, '/showcase/mail');
+    await page.getByRole('grid', { name: 'Inbox' }).getByRole('row').first().click();
+    await expect(page.getByRole('grid', { name: 'Inbox' })).toBeHidden();
+    await page.getByRole('button', { name: 'Back to Inbox' }).click();
+    await expect(page.getByRole('grid', { name: 'Inbox' })).toBeVisible();
+    // The mailboxes are in the drawer; choosing one goes there and closes it.
+    await page.getByRole('button', { name: 'Open navigation' }).click();
+    await page
+      .getByRole('dialog', { name: 'Navigation' })
+      .getByRole('link', { name: 'Sent' })
+      .click();
+    await expect(page).toHaveURL(/\/showcase\/mail\/sent$/);
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sent');
+  });
+
+  test('Quarry sorts and filters ten thousand deploys and rolls one back', async ({ page }) => {
+    await open(page, '/showcase/console/deploys');
+    const table = page.getByRole('grid', { name: 'Deploys' });
+    await expect(table).toHaveAttribute('aria-rowcount', '10001');
+    await page.getByRole('radio', { name: 'Failed' }).click();
+    await expect
+      .poll(async () => Number(await table.getAttribute('aria-rowcount')))
+      .toBeLessThan(1000);
+    await page.getByRole('radio', { name: 'All' }).click();
+    await page.getByRole('columnheader', { name: /Deploy/ }).click();
+    await expect(table.getByRole('rowheader').first()).toHaveText('#1');
+    await table.getByRole('row').nth(3).click();
+    const drawer = page.getByRole('dialog', { name: /Deploy #/ });
+    await drawer.getByRole('button', { name: 'Roll back to this deploy' }).click();
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Roll back' }).click();
+    await expect(page.getByText(/Rolled back to #/)).toBeVisible();
+  });
+
+  test('Quarry’s command palette reaches its settings', async ({ page }) => {
+    await open(page, '/showcase/console');
+    await page.getByRole('button', { name: /Go to/ }).click();
+    await page.getByRole('searchbox', { name: 'Search commands' }).fill('sett');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/showcase\/console\/settings$/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Settings');
+  });
+
+  test('Strata opens folders from the tree and chooses files in the grid', async ({ page }) => {
+    await open(page, '/showcase/files');
+    await page
+      .getByRole('treegrid', { name: 'Folders' })
+      .getByRole('row', { name: 'Kyoto, spring' })
+      .click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Kyoto, spring');
+    await expect(
+      page.getByRole('navigation', { name: /Breadcrumbs/ }).or(page.locator('.carved-breadcrumbs')),
+    ).toContainText('Photos');
+    const grid = page.getByRole('grid', { name: 'Kyoto, spring' });
+    await grid.getByRole('row').first().click();
+    await page.keyboard.down('Shift');
+    await grid.getByRole('row').nth(2).click();
+    await page.keyboard.up('Shift');
+    await expect(page.getByText('3 chosen').first()).toBeVisible();
+    await page.getByRole('radio', { name: 'List' }).click();
+    await expect(page.getByRole('grid', { name: 'Kyoto, spring' })).toBeVisible();
+  });
+});
+
+// Prerendering happens in UTC and English; readers are anywhere. The apps must hydrate the same.
+test.describe('showcase far from UTC', () => {
+  test.use({ timezoneId: 'Pacific/Kiritimati', locale: 'de-DE' });
+  for (const path of pages.filter((path) => path.startsWith('/showcase/')))
+    test(`${path} hydrates without mismatches`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
+      await open(page, path);
+      await page.waitForLoadState('load');
+      expect(errors).toEqual([]);
+    });
+});

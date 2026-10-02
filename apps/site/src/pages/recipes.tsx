@@ -33,8 +33,8 @@ export function Recipes() {
           module={search}
         />
         <Specimen
-          title="Page frame"
-          description="Navigation, a trail and a heading around the content."
+          title="Workspace frame"
+          description="An app shell around a page: the workspace's places, a trail and a heading."
           module={shell}
         />
       </div>

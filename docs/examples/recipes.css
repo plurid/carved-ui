@@ -38,32 +38,16 @@
   color: var(--carved-muted);
 }
 
-.recipe-shell {
-  display: flex;
-  flex-direction: column;
-  gap: var(--carved-space-5);
-  max-inline-size: 64rem;
-}
-
-.recipe-shell-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--carved-space-4);
-  align-items: center;
-  justify-content: space-between;
-}
-
 .recipe-brand {
-  font-size: 2rem;
+  flex: 1;
+  margin: 0;
+  font-size: 1.5rem;
 }
 
-.recipe-shell-nav {
-  display: flex;
-  gap: var(--carved-space-1);
-}
-
-.recipe-shell-main {
+.recipe-page {
   display: flex;
   flex-direction: column;
   gap: var(--carved-space-4);
+  max-inline-size: 64rem;
+  padding: var(--carved-space-2) var(--carved-space-4) var(--carved-space-6);
 }

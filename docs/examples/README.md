@@ -8,6 +8,6 @@ Patterns built from Carved components that every application shapes differently.
 | [`confirm-action.tsx`](confirm-action.tsx)     | A destructive action confirmed in an `AlertDialog` that stays open while the request runs |
 | [`searchable-table.tsx`](searchable-table.tsx) | A native table filtered by a `SearchField`, with a result count and an empty state        |
 | [`empty-state.tsx`](empty-state.tsx)           | A quiet well that says what is missing and what to do                                     |
-| [`app-shell.tsx`](app-shell.tsx)               | A page frame: navigation, breadcrumbs and a heading                                       |
+| [`app-shell.tsx`](app-shell.tsx)               | A workspace frame on `AppShell`: header, sidebar places, a trail and a heading            |
 
 Storybook runs every recipe under **Recipes**, including the failure paths, and the documentation site shows each one live.

@@ -1,0 +1,249 @@
+/* Strata, a drive: the folder tree and the folder's contents share a split view; the details
+ * of what is chosen sit beside the contents. */
+
+.strata-brand {
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.strata-storage {
+  padding-inline: var(--carved-space-3);
+  margin-block-start: auto;
+}
+
+.strata-main {
+  container: strata / inline-size;
+  block-size: 100%;
+}
+
+.strata-split {
+  block-size: 100%;
+}
+
+.strata-tree {
+  block-size: 100%;
+}
+
+.strata-tree-title {
+  display: inline-flex;
+  gap: var(--carved-space-2);
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.strata-tree-title > svg {
+  flex: none;
+}
+
+.strata-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  overflow: hidden;
+}
+
+.strata-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-3);
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-inline: var(--carved-space-1);
+}
+
+.strata-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  min-inline-size: 0;
+}
+
+.strata-title {
+  margin: 0;
+  font-size: var(--carved-text-xl);
+}
+
+.strata-selection {
+  flex-wrap: wrap;
+  align-self: flex-start;
+}
+
+.strata-count {
+  padding-inline: var(--carved-space-3);
+  font-size: var(--carved-text-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.strata-body {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 17rem;
+  gap: var(--carved-space-3);
+  min-block-size: 0;
+}
+
+.strata-files {
+  block-size: 100%;
+}
+
+/* A tile: its picture above its name. */
+.strata-tiles .strata-item {
+  padding: var(--carved-space-2);
+}
+
+.strata-tiles .strata-item .carved-grid-item-content {
+  flex-direction: column;
+  gap: var(--carved-space-2);
+  align-items: stretch;
+}
+
+.strata-thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  color: var(--carved-muted);
+  background-color: var(--carved-cut);
+  border-radius: calc(var(--carved-radius-control) - 2px);
+}
+
+/* Tiles are as tall as what they hold, so a tile's picture sets its height. */
+.strata-tiles .strata-thumb {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 4 / 3;
+}
+
+/* A photo, until there is a real one: its own sky over its own ground. */
+.strata-thumb[data-kind='photo'] {
+  background: linear-gradient(
+    to bottom,
+    oklch(78% 0.08 var(--_hue)) 0%,
+    oklch(62% 0.1 calc(var(--_hue) + 30)) 58%,
+    oklch(42% 0.07 calc(var(--_hue) + 60)) 58.5%,
+    oklch(30% 0.05 calc(var(--_hue) + 80)) 100%
+  );
+}
+
+.strata-thumb[data-kind='folder'] {
+  color: var(--_folder, var(--carved-accent-ink));
+}
+
+.strata-item-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.strata-tiles .strata-item-text {
+  flex: none;
+}
+
+.strata-item-name,
+.strata-item-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.strata-item-name {
+  font-size: var(--carved-text-sm);
+  font-weight: 500;
+}
+
+.strata-item-meta {
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+}
+
+.strata-item[data-selected] .strata-item-meta {
+  color: inherit;
+}
+
+.strata-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-1);
+}
+
+.strata-empty > p {
+  margin: 0;
+}
+
+.strata-muted {
+  font-size: var(--carved-text-sm);
+  color: var(--carved-muted);
+}
+
+/* The details of what is chosen */
+.strata-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-4);
+  min-block-size: 0;
+  overflow: auto;
+}
+
+.strata-details > .strata-thumb {
+  inline-size: 100%;
+  block-size: 9rem;
+}
+
+.strata-details-title {
+  margin: 0;
+  font-size: var(--carved-text-lg);
+  overflow-wrap: anywhere;
+}
+
+.strata-details > p {
+  margin: 0;
+}
+
+.strata-facts {
+  display: grid;
+  gap: var(--carved-space-3);
+  margin: 0;
+}
+
+.strata-facts dt {
+  font-size: var(--carved-text-xs);
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.strata-facts dd {
+  margin: 0;
+}
+
+/* Narrower: the details give way first, then the tree, which the breadcrumbs stand in for. */
+@container strata (width < 62rem) {
+  .strata-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .strata-details {
+    display: none;
+  }
+}
+
+@container strata (width < 44rem) {
+  .strata-main .strata-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .strata-main .strata-split > :is(.carved-split-handle, .carved-split-pane:first-child) {
+    display: none;
+  }
+}
+
+@container carved-shell (width < 34rem) {
+  .strata .carved-shell-header > .carved-avatar {
+    display: none;
+  }
+}

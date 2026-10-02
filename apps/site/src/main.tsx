@@ -7,6 +7,10 @@ import '@fontsource-variable/geist-mono';
 import '@plurid/carved-ui-react/styles.css';
 import '../../../docs/examples/recipes.css';
 import './site.css';
+import './showcase/showcase.css';
+import './showcase/post/post.css';
+import './showcase/quarry/quarry.css';
+import './showcase/strata/strata.css';
 import { App, basename } from './app';
 
 const root = document.getElementById('root')!;

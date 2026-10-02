@@ -1,0 +1,391 @@
+/* Layout: split views and the application shell. A split view's panes are divided by a trench
+ * cut between them; its handle is a groove in the trench that lights while you hold it. */
+
+.carved-split {
+  --_handle: 1.5rem;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, calc((100% - var(--_handle)) * var(--_size) / 100))
+    var(--_handle)
+    minmax(0, 1fr);
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
+.carved-split[data-orientation='vertical'] {
+  grid-template-rows:
+    minmax(0, calc((100% - var(--_handle)) * var(--_size) / 100))
+    var(--_handle)
+    minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.carved-split-pane {
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+  scrollbar-color: var(--carved-edge) transparent;
+}
+
+.carved-split-pane[data-collapsed] {
+  visibility: hidden;
+}
+
+.carved-split-handle {
+  --carved-carve-scale: 0.4;
+
+  position: relative;
+  cursor: col-resize;
+  touch-action: none;
+  box-shadow: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-split[data-orientation='vertical'] > .carved-split-handle {
+  cursor: row-resize;
+}
+
+/* The trench, cut the length of the view. */
+.carved-split-handle::before {
+  position: absolute;
+  inset-block: var(--carved-space-1);
+  inset-inline: calc(50% - 0.25rem);
+  content: '';
+  background-color: var(--carved-cut);
+  border-radius: var(--carved-radius-pill);
+  box-shadow: var(--carved-carve-shadow);
+  transition: box-shadow var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-split[data-orientation='vertical'] > .carved-split-handle::before {
+  inset-block: calc(50% - 0.25rem);
+  inset-inline: var(--carved-space-1);
+}
+
+/* The grip: an engraved line at the trench's middle, inlaid with the accent while you hold
+ * the handle, point at it or reach it with the keyboard. */
+.carved-split-handle::after {
+  position: absolute;
+  inset-block: calc(50% - 1.25rem);
+  inset-inline: calc(50% - 1px);
+  content: '';
+  background: linear-gradient(to right, var(--carved-shade) 50%, var(--carved-lip) 50%);
+  border-radius: 1px;
+  transition:
+    inset var(--carved-motion-duration) var(--carved-motion-easing),
+    background-color var(--carved-motion-duration) var(--carved-motion-easing);
+}
+
+.carved-split-handle:is([data-hovered], [data-dragging], [data-focus-visible])::after {
+  inset-block: calc(50% - 1.75rem);
+  inset-inline: calc(50% - 1.5px);
+  background: var(--carved-accent);
+}
+
+.carved-split[data-orientation='vertical'] > .carved-split-handle::after {
+  inset-block: calc(50% - 1px);
+  inset-inline: calc(50% - 1.25rem);
+  background: linear-gradient(var(--carved-shade) 50%, var(--carved-lip) 50%);
+}
+
+.carved-split[data-orientation='vertical']
+  > .carved-split-handle:is([data-hovered], [data-dragging], [data-focus-visible])::after {
+  inset-block: calc(50% - 1.5px);
+  inset-inline: calc(50% - 1.75rem);
+  background: var(--carved-accent);
+}
+
+/* Focus lights the trench's own edge, not the wider strip it sits in. */
+.carved-split-handle[data-focus-visible] {
+  outline: none;
+}
+
+.carved-split-handle[data-focus-visible]::before {
+  outline: 2px solid var(--carved-focus);
+  outline-offset: -2px;
+}
+
+/* While dragging, the pointer may cross the panes: they keep the resize cursor and neither
+ * select text nor swallow the drag, as frames would. */
+.carved-split[data-dragging] {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.carved-split[data-orientation='vertical'][data-dragging] {
+  cursor: row-resize;
+}
+
+.carved-split[data-dragging] > .carved-split-pane {
+  pointer-events: none;
+}
+
+/* The application shell: a header across the top, and the sidebar's well beside the content.
+ * The shell is a container, so it collapses by its own width: below its breakpoint the sidebar
+ * moves into a drawer, opened from the header's menu button. */
+.carved-shell {
+  position: relative;
+  container: carved-shell / inline-size;
+  inline-size: 100%;
+  block-size: 100dvh;
+  color: var(--carved-fg);
+  background-color: var(--carved-bg);
+}
+
+.carved-shell-frame {
+  display: grid;
+  grid-template:
+    'header header' auto
+    'sidebar main' minmax(0, 1fr)
+    / var(--carved-shell-sidebar, 15rem) minmax(0, 1fr);
+  gap: var(--carved-space-3);
+  block-size: 100%;
+  padding: var(--carved-space-3);
+}
+
+.carved-shell-header {
+  display: flex;
+  grid-area: header;
+  gap: var(--carved-space-3);
+  align-items: center;
+  min-inline-size: 0;
+  min-block-size: 2.75rem;
+}
+
+.carved-shell-menu {
+  display: none;
+}
+
+.carved-shell-sidebar {
+  display: flex;
+  flex-direction: column;
+  grid-area: sidebar;
+  min-block-size: 0;
+}
+
+.carved-shell-main {
+  grid-area: main;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+  outline: none;
+  scrollbar-color: var(--carved-edge) transparent;
+}
+
+/* The skip link is out of sight until the keyboard reaches it. */
+.carved-skip-link {
+  position: absolute;
+  inset-block-start: var(--carved-space-2);
+  inset-inline-start: var(--carved-space-2);
+  z-index: 10;
+  padding: var(--carved-space-2) var(--carved-space-4);
+  font-weight: 600;
+  color: var(--carved-on-accent);
+  text-decoration: none;
+  background-color: var(--carved-accent);
+  background-image: var(--carved-sheen);
+  border-radius: var(--carved-radius-pill);
+}
+
+.carved-skip-link:not(:focus-visible) {
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container carved-shell (width < 72rem) {
+  .carved-shell[data-collapse='lg'] .carved-shell-frame {
+    grid-template: 'header' auto 'main' minmax(0, 1fr) / minmax(0, 1fr);
+  }
+
+  .carved-shell[data-collapse='lg'] .carved-shell-sidebar {
+    display: none;
+  }
+
+  .carved-shell[data-collapse='lg'] .carved-shell-menu {
+    display: inline-flex;
+  }
+}
+
+@container carved-shell (width < 56rem) {
+  .carved-shell[data-collapse='md'] .carved-shell-frame {
+    grid-template: 'header' auto 'main' minmax(0, 1fr) / minmax(0, 1fr);
+  }
+
+  .carved-shell[data-collapse='md'] .carved-shell-sidebar {
+    display: none;
+  }
+
+  .carved-shell[data-collapse='md'] .carved-shell-menu {
+    display: inline-flex;
+  }
+}
+
+@container carved-shell (width < 40rem) {
+  .carved-shell[data-collapse='sm'] .carved-shell-frame {
+    grid-template: 'header' auto 'main' minmax(0, 1fr) / minmax(0, 1fr);
+  }
+
+  .carved-shell[data-collapse='sm'] .carved-shell-sidebar {
+    display: none;
+  }
+
+  .carved-shell[data-collapse='sm'] .carved-shell-menu {
+    display: inline-flex;
+  }
+}
+
+.carved-shell-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+  min-block-size: 100%;
+  padding: var(--carved-space-3);
+}
+
+.carved-shell-drawer-head {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* The sidebar: a well of places. Places are plain until touched: hovering shades them half a
+ * level, and the current place is cut a full level in. */
+.carved-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-5);
+}
+
+.carved-sidebar[data-placement='inline'] {
+  --carved-carve-scale: 0.6;
+
+  flex: 1;
+  min-block-size: 0;
+  padding: var(--carved-space-4) var(--carved-space-2);
+  overflow: auto;
+  color: var(--carved-fg);
+  background-color: var(--carved-bg);
+  border-radius: calc(var(--carved-radius-control) + var(--carved-space-2));
+  scrollbar-width: thin;
+  scrollbar-color: var(--carved-edge) transparent;
+}
+
+.carved-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-2);
+}
+
+.carved-sidebar-title {
+  padding-inline: var(--carved-space-3);
+  margin: 0;
+  font-size: var(--carved-text-xs);
+  font-weight: 650;
+  color: var(--carved-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-shadow: 0 calc(var(--carved-light-y) * 1px) 0 var(--carved-lip);
+}
+
+.carved-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.carved-sidebar-item {
+  --carved-carve-scale: 0.4;
+
+  display: flex;
+  gap: var(--carved-space-3);
+  align-items: center;
+  min-block-size: 2.25rem;
+  padding: 0.375rem var(--carved-space-3);
+  font-size: var(--carved-text-sm);
+  font-weight: 450;
+  color: var(--carved-muted);
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--carved-radius-control);
+  box-shadow: none;
+  outline: none;
+  transition:
+    color var(--carved-motion-duration),
+    background-color var(--carved-motion-duration);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carved-sidebar-item[data-hovered] {
+  color: var(--carved-fg);
+  background-color: color-mix(in oklab, var(--carved-cut) 55%, transparent);
+}
+
+.carved-sidebar-item[aria-current='page'] {
+  font-weight: 600;
+  color: var(--carved-cut-fg);
+  cursor: default;
+  background-color: var(--carved-cut);
+  box-shadow: revert-layer;
+}
+
+.carved-sidebar-icon {
+  display: inline-grid;
+  flex: none;
+}
+
+.carved-sidebar-icon svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.carved-sidebar-label {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carved-sidebar-count {
+  flex: none;
+  font-size: var(--carved-text-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carved-split-handle::before,
+  .carved-split-handle::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .carved-split-handle::before {
+    border: 1px solid CanvasText;
+  }
+
+  .carved-split-handle::after {
+    background: CanvasText;
+  }
+
+  .carved-split-handle:is([data-hovered], [data-dragging], [data-focus-visible])::after {
+    background: Highlight;
+  }
+
+  .carved-sidebar[data-placement='inline'] {
+    border: 1px solid CanvasText;
+  }
+
+  .carved-sidebar-item[aria-current='page'] {
+    border: 1px solid CanvasText;
+  }
+}

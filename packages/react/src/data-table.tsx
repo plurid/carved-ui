@@ -27,6 +27,7 @@ import type { Ref } from 'react';
 import { Checkbox } from './choice.js';
 import { DepthScope, useCutDepth } from './provider.js';
 import { withClass } from './internal/class-names.js';
+import { useIsVirtualized, useRem } from './internal/virtualized.js';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from './internal/icons.js';
 
 export interface DataTableProps
@@ -46,6 +47,8 @@ export interface DataTableProps
 /**
  * An interactive table cut into its own well: rows can be sorted, selected and navigated with
  * the arrow keys, and columns resized. For static data, the server-rendered `Table` is lighter.
+ * Inside a `Virtualizer` with `TableLayout`, it renders only the rows in view and keeps its
+ * header in place: give its parent a height.
  */
 export function DataTable({
   isResizable = false,
@@ -56,25 +59,39 @@ export function DataTable({
   ...props
 }: DataTableProps) {
   const depth = useCutDepth();
+  const virtualized = useIsVirtualized();
   const table = (
     <DepthScope depth={depth}>
-      <AriaTable {...props} className={withClass('carved-data-table', className)} />
+      <AriaTable
+        {...props}
+        data-virtualized={virtualized || undefined}
+        className={withClass('carved-data-table', className)}
+      />
     </DepthScope>
   );
-  const well = 'carved-table-well carved-data-well carved-carve';
-  return isResizable ? (
-    <ResizableTableContainer
+  // The well itself never scrolls, so its carve can be drawn over what scrolls inside it, such
+  // as a virtualized table's header, which stays in place and would otherwise cover it. A
+  // virtualized table is its own scroller.
+  return (
+    <div
       data-carved-depth={depth}
-      onResizeStart={onResizeStart}
-      onResize={onResize}
-      onResizeEnd={onResizeEnd}
-      className={well}
+      data-virtualized={virtualized || undefined}
+      className="carved-table-well carved-data-well carved-carve"
     >
-      {table}
-    </ResizableTableContainer>
-  ) : (
-    <div data-carved-depth={depth} className={well}>
-      {table}
+      {isResizable ? (
+        <ResizableTableContainer
+          onResizeStart={onResizeStart}
+          onResize={onResize}
+          onResizeEnd={onResizeEnd}
+          className="carved-data-scroll"
+        >
+          {table}
+        </ResizableTableContainer>
+      ) : virtualized ? (
+        table
+      ) : (
+        <div className="carved-data-scroll">{table}</div>
+      )}
     </div>
   );
 }
@@ -98,10 +115,17 @@ export function DataTableHeader<T extends object>({
   ...props
 }: DataTableHeaderProps<T>) {
   const options = useTableOptions();
+  // Resizable and virtualized tables size their columns from these, not from styles.
+  const select = Math.round(2.75 * useRem());
   return (
     <AriaTableHeader {...props} className={withClass('carved-data-header', className)}>
       {selectsWithCheckboxes(options) && (
-        <AriaColumn className="carved-data-column carved-data-select">
+        <AriaColumn
+          width={select}
+          minWidth={select}
+          maxWidth={select}
+          className="carved-data-column carved-data-select"
+        >
           <Checkbox slot="selection" />
         </AriaColumn>
       )}
@@ -195,6 +219,20 @@ export function Row<T extends object>({ id, columns, children, className, ...pro
 }
 
 /** A cell of a row. */
-export function Cell({ className, ...props }: AriaCellProps & { ref?: Ref<HTMLTableCellElement> }) {
-  return <AriaCell {...props} className={withClass('carved-data-cell', className)} />;
+export function Cell({
+  className,
+  children,
+  ...props
+}: AriaCellProps & { ref?: Ref<HTMLTableCellElement> }) {
+  // Virtualized rows have one height, so a cell's content stays on one line and is cut short.
+  const virtualized = useIsVirtualized();
+  return (
+    <AriaCell {...props} className={withClass('carved-data-cell', className)}>
+      {virtualized
+        ? composeRenderProps(children, (content) => (
+            <span className="carved-data-cell-content">{content}</span>
+          ))
+        : children}
+    </AriaCell>
+  );
 }

@@ -1,0 +1,58 @@
+/* The showcase's front page, and what its apps share. Each app's own styles are in its
+ * folder, prefixed with its name. */
+
+.showcase-apps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-6);
+}
+
+.showcase-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--carved-space-5);
+  align-items: center;
+}
+
+.showcase-shot {
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--carved-radius-control);
+  box-shadow: 0 0 0 1px var(--carved-edge);
+}
+
+.showcase-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-3);
+}
+
+.showcase-card-text > :is(h2, p) {
+  margin: 0;
+}
+
+.showcase-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--carved-space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* On the landing page: the three apps side by side. */
+.showcase-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--carved-space-4);
+}
+
+.showcase-tile > :is(h3, p) {
+  margin: 0;
+}
+
+@media (width < 48rem) {
+  .showcase-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

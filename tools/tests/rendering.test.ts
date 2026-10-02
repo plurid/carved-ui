@@ -6,6 +6,15 @@ import { parseDate } from '@internationalized/date';
 import { createTheme } from '@plurid/carved-ui-core';
 import {
   Accordion,
+  AppShell,
+  ListBox,
+  ListBoxItem,
+  Sidebar,
+  SidebarItem,
+  SidebarSection,
+  SplitPane,
+  SplitView,
+  Virtualizer,
   Alert,
   Avatar,
   AvatarGroup,
@@ -238,5 +247,65 @@ describe('pagination', () => {
       /aria-label="Page 2"[^>]*aria-current="page"|aria-current="page"[^>]*aria-label="Page 2"/,
     );
     expect(markup).toContain('href="?page=3"');
+  });
+});
+
+describe('layout', () => {
+  it('renders a split view with its separator, sized without measuring', () => {
+    const markup = html(
+      h(SplitView, {
+        defaultSize: 30,
+        children: [h(SplitPane, { key: 'a' }, 'One'), h(SplitPane, { key: 'b' }, 'Two')],
+      }),
+    );
+    expect(markup).toContain('role="separator"');
+    expect(markup).toContain('aria-valuenow="30"');
+    expect(markup).toContain('aria-orientation="vertical"');
+    expect(markup).toContain('--_size:30');
+    const controls = markup.match(/aria-controls="([^"]+)"/)![1];
+    expect(markup).toContain(`id="${controls}"`);
+  });
+
+  it('renders the shell with its landmarks, the sidebar inline and no drawer', () => {
+    const markup = html(
+      h(AppShell, {
+        header: 'Post',
+        sidebar: h(
+          Sidebar,
+          { 'aria-label': 'Mailboxes' },
+          h(
+            SidebarSection,
+            { title: 'Mail' },
+            h(SidebarItem, { href: '/inbox', isCurrent: true, children: 'Inbox' }),
+            h(SidebarItem, { href: '/sent', children: 'Sent' }),
+          ),
+        ),
+        children: 'Content',
+      }),
+    );
+    expect(markup).toMatch(/<main[^>]*class="carved-shell-main"/);
+    expect(markup).toContain('<nav aria-label="Mailboxes"');
+    expect(markup).toContain('Skip to content');
+    expect(markup).toContain('aria-label="Open navigation"');
+    expect(markup).not.toContain('role="dialog"');
+    expect(markup).toMatch(/aria-current="page"[^>]*>|href="\/inbox"[^>]*aria-current="page"/);
+    expect(markup.match(/aria-current/g)).toHaveLength(1);
+    const embedded = html(h(AppShell, { landmarks: false, children: 'Content' }));
+    expect(embedded).not.toContain('<main');
+    expect(embedded).not.toContain('Skip to content');
+  });
+
+  it('marks collections virtualized only inside a virtualizer', () => {
+    const items = [{ id: 1, name: 'One' }];
+    const list = (virtualized: boolean) => {
+      const box = h(ListBox<{ id: number; name: string }>, {
+        'aria-label': 'Items',
+        items,
+        children: (item: { name: string }) => h(ListBoxItem, null, item.name),
+      });
+      return html(virtualized ? h(Virtualizer, null, box) : box);
+    };
+    expect(list(true)).toContain('data-virtualized="true"');
+    expect(list(false)).not.toContain('data-virtualized');
   });
 });

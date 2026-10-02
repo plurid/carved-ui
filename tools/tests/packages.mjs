@@ -209,6 +209,10 @@ try {
         !javascript.includes('carved-toast'),
         `${label}: a button-only app must tree-shake toasts`,
       );
+      assert(
+        !javascript.includes('carved-split') && !javascript.includes('carved-shell'),
+        `${label}: a button-only app must tree-shake split views and the app shell`,
+      );
     }
     assert.deepEqual(errors, [], `${label}: console or hydration errors`);
     await page.close();

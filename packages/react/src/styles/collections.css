@@ -84,6 +84,23 @@
   border-block-start: 1px solid var(--carved-hairline);
 }
 
+/* Virtualized lists: React Aria places each item itself, so the layout holds the padding and
+ * items hold their own 1px gap. Sections follow on without a rule between them. */
+:is(.carved-listbox, .carved-menu)[data-virtualized]:not([data-empty]) {
+  padding: 0;
+}
+
+:is(.carved-listbox, .carved-menu)[data-virtualized] .carved-item {
+  background-clip: padding-box;
+  border-block-end: 1px solid transparent;
+}
+
+:is(.carved-listbox, .carved-menu)[data-virtualized] .carved-section:not(:first-child) {
+  padding-block-start: 0;
+  margin-block-start: 0;
+  border-block-start: 0;
+}
+
 .carved-section-title {
   padding: var(--carved-space-2) 0.75rem var(--carved-space-1);
   font-size: var(--carved-text-xs);
@@ -162,6 +179,21 @@
 
 .carved-popover.carved-menu-popover {
   min-inline-size: 12rem;
+}
+
+/* A searchable popover: a search field above the menu or list it filters. */
+.carved-popover:has(> .carved-search) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--carved-space-1);
+  min-inline-size: 15rem;
+  padding: var(--carved-space-2);
+}
+
+.carved-popover > .carved-search ~ :is(.carved-menu, .carved-listbox) {
+  flex: 1;
+  min-block-size: 0;
+  padding: 0;
 }
 
 /* Tags: small carved pills, inlaid with the accent when selected. */

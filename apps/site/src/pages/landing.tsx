@@ -26,6 +26,7 @@ import { Command } from '../components/code-block';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { titleFor } from '../routes';
+import { showcase } from '../showcase/meta';
 import { setSiteTheme, useSiteTheme } from '../theme';
 
 /**
@@ -216,6 +217,32 @@ export function Landing() {
             inlays that stay readable on every one.
           </p>
           <Materials />
+        </section>
+        <section className="landing-section" aria-labelledby="built">
+          <Heading level={2} id="built">
+            Built with Carved
+          </Heading>
+          <p className="section-lede">
+            Three working applications, made only of Carved components. Open one and use it.
+          </p>
+          <div className="showcase-strip">
+            {showcase.map((app) => (
+              <Card key={app.path} className="showcase-tile">
+                <img
+                  src={`${import.meta.env.BASE_URL}showcase/${app.path.split('/').pop()}.jpg`}
+                  alt=""
+                  width={1280}
+                  height={800}
+                  loading="lazy"
+                  className="showcase-shot"
+                />
+                <Heading level={3}>{app.name}</Heading>
+                <p>{app.summary}</p>
+                <Link href={app.path}>Open {app.name}</Link>
+              </Card>
+            ))}
+          </div>
+          <Link href="/showcase">See how they are built</Link>
         </section>
         <section className="landing-section" aria-labelledby="start">
           <Heading level={2} id="start">

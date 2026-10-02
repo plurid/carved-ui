@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { AppShell } from '../../../docs/examples/app-shell';
+import { Workspace } from '../../../docs/examples/app-shell';
 import { ConfirmAction } from '../../../docs/examples/confirm-action';
 import { EmptyState } from '../../../docs/examples/empty-state';
 import { SearchableTable } from '../../../docs/examples/searchable-table';
@@ -93,8 +93,8 @@ export const Empty: Story = {
 
 export const Shell: Story = {
   render: () => (
-    <AppShell title="Projects">
+    <Workspace title="Projects" landmarks={false} style={{ blockSize: '36rem' }}>
       <SearchableTable projects={projects} />
-    </AppShell>
+    </Workspace>
   ),
 };

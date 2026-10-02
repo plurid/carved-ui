@@ -11,6 +11,7 @@ const sections = [
   { href: '/material', label: 'Material' },
   { href: '/themes', label: 'Themes' },
   { href: '/components', label: 'Components' },
+  { href: '/showcase', label: 'Showcase' },
 ];
 
 const MenuIcon = () => (

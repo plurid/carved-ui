@@ -5,6 +5,10 @@ export const pages = {
   themes: () => import('./pages/themes'),
   components: () => import('./pages/components'),
   recipes: () => import('./pages/recipes'),
+  showcase: () => import('./showcase/gallery'),
+  post: () => import('./showcase/post/route'),
+  quarry: () => import('./showcase/quarry/route'),
+  strata: () => import('./showcase/strata/route'),
   notFound: () => import('./pages/not-found'),
   start: () => import('../../../docs/getting-started.md'),
   accessibility: () => import('../../../docs/accessibility.md'),
@@ -19,6 +23,8 @@ const byPath: Record<string, () => Promise<unknown>> = {
   '/migration': pages.migration,
   '/components': pages.components,
   '/recipes': pages.recipes,
+  // The apps themselves load only when visited.
+  '/showcase': pages.showcase,
 };
 
 /** Start loading a page and, for a component page, its examples. Safe to call repeatedly. */

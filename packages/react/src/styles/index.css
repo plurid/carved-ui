@@ -16,4 +16,5 @@
 @import './navigation.css' layer(carved.components);
 @import './content.css' layer(carved.components);
 @import './feedback.css' layer(carved.components);
+@import './layout.css' layer(carved.components);
 @import './states.css' layer(carved.states);

@@ -392,3 +392,61 @@ test.describe('visual', { tag: '@visual' }, () => {
     await expect(page.locator('.showcase')).toHaveScreenshot('showcase-mobile.png');
   });
 });
+
+test('a virtualized table renders only the rows in view, and reaches the last', async ({
+  page,
+}) => {
+  await story(page, 'collections-virtualizer--table');
+  const table = page.getByRole('grid', { name: 'People' });
+  await expect(table).toHaveAttribute('aria-rowcount', '1001');
+  expect(await table.getByRole('row').count()).toBeLessThan(30);
+  // Rows are one box each: filled and ruled whole, and never wider than the table.
+  const row = table.getByRole('row').nth(1);
+  expect(await row.evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe('1px');
+  expect(await table.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+  await table.evaluate((element) => element.scrollTo(0, element.scrollHeight));
+  await expect(table.getByRole('rowheader', { name: '1000', exact: true })).toBeVisible();
+  // The header stays in place while the rows scroll beneath it.
+  const header = table.getByRole('columnheader', { name: /Number/ });
+  const box = await header.boundingBox();
+  const frame = await table.boundingBox();
+  expect(Math.abs(box!.y - frame!.y)).toBeLessThan(4);
+});
+
+test('a split view resizes by dragging its handle, both ways round', async ({ page }) => {
+  // Stories run their own interactions first, so each starts away from its default size.
+  for (const [id, direction, initial] of [
+    ['layout-shell-and-split-view--side-by-side', 1, 30],
+    ['layout-shell-and-split-view--right-to-left', -1, 40],
+  ] as const) {
+    await story(page, id);
+    const handle = page.getByRole('separator');
+    const box = (await handle.boundingBox())!;
+    // Big enough to grab: WCAG 2.2 asks for 24 pixels.
+    expect(box.width).toBeGreaterThanOrEqual(24);
+    const before = Number(await handle.getAttribute('aria-valuenow'));
+    // Dragging towards the first pane, which is on the right in right-to-left text, shrinks it.
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 - 120 * direction, box.y + box.height / 2, {
+      steps: 6,
+    });
+    await page.mouse.up();
+    await expect
+      .poll(async () => Number(await handle.getAttribute('aria-valuenow')))
+      .toBeLessThan(before - 5);
+    // A double click returns to the default.
+    await handle.dblclick();
+    await expect(handle).toHaveAttribute('aria-valuenow', String(initial));
+  }
+});
+
+test('an app shell collapses by its own width, not the window’s', async ({ page }) => {
+  await story(page, 'layout-shell-and-split-view--narrow-shell');
+  expect(page.viewportSize()!.width).toBeGreaterThan(1000);
+  await expect(page.getByRole('button', { name: 'Open navigation' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Mailboxes' })).toBeHidden();
+  await story(page, 'layout-shell-and-split-view--wide-shell');
+  await expect(page.getByRole('button', { name: 'Open navigation' })).toBeHidden();
+  await expect(page.getByRole('navigation', { name: 'Mailboxes' })).toBeVisible();
+});

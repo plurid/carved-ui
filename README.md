@@ -95,18 +95,36 @@ The theme engine builds six depths in OKLCH, keeping the hue steady, then solves
 | Family      | Components                                                                                                           |
 | ----------- | -------------------------------------------------------------------------------------------------------------------- |
 | Foundations | `CarvedProvider`, `Surface`, `Card`                                                                                  |
+| Layout      | `AppShell`, `Sidebar`, `SidebarSection`, `SidebarItem`, `SplitView`, `SplitPane`                                     |
 | Actions     | `Button`, `IconButton`, `Link`, `ToggleButton`, `ToggleButtonGroup`, `Toolbar`                                       |
 | Fields      | `TextField`, `SearchField`, `NumberField`, `Checkbox`, `CheckboxGroup`, `RadioGroup`, `Switch`, `Slider`, `Fieldset` |
 | Dates       | `DatePicker`, `DateRangePicker`, `DateField`, `TimeField`, `Calendar`, `RangeCalendar`                               |
 | Colour      | `ColorPicker`, `ColorArea`, `ColorSlider`, `ColorWheel`, `ColorField`, `ColorSwatch`, `ColorSwatchPicker`            |
 | Files       | `DropZone`, `FileTrigger`, `FileList`, `FileItem`                                                                    |
-| Collections | `Select`, `ComboBox`, `ListBox`, `Menu`, `DataTable`, `GridList`, `Tree`, `TagGroup`                                 |
+| Collections | `Select`, `ComboBox`, `Autocomplete`, `ListBox`, `Menu`, `DataTable`, `GridList`, `Tree`, `TagGroup`, `Virtualizer`  |
 | Overlays    | `Modal`, `Drawer`, `Dialog`, `AlertDialog`, `Popover`, `Tooltip`, `CommandPalette`                                   |
 | Navigation  | `Tabs`, `Accordion`, `Disclosure`, `Breadcrumbs`, `Pagination`                                                       |
 | Feedback    | `Alert`, `ToastRegion`, `ProgressBar`, `Meter`, `Spinner`, `Skeleton`                                                |
 | Content     | `Heading`, `Separator`, `Badge`, `Avatar`, `AvatarGroup`, `Kbd`, `Table`                                             |
 
 Interaction, focus and screen reader behaviour come from [React Aria](https://react-spectrum.adobe.com/react-aria/). Every component is documented on the [site](https://plurid.github.io/carved-ui/components) with live examples and its full API. Patterns that every app shapes differently, like settings forms, confirmations, searchable tables, empty states and page frames, are [recipes](docs/examples/README.md) to copy and make your own.
+
+## Showcase
+
+Three working applications built only from Carved components, each in its own folder under [`apps/site/src/showcase`](apps/site/src/showcase) to read and copy.
+
+<table>
+  <tr>
+    <td width="33%"><a href="https://plurid.github.io/carved-ui/showcase/mail"><img src="docs/assets/showcase-post.jpg" alt="Post, a mail client: mailboxes in a sidebar, a list of messages and the open message side by side" /></a></td>
+    <td width="33%"><a href="https://plurid.github.io/carved-ui/showcase/console"><img src="docs/assets/showcase-quarry.jpg" alt="Quarry, a deploy console: usage meters, a chart of deploys per day and the latest deploys" /></a></td>
+    <td width="33%"><a href="https://plurid.github.io/carved-ui/showcase/files"><img src="docs/assets/showcase-strata.jpg" alt="Strata, a drive: a folder tree beside a grid of photos and the details of the folder" /></a></td>
+  </tr>
+  <tr>
+    <td><strong>Post</strong>, mail: five thousand messages filtered as you type, in a split view.</td>
+    <td><strong>Quarry</strong>, a deploy console: ten thousand deploys to sort and filter, rollbacks and a command palette.</td>
+    <td><strong>Strata</strong>, a drive: nested folders, two thousand photos and uploads with progress.</td>
+  </tr>
+</table>
 
 ## Packages
 

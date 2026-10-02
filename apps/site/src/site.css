@@ -178,12 +178,6 @@ body {
   gap: var(--carved-space-1);
 }
 
-.site-sections .carved-button[aria-current] {
-  color: var(--carved-cut-fg);
-  background-color: var(--carved-cut);
-  box-shadow: revert-layer;
-}
-
 .site-tools {
   display: flex;
   gap: var(--carved-space-2);

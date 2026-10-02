@@ -15,6 +15,7 @@ import type { CSSProperties, ReactNode, Ref } from 'react';
 import { Checkbox } from './choice.js';
 import { DepthScope, useCutDepth } from './provider.js';
 import { withClass } from './internal/class-names.js';
+import { useIsVirtualized } from './internal/virtualized.js';
 import { ChevronEnd } from './internal/icons.js';
 
 /** Levels deeper than this share the deepest well. */
@@ -31,6 +32,7 @@ export interface TreeProps<T extends object> extends AriaTreeProps<T> {
  */
 export function Tree<T extends object>({ className, style, ...props }: TreeProps<T>) {
   const depth = useCutDepth();
+  const virtualized = useIsVirtualized();
   // The well of the n-th level sits n - 1 levels below the tree's own.
   const levels: Record<string, string> = {};
   for (let level = 1; level <= deepest; level++) {
@@ -45,6 +47,7 @@ export function Tree<T extends object>({ className, style, ...props }: TreeProps
       <AriaTree
         {...props}
         data-carved-depth={depth}
+        data-virtualized={virtualized || undefined}
         style={(values) => ({
           ...levels,
           ...(typeof style === 'function' ? style(values) : style),

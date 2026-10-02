@@ -11,6 +11,7 @@ export interface Entry {
   title: string;
   group:
     | 'Foundations'
+    | 'Layout'
     | 'Actions'
     | 'Fields'
     | 'Collections'
@@ -42,6 +43,38 @@ export const catalog: Entry[] = [
         title: 'Card',
         description: 'A padded surface with header, content and footer parts.',
         file: 'card',
+      },
+    ],
+  },
+  {
+    slug: 'app-shell',
+    title: 'App shell',
+    group: 'Layout',
+    summary:
+      'The frame of an application: a header, a sidebar well of places and the content beside it. A narrow shell moves its sidebar into a drawer.',
+    components: ['AppShell', 'Sidebar', 'SidebarSection', 'SidebarItem'],
+    examples: [
+      {
+        title: 'A workspace',
+        description:
+          'The shell collapses by its own width, so narrow this one by narrowing the window.',
+        file: 'app-shell',
+      },
+    ],
+  },
+  {
+    slug: 'split-view',
+    title: 'Split view',
+    group: 'Layout',
+    summary:
+      'Two panes divided by a carved trench. Drag its groove, or focus it and use the arrow keys; Enter folds a collapsible pane away.',
+    components: ['SplitView', 'SplitPane'],
+    examples: [
+      { title: 'Side by side', file: 'split-view' },
+      {
+        title: 'Stacked and collapsible',
+        description: 'Home or Enter folds the top pane away; Enter brings it back.',
+        file: 'split-view-stacked',
       },
     ],
   },
@@ -214,6 +247,26 @@ export const catalog: Entry[] = [
     ],
   },
   {
+    slug: 'autocomplete',
+    title: 'Autocomplete',
+    group: 'Collections',
+    summary:
+      'A search field that filters the list, menu, grid list or table after it as you type, ignoring case and accents.',
+    components: ['Autocomplete'],
+    examples: [
+      {
+        title: 'Filter a list',
+        description: 'The arrow keys move through the matches while you keep typing.',
+        file: 'autocomplete-people',
+      },
+      {
+        title: 'Searchable menu',
+        description: 'A field above a menu in a popover, for long lists of choices.',
+        file: 'autocomplete-menu',
+      },
+    ],
+  },
+  {
     slug: 'menu',
     title: 'Menu',
     group: 'Collections',
@@ -269,6 +322,27 @@ export const catalog: Entry[] = [
     summary: 'Small carved pills, removable or selectable like toggles.',
     components: ['TagGroup', 'Tag'],
     examples: [{ title: 'Removable and selectable', file: 'tag-group' }],
+  },
+  {
+    slug: 'virtualizer',
+    title: 'Virtualized collections',
+    group: 'Collections',
+    summary:
+      'Thousands of rows, only those in view rendered. Wrap a list, grid list, tree or data table in a Virtualizer and give it a height.',
+    components: ['Virtualizer'],
+    examples: [
+      {
+        title: 'Ten thousand rows',
+        description: 'Sorted, resized and selected like any data table; its header stays in place.',
+        file: 'virtualized-table',
+      },
+      {
+        title: 'Five thousand people',
+        description:
+          'A virtualized list filtered by an autocomplete: type, then Tab into the list.',
+        file: 'virtualized-list',
+      },
+    ],
   },
   {
     slug: 'dialog',

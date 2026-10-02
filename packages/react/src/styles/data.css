@@ -12,7 +12,31 @@
 }
 
 .carved-data-well {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  box-shadow: none;
+}
+
+/* The well's carve is drawn over what scrolls inside it, so a header that stays in place while
+ * rows scroll beneath it does not hide the well's shaded wall. */
+.carved-data-well::after {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--carved-carve-shadow);
+}
+
+.carved-data-scroll {
+  flex: 1;
+  min-block-size: 0;
   overflow: auto;
+  border-radius: inherit;
+  scrollbar-color: var(--carved-edge) transparent;
 }
 
 .carved-data-table {
@@ -314,6 +338,70 @@ button.carved-tree-chevron {
 /* React Aria hovers a row only when it can be chosen or acted on. */
 :is(.carved-data-row, .carved-grid-item, .carved-tree-item)[data-hovered] {
   cursor: pointer;
+}
+
+/* Virtualized collections: React Aria places each item itself, so the layout holds the
+ * padding, items hold their own 1px gap, and a table row, being one box, fills and rules itself
+ * instead of through its cells. Tree rows touch, so its wells run unbroken. */
+:is(.carved-grid-list, .carved-tree)[data-virtualized]:not([data-empty]) {
+  padding: 0;
+}
+
+.carved-grid-list[data-virtualized] .carved-grid-item {
+  background-clip: padding-box;
+  border-block-end: 1px solid transparent;
+}
+
+.carved-grid-list[data-virtualized][data-layout='grid'] .carved-grid-item {
+  block-size: 100%;
+  border-block-end: 0;
+}
+
+.carved-data-well[data-virtualized] {
+  block-size: 100%;
+}
+
+.carved-data-well > .carved-data-table[data-virtualized] {
+  flex: 1;
+  min-block-size: 0;
+  overflow: auto;
+  scrollbar-color: var(--carved-edge) transparent;
+}
+
+.carved-data-table[data-virtualized] .carved-data-header,
+.carved-data-table[data-virtualized] .carved-data-header > [role='row'] {
+  block-size: 100%;
+}
+
+.carved-data-table[data-virtualized] .carved-data-header {
+  background-color: var(--carved-bg);
+}
+
+.carved-data-table[data-virtualized] :is(.carved-data-column, .carved-data-cell) {
+  display: flex;
+  align-items: center;
+  block-size: 100%;
+}
+
+.carved-data-table[data-virtualized] .carved-data-cell {
+  border-block-end: 0;
+}
+
+.carved-data-table[data-virtualized] .carved-data-select {
+  inline-size: auto;
+}
+
+.carved-data-table[data-virtualized] .carved-data-row {
+  block-size: 100%;
+  background-color: var(--_row, transparent);
+  border-block-end: 1px solid var(--carved-hairline);
+}
+
+.carved-data-cell-content {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Interaction, shared by the three: each sets its row's fill. */
